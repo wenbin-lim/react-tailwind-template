@@ -1,0 +1,14 @@
+.btn {
+  @apply select-none;
+  @apply px-3.5 py-2.5;
+  @apply rounded-btn;
+  @apply text-sm font-semibold;
+  @apply shadow-sm;
+  @apply focus-visible:outline-input-focus focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2;
+  @apply hover:opacity-90;
+
+  &-disabled {
+    @apply pointer-events-none select-none;
+    @apply opacity-50;
+  }
+}

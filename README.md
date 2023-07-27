@@ -18,7 +18,8 @@ Getting Started:
 
 Folders inside `./src`:
 
-1. `styles`: Custom .scss files, tailwindCSS
+- `styles`: Custom .scss files, tailwindCSS
+- `pages`: Unique pages, screens and views
 
 Important Notes:
 

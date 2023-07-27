@@ -6,3 +6,22 @@
 	To add custom overrides
 	https://tailwindcss.com/docs/functions-and-directives
 */
+
+@layer base {
+  html,
+  body {
+    @apply h-full;
+  }
+
+  #root {
+    @apply h-full;
+    @apply min-h-screen;
+  }
+}
+
+@layer components {
+  @import "common/button";
+  @import "common/input";
+  @import "common/input-label";
+  @import "common/checkbox";
+}
