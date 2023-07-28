@@ -1,9 +1,86 @@
 import { useNavigate } from "react-router-dom";
 import { ReactComponent as CompanyLogo } from "@root/assets/up_logo_icon.svg";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { RegisterProps, useAuth } from "@root/providers/authProvider";
+import { zodResolver } from "@hookform/resolvers/zod";
+import toast from "@root/components/common/Toaster";
+import { useState } from "react";
+import { Input, Button } from "@root/components/common";
 
-interface Props {}
-const SignupPage = ({}: Props) => {
+// Regex
+/* 
+  Usernames can only have: 
+  - Letters (a-z A-Z) 
+  - Numbers (0-9)
+  - Dots (.)
+  - Underscores (_)
+*/
+const USERNAME_REGEX = /^[a-zA-Z0-9_.]+$/;
+
+/* 
+  Passwords cannot have any spaces within (simple)
+  Passwords need 1 symbol, upper and lowercase and a digit (complex)
+*/
+const PASSWORD_REGEX = /^\S{8,}$/;
+// const PASSWORD_REGEX = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]){8,}$/;
+
+const SignupPage = () => {
   const navigate = useNavigate();
+  const { register: signup } = useAuth();
+  const [signingUp, setSigningUp] = useState(false);
+  //
+  // Form
+  const LoginSchema = z
+    .object({
+      username: z
+        .string()
+        .trim()
+        .min(4, "Please enter an username with at least 4 characters")
+        .regex(
+          USERNAME_REGEX,
+          "Valid characters are characters, digits, dots and underscores",
+        )
+        .toLowerCase(),
+      email: z.string().email(),
+      // email: z.union([z.string().email().nullish(), z.literal("")]),
+      password: z
+        .string()
+        .regex(PASSWORD_REGEX, "Please enter a valid password")
+        .min(8, "Please enter a password with at least 8 characters"),
+      passwordConfirm: z
+        .string()
+        .min(8, "Please enter a password with at least 8 characters"),
+    })
+    .refine(({ password, passwordConfirm }) => password === passwordConfirm, {
+      message: "Passwords do not match",
+      path: ["passwordConfirm"],
+    });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterProps>({
+    resolver: zodResolver(LoginSchema),
+    // defaultValues: {
+    //   username: `admin${new Date().getTime() % 10000}`,
+    //   email: `admin${new Date().getTime() % 10000}@email.com`,
+    //   password: "password",
+    //   passwordConfirm: "password",
+    // },
+  });
+
+  const onSignup = async (data: RegisterProps) => {
+    setSigningUp(true);
+    try {
+      await signup(data);
+      toast.success("Signup Successful");
+    } catch (error) {
+      toast.error("Failed to register account, please try again later");
+    }
+    setSigningUp(false);
+  };
 
   return (
     <div className="flex min-h-full flex-1">
@@ -25,100 +102,57 @@ const SignupPage = ({}: Props) => {
             </p>
           </div>
 
-          <div className="mt-10">
+          <div className="mt-6">
             <div>
-              <form action="#" method="POST" className="space-y-4">
-                <div>
-                  <label htmlFor="username" className="input-label">
-                    Username
-                  </label>
-                  <div className="mt-2">
-                    <input
-                      id="username"
-                      name="username"
-                      type="text"
-                      autoComplete="username"
-                      required
-                      className="input"
-                    />
-                  </div>
-                </div>
+              <form className="space-y-4" onSubmit={handleSubmit(onSignup)}>
+                <Input
+                  id="username"
+                  label="Username"
+                  type="text"
+                  autoComplete="username"
+                  required
+                  errorText={errors.username?.message}
+                  {...register("username")}
+                />
 
-                <div>
-                  <label htmlFor="email" className="input-label">
-                    Email address
-                  </label>
-                  <div className="mt-2">
-                    <input
-                      id="email"
-                      name="email"
-                      type="email"
-                      autoComplete="email"
-                      required
-                      className="input"
-                    />
-                  </div>
-                </div>
+                <Input
+                  id="email"
+                  label="Email"
+                  type="text"
+                  autoComplete="email"
+                  required
+                  errorText={errors.email?.message}
+                  {...register("email")}
+                />
 
-                <div>
-                  <label htmlFor="password" className="input-label">
-                    Password
-                  </label>
-                  <div className="mt-2">
-                    <input
-                      id="password"
-                      name="password"
-                      type="password"
-                      autoComplete="current-password"
-                      required
-                      className="input"
-                    />
-                  </div>
-                </div>
+                <Input
+                  id="password"
+                  label="Password"
+                  type="password"
+                  autoComplete="current-password"
+                  required
+                  errorText={errors.password?.message}
+                  {...register("password")}
+                />
 
-                <div>
-                  <label htmlFor="passwordConfirm" className="input-label">
-                    Confirm Password
-                  </label>
-                  <div className="mt-2">
-                    <input
-                      id="passwordConfirm"
-                      name="passwordConfirm"
-                      type="password"
-                      autoComplete="current-password"
-                      required
-                      className="input"
-                    />
-                  </div>
-                </div>
+                <Input
+                  id="passwordConfirm"
+                  label="Confirm Password"
+                  type="password"
+                  autoComplete="current-password"
+                  required
+                  errorText={errors.passwordConfirm?.message}
+                  {...register("passwordConfirm")}
+                />
 
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <input
-                      id="remember-me"
-                      name="remember-me"
-                      type="checkbox"
-                      className="checkbox"
-                    />
-                    <label htmlFor="remember-me" className="input-label ml-3">
-                      Remember me
-                    </label>
-                  </div>
-
-                  <div className="text-sm leading-6">
-                    <a className="cursor-pointer font-semibold leading-6 text-primary-600 hover:text-primary-500">
-                      Forgot password?
-                    </a>
-                  </div>
-                </div>
-
-                <div className="pt-8">
-                  <button
+                <div className="pt-6">
+                  <Button
+                    className="bg-primary text-on-primary"
                     type="submit"
-                    className="btn  flex w-full justify-center bg-primary text-on-primary"
+                    disabled={signingUp}
                   >
-                    Sign in
-                  </button>
+                    Sign up
+                  </Button>
                 </div>
               </form>
             </div>

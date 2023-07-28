@@ -32,7 +32,7 @@ export const Toaster = () => {
       {(t) => (
         <ToastBar toast={t} position="bottom-center">
           {({ icon, message }) => (
-            <div className="flex min-w-[100px] place-items-center">
+            <div className="flex place-items-center">
               <div className="flex-shrink-0">{icon}</div>
               <div className="ml-3">
                 <div

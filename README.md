@@ -25,11 +25,15 @@ Getting Started:
 
 Folders inside `./src`:
 
-- `styles`: Custom .scss files, tailwindCSS
-- `pages`: Unique pages, screens and views
-- `routes`: App routes
 - `assets`: Images, icons etc
+- `components`: Reusable components
+- `hooks`: Custom hooks
 - `lib`: Library extension or facades
+- `pages`: Unique pages, screens and views
+- `providers`: Providers
+- `routes`: App routes
+- `styles`: Custom .scss files, tailwindCSS
+- `types`: Custom .d.ts types
 
 Backend:
 

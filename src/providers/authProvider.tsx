@@ -70,17 +70,28 @@ const AuthProvider = ({ children }: AuthProviderType) => {
     });
   }, []);
 
+  /* 
+    Auth logic:
+    1. register
+    2. login
+    3. logout
+  */
   const register = useCallback(
     async ({ username, email, password, passwordConfirm }: RegisterProps) => {
-      return await pb
-        .collection("users")
-        .create({ username, email, password, passwordConfirm });
+      try {
+        const res = await pb
+          .collection("users")
+          .create({ username, email, password, passwordConfirm });
+
+        return res;
+      } catch (error) {
+        throw handleError({ error });
+      }
     },
     [],
   );
 
   const login = useCallback(async ({ username, password }: LoginProps) => {
-    // return
     try {
       const res = await pb
         .collection("users")

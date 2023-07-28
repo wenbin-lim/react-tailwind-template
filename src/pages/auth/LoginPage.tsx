@@ -6,25 +6,28 @@ import { useAuth, LoginProps } from "@root/providers/authProvider";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "@root/components/common/Toaster";
 import { useState } from "react";
-import clsx from "clsx";
+import { Input, Button } from "@root/components/common";
 
-interface Props {}
-const LoginPage = ({}: Props) => {
+const LoginPage = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
   const [loggingIn, setLoggingIn] = useState(false);
 
   // Form
   const LoginSchema = z.object({
-    username: z.string().min(2),
-    password: z.string().min(2),
+    username: z.string().min(1, "Please enter your username"),
+    password: z.string().min(1, "Please enter your password"),
   });
 
-  const { register, handleSubmit } = useForm<LoginProps>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginProps>({
     resolver: zodResolver(LoginSchema),
     // defaultValues: {
     //   username: "admin",
-    //   password: "password",
+    //   password: "password123",
     // },
   });
 
@@ -53,55 +56,35 @@ const LoginPage = ({}: Props) => {
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         <form className="space-y-6" onSubmit={handleSubmit(onLogin)}>
-          <div>
-            <label htmlFor="username" className="input-label">
-              Username
-            </label>
-            <div className="mt-2">
-              <input
-                id="username"
-                className="input"
-                type="text"
-                autoComplete="username"
-                {...register("username")}
-              />
-            </div>
-          </div>
+          <Input
+            id="username"
+            label="Username"
+            type="text"
+            autoComplete="username"
+            errorText={errors.username?.message}
+            {...register("username")}
+          />
+          <Input
+            id="password"
+            label="Password"
+            type="password"
+            autoComplete="current-password"
+            errorText={errors.password?.message}
+            {...register("password")}
+            inputHint={
+              <a className="cursor-pointer font-semibold text-primary-600 hover:text-primary-500">
+                Forgot password?
+              </a>
+            }
+          />
 
-          <div>
-            <div className="flex items-center justify-between">
-              <label htmlFor="password" className="input-label">
-                Password
-              </label>
-              <div className="text-sm">
-                <a className="cursor-pointer font-semibold text-primary-600 hover:text-primary-500">
-                  Forgot password?
-                </a>
-              </div>
-            </div>
-            <div className="mt-2">
-              <input
-                id="password"
-                className="input"
-                type="password"
-                autoComplete="current-password"
-                {...register("password")}
-              />
-            </div>
-          </div>
-
-          <div>
-            <button
-              type="submit"
-              className={clsx(
-                "btn flex w-full justify-center bg-primary text-on-primary",
-                { "btn-disabled": loggingIn },
-              )}
-              disabled={loggingIn}
-            >
-              Sign in
-            </button>
-          </div>
+          <Button
+            className="bg-primary text-on-primary"
+            type="submit"
+            disabled={loggingIn}
+          >
+            Sign in
+          </Button>
         </form>
 
         <p className="mt-10 text-center text-sm text-gray-500">

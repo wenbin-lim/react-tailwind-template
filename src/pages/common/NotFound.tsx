@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { Button } from "@root/components/common";
 
 interface Props {}
 const NotFound = ({}: Props) => {
@@ -15,12 +16,12 @@ const NotFound = ({}: Props) => {
           Sorry, we couldn&#39;t find the page you&#39;re looking for.
         </p>
         <div className="mt-10 flex items-center justify-center gap-x-6">
-          <button
+          <Button
+            className="bg-primary text-on-primary"
             onClick={() => navigate("/")}
-            className="btn bg-primary text-on-primary"
           >
             Go back home
-          </button>
+          </Button>
         </div>
       </div>
     </main>
