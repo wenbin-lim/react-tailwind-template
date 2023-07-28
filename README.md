@@ -9,6 +9,13 @@ Ecosystem:
 5. Forms - React Hook Form + Zod
 6. Client State Management - Jotai
 
+Utils Packages:
+
+1. usehooks-ts
+2. clsx
+3. twrnc
+4. jwt-decode
+
 Getting Started:
 
 1. Clone and cd into project
@@ -20,6 +27,14 @@ Folders inside `./src`:
 
 - `styles`: Custom .scss files, tailwindCSS
 - `pages`: Unique pages, screens and views
+- `routes`: App routes
+- `assets`: Images, icons etc
+- `lib`: Library extension or facades
+
+Backend:
+
+- Using Pocketbase for data and auth
+- https://github.com/pocketbase/js-sdk
 
 Important Notes:
 

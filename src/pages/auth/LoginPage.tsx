@@ -1,9 +1,46 @@
 import { useNavigate } from "react-router-dom";
 import { ReactComponent as CompanyLogo } from "@root/assets/up_logo_icon.svg";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { useAuth, LoginProps } from "@root/providers/authProvider";
+import { zodResolver } from "@hookform/resolvers/zod";
+import toast from "@root/components/common/Toaster";
+import { useState } from "react";
+import clsx from "clsx";
 
 interface Props {}
 const LoginPage = ({}: Props) => {
   const navigate = useNavigate();
+  const { login } = useAuth();
+  const [loggingIn, setLoggingIn] = useState(false);
+
+  // Form
+  const LoginSchema = z.object({
+    username: z.string().min(2),
+    password: z.string().min(2),
+  });
+
+  const { register, handleSubmit } = useForm<LoginProps>({
+    resolver: zodResolver(LoginSchema),
+    // defaultValues: {
+    //   username: "admin",
+    //   password: "password",
+    // },
+  });
+
+  const onLogin = async (data: LoginProps) => {
+    setLoggingIn(true);
+
+    try {
+      await login(data);
+
+      toast.success("Login Successful");
+    } catch (error) {
+      toast.error("Invalid Credentials");
+    }
+
+    setLoggingIn(false);
+  };
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -15,19 +52,18 @@ const LoginPage = ({}: Props) => {
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form className="space-y-6" action="#" method="POST">
+        <form className="space-y-6" onSubmit={handleSubmit(onLogin)}>
           <div>
-            <label htmlFor="email" className="input-label">
-              Email address
+            <label htmlFor="username" className="input-label">
+              Username
             </label>
             <div className="mt-2">
               <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
+                id="username"
                 className="input"
+                type="text"
+                autoComplete="username"
+                {...register("username")}
               />
             </div>
           </div>
@@ -46,11 +82,10 @@ const LoginPage = ({}: Props) => {
             <div className="mt-2">
               <input
                 id="password"
-                name="password"
+                className="input"
                 type="password"
                 autoComplete="current-password"
-                required
-                className="input"
+                {...register("password")}
               />
             </div>
           </div>
@@ -58,7 +93,11 @@ const LoginPage = ({}: Props) => {
           <div>
             <button
               type="submit"
-              className="btn flex w-full justify-center bg-primary text-on-primary"
+              className={clsx(
+                "btn flex w-full justify-center bg-primary text-on-primary",
+                { "btn-disabled": loggingIn },
+              )}
+              disabled={loggingIn}
             >
               Sign in
             </button>
