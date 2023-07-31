@@ -18,5 +18,22 @@ export default defineConfig(({ command, mode }) => {
         "@root": "/src",
       },
     },
+    // build: {
+    //   rollupOptions: {
+    //     output: {
+    //       // to split node_modules into each individual vendor chunks
+    //       // use only if vite auto chunking is not optimal
+    //       manualChunks(id) {
+    //         if (id.includes("node_modules")) {
+    //           return id
+    //             .toString()
+    //             .split("node_modules/")[1]
+    //             .split("/")[0]
+    //             .toString();
+    //         }
+    //       },
+    //     },
+    //   },
+    // },
   };
 });
