@@ -7,14 +7,12 @@ import toast, {
 import clsx from "clsx";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 
-export default toast;
-
 /* 
 	https://react-hot-toast.com/
 	toast types: "success" | "error" | "loading" | "blank" | "custom"
 */
 
-export const Toaster = () => {
+const Toaster = () => {
   return (
     <RHTToaster
       position="bottom-center"
@@ -78,3 +76,5 @@ export const Toaster = () => {
     </RHTToaster>
   );
 };
+
+export default Toaster;

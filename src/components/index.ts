@@ -1,3 +1,3 @@
 export { default as Input } from "./Input";
 export { default as Button } from "./Button";
-export * from "./Toaster";
+export { default as Toaster } from "./Toaster";

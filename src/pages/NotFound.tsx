@@ -1,8 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import { Button } from "@root/components/common";
+import { Button } from "@root/components";
 
-interface Props {}
-const NotFound = ({}: Props) => {
+const NotFound = () => {
   const navigate = useNavigate();
 
   return (

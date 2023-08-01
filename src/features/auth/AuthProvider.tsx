@@ -1,10 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useCallback,
-  useState,
-  useEffect,
-} from "react";
+import { createContext, useCallback, useState, useEffect } from "react";
 import pb from "@root/lib/pocketbase";
 import { RecordAuthResponse, Record, Admin } from "pocketbase";
 import { useInterval } from "usehooks-ts";
@@ -41,7 +35,7 @@ type AuthContextType = {
 };
 
 // Context
-const AuthContext = createContext<AuthContextType>({
+export const AuthContext = createContext<AuthContextType>({
   register: () =>
     Promise.reject({
       type: "error",
@@ -59,7 +53,7 @@ const AuthContext = createContext<AuthContextType>({
   token: "",
 });
 
-const AuthProvider = ({ children }: AuthProviderType) => {
+export const AuthProvider = ({ children }: AuthProviderType) => {
   const [token, setToken] = useState(pb.authStore.token);
   const [user, setUser] = useState(pb.authStore.model);
 
@@ -130,7 +124,3 @@ const AuthProvider = ({ children }: AuthProviderType) => {
     </AuthContext.Provider>
   );
 };
-
-export default AuthProvider;
-
-export const useAuth = () => useContext(AuthContext);

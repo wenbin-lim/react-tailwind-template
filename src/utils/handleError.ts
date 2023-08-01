@@ -1,5 +1,5 @@
 import { ClientResponseError } from "pocketbase";
-import toast from "@root/components/common/Toaster";
+import toast from "react-hot-toast";
 
 export type ErrorType = {
   type: "error";

@@ -1,12 +1,15 @@
-import { useNavigate } from "react-router-dom";
-import { ReactComponent as CompanyLogo } from "@root/assets/up_logo_icon.svg";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { useAuth, LoginProps } from "@root/providers/authProvider";
-import { zodResolver } from "@hookform/resolvers/zod";
-import toast from "@root/components/common/Toaster";
 import { useState } from "react";
-import { Input, Button } from "@root/components/common";
+import { useNavigate } from "react-router-dom";
+
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useAuth, LoginProps } from "@root/features/auth";
+
+import { Input, Button } from "@root/components";
+import { ReactComponent as CompanyLogo } from "@root/assets/up_logo_icon.svg";
+
+import toast from "react-hot-toast";
 
 const LoginPage = () => {
   const navigate = useNavigate();

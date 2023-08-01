@@ -1,8 +1,8 @@
 import { RouterProvider } from "@root/routes";
-import AuthProvider from "@root/providers/authProvider";
+import { AuthProvider } from "@root/features/auth";
 
 // Toasts
-import { Toaster } from "@root/components/common/Toaster";
+import { Toaster } from "@root/components";
 
 interface Props {}
 const App = ({}: Props) => {

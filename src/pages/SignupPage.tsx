@@ -1,12 +1,15 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ReactComponent as CompanyLogo } from "@root/assets/up_logo_icon.svg";
+
 import { z } from "zod";
 import { useForm } from "react-hook-form";
-import { RegisterProps, useAuth } from "@root/providers/authProvider";
 import { zodResolver } from "@hookform/resolvers/zod";
-import toast from "@root/components/common/Toaster";
-import { useState } from "react";
-import { Input, Button } from "@root/components/common";
+import { RegisterProps, useAuth } from "@root/features/auth";
+
+import { Input, Button } from "@root/components";
+import { ReactComponent as CompanyLogo } from "@root/assets/up_logo_icon.svg";
+
+import toast from "react-hot-toast";
 
 // Regex
 /* 

@@ -1,16 +1,19 @@
 import {
-  RouteObject,
   createBrowserRouter,
   RouterProvider as BrowserRouterProvider,
   Navigate,
 } from "react-router-dom";
+import { RouteObject } from "@root/types/routes";
 
-import { LoginPage, SignupPage } from "@root/pages/auth";
-import { NotFound } from "@root/pages/common";
+// Pages
+import LoginPage from "@root/pages/LoginPage";
+import SignupPage from "@root/pages/SignupPage";
+import NotFound from "@root/pages/NotFound";
 
-type CustomRouteObj = RouteObject & {};
+// Routes
+import exampleRoute from "@root/features/example/routes";
 
-const publicRoutes: CustomRouteObj[] = [
+const publicRoutes: RouteObject[] = [
   {
     path: "/",
     element: <Navigate to="/login" />,
@@ -25,16 +28,15 @@ const publicRoutes: CustomRouteObj[] = [
   },
 ];
 
-const errorRoutes: CustomRouteObj[] = [
-  {
-    path: "*",
-    element: <NotFound />,
-  },
-];
+const notFoundRoute: RouteObject = {
+  path: "*",
+  element: <NotFound />,
+};
 
-// Destructure and add new routes here
-const routes = [...publicRoutes, ...errorRoutes];
+// Add new routes here
+const routes = [...publicRoutes, exampleRoute];
 
-const router = createBrowserRouter(routes);
+// notFoundRoute (catch all) should be the last route
+const router = createBrowserRouter([...routes, notFoundRoute]);
 const RouterProvider = () => <BrowserRouterProvider router={router} />;
 export { RouterProvider, router, routes };

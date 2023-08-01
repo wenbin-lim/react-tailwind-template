@@ -7,7 +7,6 @@ Ecosystem:
 3. Data Fetching - Tanstack Query
 4. Routing - React Router
 5. Forms - React Hook Form + Zod
-6. Client State Management - Jotai
 
 Utils Packages:
 
@@ -34,6 +33,7 @@ Folders inside `./src`:
 - `routes`: App routes
 - `styles`: Custom .scss files, tailwindCSS
 - `types`: Custom .d.ts types
+- `features`: Folder containing the different app features
 
 Backend:
 
