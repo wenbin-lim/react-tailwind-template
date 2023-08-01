@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom";
 import { RouteObject } from "@root/types/routes";
+import { RequireAuth } from "@root/features/auth";
 
 // Pages
 import List from "../pages/List";
@@ -30,7 +31,11 @@ const childrenRoutes: RouteObject[] = [
 const route: RouteObject = {
   path: "/examples",
   children: childrenRoutes,
-  element: <Outlet />,
+  element: (
+    <RequireAuth>
+      <Outlet />
+    </RequireAuth>
+  ),
 };
 
 export default route;

@@ -6,9 +6,11 @@ import {
 import { RouteObject } from "@root/types/routes";
 
 // Pages
+import UnauthorisedPage from "@root/pages/UnauthorisedPage";
+import ForbiddenPage from "@root/pages/ForbiddenPage";
+import NotFoundPage from "@root/pages/NotFoundPage";
 import LoginPage from "@root/pages/LoginPage";
 import SignupPage from "@root/pages/SignupPage";
-import NotFound from "@root/pages/NotFound";
 
 // Routes
 import exampleRoute from "@root/features/example/routes";
@@ -28,15 +30,28 @@ const publicRoutes: RouteObject[] = [
   },
 ];
 
-const notFoundRoute: RouteObject = {
-  path: "*",
-  element: <NotFound />,
-};
-
-// Add new routes here
+/* 
+  Add new routes here
+*/
 const routes = [...publicRoutes, exampleRoute];
 
-// notFoundRoute (catch all) should be the last route
-const router = createBrowserRouter([...routes, notFoundRoute]);
+// Error routes
+const errorRoutes: RouteObject[] = [
+  {
+    path: "/access-denied",
+    element: <UnauthorisedPage redirectTo="/login" />,
+  },
+  {
+    path: "/access-forbidden",
+    element: <ForbiddenPage redirectTo="/login" />,
+  },
+  // 404 should always be the last route of the array
+  {
+    path: "*",
+    element: <NotFoundPage />,
+  },
+];
+
+const router = createBrowserRouter([...routes, ...errorRoutes]);
 const RouterProvider = () => <BrowserRouterProvider router={router} />;
 export { RouterProvider, router, routes };

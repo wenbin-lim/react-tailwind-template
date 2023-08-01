@@ -1,8 +1,11 @@
 import { createContext, useCallback, useState, useEffect } from "react";
+import { useInterval } from "usehooks-ts";
+
 import pb from "@root/lib/pocketbase";
 import { RecordAuthResponse, Record, Admin } from "pocketbase";
-import { useInterval } from "usehooks-ts";
+
 import jwtDecode, { JwtPayload } from "jwt-decode";
+
 import handleError, { ErrorType } from "@root/utils/handleError";
 
 // Constants
