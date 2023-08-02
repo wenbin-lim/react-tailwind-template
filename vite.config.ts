@@ -4,7 +4,7 @@ import svgr from "vite-plugin-svgr";
 import { reactClickToComponent } from "vite-plugin-react-click-to-component";
 
 // https://vitejs.dev/config/
-export default defineConfig(({ command, mode }) => {
+export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   return {
     // vite config

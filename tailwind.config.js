@@ -25,8 +25,8 @@ export default {
         },
         secondary: {
           DEFAULT: "#44C8F5",
-          light: "#70C7AD",
-          dark: "#70C7AD",
+          light: "#44C8F5",
+          dark: "#44C8F5",
           50: "#F2FBFE",
           100: "#DFF6FD",
           200: "#B8EAFB",
@@ -55,9 +55,41 @@ export default {
           900: "#000000",
           950: "#000000",
         },
-        "on-primary": colors.black,
-        "on-secondary": colors.black,
-        "on-tertiary": colors.white,
+        background: {
+          DEFAULT: colors.neutral[50],
+          light: colors.neutral[50],
+          dark: colors.neutral[900],
+        },
+        card: {
+          DEFAULT: colors.neutral[200],
+          light: colors.neutral[200],
+          dark: colors.neutral[700],
+        },
+        "on-primary": {
+          DEFAULT: colors.black,
+          light: colors.black,
+          dark: colors.black,
+        },
+        "on-secondary": {
+          DEFAULT: colors.black,
+          light: colors.black,
+          dark: colors.black,
+        },
+        "on-tertiary": {
+          DEFAULT: colors.white,
+          light: colors.white,
+          dark: colors.white,
+        },
+        "on-background": {
+          DEFAULT: colors.black,
+          light: colors.black,
+          dark: colors.white,
+        },
+        "on-card": {
+          DEFAULT: colors.black,
+          light: colors.black,
+          dark: colors.white,
+        },
         "input-focus": colors.blue[400],
       },
       borderRadius: {

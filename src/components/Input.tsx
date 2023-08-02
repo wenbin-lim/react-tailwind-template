@@ -30,7 +30,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           {!!label && (
             <label
               htmlFor={id || `input_${new Date().getTime()}`}
-              className="input-label"
+              className="block text-sm font-medium leading-6 text-gray-900"
             >
               {label} {required && <span className="text-red-500">*</span>}
             </label>
@@ -41,10 +41,13 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         <div className="relative mt-2 rounded-md shadow-sm">
           <input
             id={id || `input_${new Date().getTime()}`}
-            className={clsx("input", {
-              "input-error": !!errorText,
-            })}
-            aria-invalid={!!errorText ? "true" : "false"}
+            className={clsx(
+              "block w-full rounded-input border-0 py-1.5 shadow-sm ring-1 ring-inset focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6",
+              errorText
+                ? "border-red-300 pr-10 text-red-900 placeholder-red-300 ring-red-300 focus:border-red-500 focus:ring-red-500"
+                : "text-gray-900 ring-gray-300 placeholder:text-gray-400 focus:ring-input-focus",
+            )}
+            aria-invalid={errorText ? "true" : "false"}
             required={required}
             ref={ref}
             {...rest}
@@ -63,7 +66,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             "text-red-600": !!errorText,
           })}
         >
-          {!!errorText ? errorText : helperText}
+          {errorText || helperText}
         </p>
       </div>
     );

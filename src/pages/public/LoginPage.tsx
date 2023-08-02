@@ -7,7 +7,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth, LoginProps } from "@root/features/auth";
 
 import { Input, Button } from "@root/components";
-import { ReactComponent as CompanyLogo } from "@root/assets/up_logo_icon.svg";
 
 import toast from "react-hot-toast";
 
@@ -39,7 +38,7 @@ const LoginPage = () => {
 
     try {
       await login(data);
-
+      navigate("/dashboard");
       toast.success("Login Successful");
     } catch (error) {
       toast.error("Invalid Credentials");
@@ -51,7 +50,11 @@ const LoginPage = () => {
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <CompanyLogo className="mx-auto h-24 w-auto" />
+        <img
+          className="mx-auto h-24 w-auto"
+          src="/brand/logo.svg"
+          alt="Company Brand"
+        />
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
           Sign in to your account
         </h2>
@@ -82,7 +85,7 @@ const LoginPage = () => {
           />
 
           <Button
-            className="bg-primary text-on-primary"
+            className="w-full bg-primary text-on-primary"
             type="submit"
             disabled={loggingIn}
           >

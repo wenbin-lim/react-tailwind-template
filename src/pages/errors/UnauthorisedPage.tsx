@@ -20,8 +20,7 @@ const UnauthorisedPage = ({ redirectTo = "/" }: UnauthorisedPageProps) => {
         </p>
         <div className="mt-10 flex items-center justify-center gap-x-6">
           <Button
-            className="bg-primary text-on-primary"
-            fullWidth={false}
+            className="w-full bg-primary text-on-primary"
             onClick={() => navigate(redirectTo)}
           >
             Go back

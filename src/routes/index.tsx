@@ -1,20 +1,24 @@
-import {
-  createBrowserRouter,
-  RouterProvider as BrowserRouterProvider,
-  Navigate,
-} from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { RouteObject } from "@root/types/routes";
 
-// Pages
-import UnauthorisedPage from "@root/pages/UnauthorisedPage";
-import ForbiddenPage from "@root/pages/ForbiddenPage";
-import NotFoundPage from "@root/pages/NotFoundPage";
-import LoginPage from "@root/pages/LoginPage";
-import SignupPage from "@root/pages/SignupPage";
+// Public Pages
+import { LoginPage, SignupPage } from "@root/pages/public";
 
 // Routes
+import dashboardRoute from "@root/features/dashboard/routes";
 import exampleRoute from "@root/features/example/routes";
 
+// Error Pages
+import {
+  UnauthorisedPage,
+  ForbiddenPage,
+  NotFoundPage,
+} from "@root/pages/errors";
+
+/*
+  Public routes
+  These routes are accessible by everyone
+*/
 const publicRoutes: RouteObject[] = [
   {
     path: "/",
@@ -31,11 +35,18 @@ const publicRoutes: RouteObject[] = [
 ];
 
 /* 
-  Add new routes here
+  Menu routes
+  These routes are usually accessible by authenticated users
+  These routes are also used to generate the sidebar menu
+  Please note that order is important here
+  The first in array will be displayed first in the sidebar
 */
-const routes = [...publicRoutes, exampleRoute];
+const menuRoutes = [dashboardRoute, exampleRoute];
 
-// Error routes
+/* 
+  Error routes
+  These routes are used to display error pages
+*/
 const errorRoutes: RouteObject[] = [
   {
     path: "/access-denied",
@@ -52,6 +63,11 @@ const errorRoutes: RouteObject[] = [
   },
 ];
 
-const router = createBrowserRouter([...routes, ...errorRoutes]);
-const RouterProvider = () => <BrowserRouterProvider router={router} />;
-export { RouterProvider, router, routes };
+/* 
+  Full routes of application
+  Used to generate the router
+  Order is important here as errorRoutes must be destructured last to catch all routes
+*/
+const routes = [...publicRoutes, ...menuRoutes, ...errorRoutes];
+
+export { routes, publicRoutes, menuRoutes, errorRoutes };

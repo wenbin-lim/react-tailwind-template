@@ -7,7 +7,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { RegisterProps, useAuth } from "@root/features/auth";
 
 import { Input, Button } from "@root/components";
-import { ReactComponent as CompanyLogo } from "@root/assets/up_logo_icon.svg";
 
 import toast from "react-hot-toast";
 
@@ -90,7 +89,11 @@ const SignupPage = () => {
       <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
         <div className="mx-auto w-full max-w-sm lg:w-96">
           <div>
-            <CompanyLogo className="mx-auto h-24 w-auto" />
+            <img
+              className="mx-auto h-24 w-auto"
+              src="/brand/logo.svg"
+              alt="Company Brand"
+            />
             <h2 className="mt-8 text-2xl font-bold leading-9 tracking-tight text-gray-900">
               Create a new account
             </h2>
@@ -150,7 +153,7 @@ const SignupPage = () => {
 
                 <div className="pt-6">
                   <Button
-                    className="bg-primary text-on-primary"
+                    className="w-full bg-primary text-on-primary"
                     type="submit"
                     disabled={signingUp}
                   >
