@@ -11,14 +11,17 @@ import { XMarkIcon } from "@heroicons/react/20/solid";
 	https://react-hot-toast.com/
 	toast types: "success" | "error" | "loading" | "blank" | "custom"
 */
+import { useBreakpoints } from "@root/hooks";
 
 const Toaster = () => {
+  const isMobile = useBreakpoints("sm");
+
   return (
     <RHTToaster
-      position="bottom-center"
+      position={isMobile ? "bottom-center" : "top-right"}
       reverseOrder={true}
       toastOptions={{
-        className: "rounded-md p-4 bg-primary-200",
+        className: "rounded-md p-4 bg-surface",
         success: {
           className: "rounded-md p-4 bg-green-50",
         },
@@ -34,10 +37,10 @@ const Toaster = () => {
               <div className="flex-shrink-0">{icon}</div>
               <div className="ml-3">
                 <div
-                  className={clsx("text-sm font-medium text-on-primary", {
+                  className={clsx("text-sm font-medium", {
                     "text-green-800": t.type === "success",
                     "text-red-800": t.type === "error",
-                    "text-on-primary":
+                    "text-on-surface":
                       t.type !== "success" && t.type !== "error",
                   })}
                 >
@@ -57,7 +60,7 @@ const Toaster = () => {
                             t.type === "success",
                           "bg-red-50 first-letter:text-red-500 hover:bg-red-100  focus:ring-red-600  focus:ring-offset-red-50":
                             t.type === "error",
-                          "bg-primary-200 first-letter:text-primary hover:bg-primary-300  focus:ring-primary-700  focus:ring-offset-primary-200":
+                          "bg-surface hover:bg-surface focus:ring-blue-400  focus:ring-offset-surface":
                             t.type !== "success" && t.type !== "error",
                         },
                       )}

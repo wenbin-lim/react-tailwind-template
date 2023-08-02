@@ -12,8 +12,7 @@ Utils Packages:
 
 1. usehooks-ts
 2. clsx
-3. twrnc
-4. jwt-decode
+3. jwt-decode
 
 Getting Started:
 
@@ -24,16 +23,16 @@ Getting Started:
 
 Folders inside `./src`:
 
-- `assets`: Images, icons etc
+- `assets`: Common images, icons etc
 - `components`: Reusable components
+- `features`: App features, to be further organised by `components`, `pages`, `routes`, `hooks` that are used only by said feature
 - `hooks`: Custom hooks
+- `layout`: Layout components
 - `lib`: Library extension or facades
 - `pages`: Unique pages, screens and views
-- `providers`: Providers
 - `routes`: App routes
 - `styles`: Custom .scss files, tailwindCSS
-- `types`: Custom .d.ts types
-- `features`: Folder containing the different app features
+- `types`: Custom type declaration files
 
 Backend:
 
@@ -46,8 +45,11 @@ Important Notes:
 
 - `import Example from '@root/example'
 
-2. Writing TailwindCSS
+2. Additional features should be added into the `features` folder with its own components, pages, hooks etc.
+
+- Folder items inside `src` such as `components` and `pages` are to shared as common items
+
+TailwindCSS:
 
 - https://github.com/tailwindlabs/prettier-plugin-tailwindcss
 - `clsx`: https://github.com/tailwindlabs/prettier-plugin-tailwindcss#sorting-classes-in-function-calls
-- `tw`: https://github.com/tailwindlabs/prettier-plugin-tailwindcss#sorting-classes-in-template-literals
