@@ -11,7 +11,7 @@ import { XMarkIcon } from "@heroicons/react/20/solid";
 	https://react-hot-toast.com/
 	toast types: "success" | "error" | "loading" | "blank" | "custom"
 */
-import { useBreakpoints } from "@root/hooks";
+import { useBreakpoints } from "@src/hooks";
 
 const Toaster = () => {
   const isMobile = useBreakpoints("sm");

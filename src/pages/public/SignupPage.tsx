@@ -4,9 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { RegisterProps, useAuth } from "@root/features/auth";
+import { RegisterProps, useAuth } from "@src/features/auth";
 
-import { Input, Button } from "@root/components";
+import { Input, Button } from "@src/components";
 
 import toast from "react-hot-toast";
 

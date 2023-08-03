@@ -1,12 +1,12 @@
 import { createContext, useCallback, useState, useEffect } from "react";
 import { useInterval } from "usehooks-ts";
 
-import pb from "@root/lib/pocketbase";
+import pb from "@src/lib/pocketbase";
 import { RecordAuthResponse, Record, Admin } from "pocketbase";
 
 import jwtDecode, { JwtPayload } from "jwt-decode";
 
-import handleError, { ErrorType } from "@root/utils/handleError";
+import handleError, { ErrorType } from "@src/utils/handleError";
 
 // Constants
 const fiveMinutesInMs = 5 * 60 * 1000;

@@ -24,8 +24,9 @@
     /* Alias and Paths */
     "baseUrl": "./",
     "paths": {
-      "@root/*": ["./src/*"],
-      "@tailwind-config": ["tailwind.config.cjs"]
+      "@root/*": ["./*"],
+      "@src/*": ["./src/*"],
+      "@tailwind-config": ["./tailwind.config.cjs"]
     }
   },
   "include": ["src"],

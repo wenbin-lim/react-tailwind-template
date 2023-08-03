@@ -1,8 +1,8 @@
-import RouterProvider from "@root/routes/RouterProvider";
-import { AuthProvider } from "@root/features/auth";
+import RouterProvider from "@src/routes/RouterProvider";
+import { AuthProvider } from "@src/features/auth";
 
 // Toasts
-import { Toaster } from "@root/components";
+import { Toaster } from "@src/components";
 
 const App = () => {
   return (

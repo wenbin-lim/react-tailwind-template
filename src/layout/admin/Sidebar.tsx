@@ -1,8 +1,8 @@
 import { cloneElement } from "react";
 import clsx from "clsx";
 import { useNavigate, NavLink } from "react-router-dom";
-import { RouteObject } from "@root/types/routes";
-import { useAuth } from "@root/features/auth";
+import { RouteObject } from "@src/types/routes";
+import { useAuth } from "@src/features/auth";
 import toast from "react-hot-toast";
 
 import { ArrowLeftOnRectangleIcon } from "@heroicons/react/24/outline";

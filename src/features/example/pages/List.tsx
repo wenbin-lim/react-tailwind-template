@@ -1,4 +1,4 @@
-import { Button } from "@root/components";
+import { Button } from "@src/components";
 
 interface Props {}
 const List = (props: Props) => {

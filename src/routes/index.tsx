@@ -1,19 +1,19 @@
 import { Navigate } from "react-router-dom";
-import { RouteObject } from "@root/types/routes";
+import { RouteObject } from "@src/types/routes";
 
 // Public Pages
-import { LoginPage, SignupPage } from "@root/pages/public";
+import { LoginPage, SignupPage } from "@src/pages/public";
 
 // Routes
-import dashboardRoute from "@root/features/dashboard/routes";
-import exampleRoute from "@root/features/example/routes";
+import dashboardRoute from "@src/features/dashboard/routes";
+import exampleRoute from "@src/features/example/routes";
 
 // Error Pages
 import {
   UnauthorisedPage,
   ForbiddenPage,
   NotFoundPage,
-} from "@root/pages/errors";
+} from "@src/pages/errors";
 
 /*
   Public routes

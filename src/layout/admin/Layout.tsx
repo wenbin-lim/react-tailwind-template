@@ -4,7 +4,7 @@ import StickyHeader from "./StickyHeader";
 import Sidebar from "./Sidebar";
 import MobileSidebarWrapper from "./MobileSidebarWrapper";
 
-import { menuRoutes } from "@root/routes";
+import { menuRoutes } from "@src/routes";
 
 type AdminLayoutProps = {
   children?: React.ReactNode;

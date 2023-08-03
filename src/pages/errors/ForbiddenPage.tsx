@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Button } from "@root/components";
+import { Button } from "@src/components";
 
 type ForbiddenPageProps = {
   redirectTo?: string;

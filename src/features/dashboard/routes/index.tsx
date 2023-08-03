@@ -1,12 +1,12 @@
 import { Outlet } from "react-router-dom";
-import { RouteObject } from "@root/types/routes";
-import { RequireAuth } from "@root/features/auth";
+import { RouteObject } from "@src/types/routes";
+import { RequireAuth } from "@src/features/auth";
 
 // Icons
 import { HomeIcon } from "@heroicons/react/24/outline";
 
 // Layout
-import { Layout } from "@root/layout/admin";
+import { Layout } from "@src/layout/admin";
 
 // Pages
 import Dashboard from "../pages/Dashboard";

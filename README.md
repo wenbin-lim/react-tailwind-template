@@ -41,9 +41,9 @@ Backend:
 
 Important Notes:
 
-1. Import files using Vite's alias (@root = './src')
+1. Import files using Vite's alias (@src = './src')
 
-- `import Example from '@root/example'
+- `import Example from '@src/example'
 
 2. Additional features should be added into the `features` folder with its own components, pages, hooks etc.
 

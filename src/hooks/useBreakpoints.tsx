@@ -1,11 +1,10 @@
-import resolveConfig from "tailwindcss/resolveConfig";
-import tailwindConfig from "@tailwind-config";
 import { useMediaQuery } from "usehooks-ts";
-
-const twConfig = resolveConfig(tailwindConfig);
-const availableBreakpoints = twConfig.theme.screens;
+import { useTheme } from "@src/hooks";
 
 const useBreakpoints = (breakpoint: string) => {
+  const theme = useTheme();
+  const availableBreakpoints = theme.screens;
+
   // check if breakpoint is available
   if (breakpoint && !availableBreakpoints[breakpoint]) {
     console.error(
