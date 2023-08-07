@@ -1,2 +1,1 @@
-export { default as getTheme } from "./getTheme";
-export { default as handleError } from "./handleError";
+export { default as setPbServerErrors } from "./setPbServerErrors";

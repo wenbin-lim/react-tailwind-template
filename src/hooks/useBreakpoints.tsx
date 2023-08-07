@@ -12,7 +12,7 @@ const useBreakpoints = (breakpoint: string) => {
     );
   }
 
-  let query = `(max-width: ${availableBreakpoints[breakpoint]})`;
+  const query = `(max-width: ${availableBreakpoints[breakpoint]})`;
   return useMediaQuery(query);
 };
 

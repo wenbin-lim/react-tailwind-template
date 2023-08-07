@@ -1,16 +1,28 @@
 import { Button } from "@src/components";
+import { useQuery } from "@tanstack/react-query";
+import { getFullList, getOne } from "@src/lib/dataProvider";
 
-interface Props {}
-const List = (props: Props) => {
+type ExampleType = {
+  id: string;
+  name: string;
+};
+
+const List = () => {
+  const { data, error } = useQuery({
+    queryKey: ["examples"],
+    queryFn: () =>
+      getOne<ExampleType>({
+        collectionName: "examples",
+        id: "123",
+      }),
+    meta: {
+      showErrorToast: true,
+    },
+  });
+
   return (
     <>
-      <Button className="bg-primary text-white">Button</Button>
-      <p>
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptate
-        labore quaerat quod consequuntur tempore soluta voluptatum doloremque
-        possimus fugit quidem veniam aperiam tempora, nobis nam vero accusamus
-        ea illum. Consequuntur.
-      </p>
+      <pre>{JSON.stringify(error, null, 2)}</pre>
     </>
   );
 };

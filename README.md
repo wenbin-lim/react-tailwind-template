@@ -1,5 +1,9 @@
 REACTJS TEMPLATE
 
+TODO:
+
+1. Implement dark mode
+
 Ecosystem:
 
 1. Build Tool - Vite
@@ -33,6 +37,7 @@ Folders inside `./src`:
 - `routes`: App routes
 - `styles`: Custom .scss files, tailwindCSS
 - `types`: Custom type declaration files
+- `utils`: Utility functions
 
 Backend:
 

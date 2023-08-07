@@ -1,5 +1,4 @@
-interface Props {}
-const Show = (props: Props) => {
+const Show = () => {
   return <div>Show</div>;
 };
 export default Show;

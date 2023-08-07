@@ -1,5 +1,4 @@
-interface Props {}
-const Create = (props: Props) => {
+const Create = () => {
   return <div>Create</div>;
 };
 export default Create;

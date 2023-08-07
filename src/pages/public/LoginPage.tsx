@@ -1,29 +1,21 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useAuth, LoginProps } from "@src/features/auth";
+import { LoginSchema, LoginProps, login } from "@src/features/auth/api";
+import { useMutation } from "@tanstack/react-query";
 
 import { Input, Button } from "@src/components";
-
 import toast from "react-hot-toast";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
-  const [loggingIn, setLoggingIn] = useState(false);
 
   // Form
-  const LoginSchema = z.object({
-    username: z.string().min(1, "Please enter your username"),
-    password: z.string().min(1, "Please enter your password"),
-  });
-
   const {
     register,
     handleSubmit,
+    resetField,
     formState: { errors },
   } = useForm<LoginProps>({
     resolver: zodResolver(LoginSchema),
@@ -33,19 +25,17 @@ const LoginPage = () => {
     // },
   });
 
-  const onLogin = async (data: LoginProps) => {
-    setLoggingIn(true);
-
-    try {
-      await login(data);
+  const { mutate, isPending } = useMutation({
+    mutationFn: login,
+    onSuccess: () => {
       navigate("/dashboard");
       toast.success("Login Successful");
-    } catch (error) {
+    },
+    onError: () => {
       toast.error("Invalid Credentials");
-    }
-
-    setLoggingIn(false);
-  };
+      resetField("password");
+    },
+  });
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -61,11 +51,15 @@ const LoginPage = () => {
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form className="space-y-6" onSubmit={handleSubmit(onLogin)}>
+        <form
+          className="space-y-6"
+          onSubmit={handleSubmit((data) => mutate(data))}
+        >
           <Input
             id="username"
             label="Username"
             type="text"
+            autoFocus
             autoComplete="username"
             errorText={errors.username?.message}
             {...register("username")}
@@ -87,7 +81,7 @@ const LoginPage = () => {
           <Button
             className="w-full bg-primary text-on-primary"
             type="submit"
-            disabled={loggingIn}
+            disabled={isPending}
           >
             Sign in
           </Button>

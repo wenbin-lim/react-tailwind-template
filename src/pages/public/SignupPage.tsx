@@ -1,70 +1,37 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { RegisterProps, useAuth } from "@src/features/auth";
+import {
+  RegisterProps,
+  RegisterSchema,
+  register as signup,
+} from "@src/features/auth/api";
+import { useMutation } from "@tanstack/react-query";
 
 import { Input, Button } from "@src/components";
 
 import toast from "react-hot-toast";
-
-// Regex
-/* 
-  Usernames can only have: 
-  - Letters (a-z A-Z) 
-  - Numbers (0-9)
-  - Dots (.)
-  - Underscores (_)
-*/
-const USERNAME_REGEX = /^[a-zA-Z0-9_.]+$/;
-
-/* 
-  Passwords cannot have any spaces within (simple)
-  Passwords need 1 symbol, upper and lowercase and a digit (complex)
-*/
-const PASSWORD_REGEX = /^\S{8,}$/;
-// const PASSWORD_REGEX = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]){8,}$/;
+import { setPbServerErrors } from "@src/utils";
 
 const SignupPage = () => {
   const navigate = useNavigate();
-  const { register: signup } = useAuth();
-  const [signingUp, setSigningUp] = useState(false);
-  //
-  // Form
-  const LoginSchema = z
-    .object({
-      username: z
-        .string()
-        .trim()
-        .min(4, "Please enter an username with at least 4 characters")
-        .regex(
-          USERNAME_REGEX,
-          "Valid characters are characters, digits, dots and underscores",
-        )
-        .toLowerCase(),
-      email: z.string().email(),
-      // email: z.union([z.string().email().nullish(), z.literal("")]),
-      password: z
-        .string()
-        .regex(PASSWORD_REGEX, "Please enter a valid password")
-        .min(8, "Please enter a password with at least 8 characters"),
-      passwordConfirm: z
-        .string()
-        .min(8, "Please enter a password with at least 8 characters"),
-    })
-    .refine(({ password, passwordConfirm }) => password === passwordConfirm, {
-      message: "Passwords do not match",
-      path: ["passwordConfirm"],
-    });
 
+  // Form
   const {
     register,
     handleSubmit,
+    resetField,
+    setError,
     formState: { errors },
   } = useForm<RegisterProps>({
-    resolver: zodResolver(LoginSchema),
+    resolver: zodResolver(RegisterSchema),
+    defaultValues: {
+      username: `wenbin`,
+      email: `wenbin@email.com`,
+      password: "password",
+      passwordConfirm: "password",
+    },
     // defaultValues: {
     //   username: `admin${new Date().getTime() % 10000}`,
     //   email: `admin${new Date().getTime() % 10000}@email.com`,
@@ -73,16 +40,22 @@ const SignupPage = () => {
     // },
   });
 
-  const onSignup = async (data: RegisterProps) => {
-    setSigningUp(true);
-    try {
-      await signup(data);
+  const { mutate, isPending } = useMutation({
+    mutationFn: signup,
+    onSuccess: () => {
+      navigate("/login");
       toast.success("Signup Successful");
-    } catch (error) {
-      toast.error("Failed to register account, please try again later");
-    }
-    setSigningUp(false);
-  };
+    },
+    onError: (error) => {
+      resetField("password");
+      resetField("passwordConfirm");
+      if (setPbServerErrors(error, setError)) {
+        toast.error("Please check form for invalid values");
+      } else {
+        toast.error("Failed to register account, please try again later");
+      }
+    },
+  });
 
   return (
     <div className="flex min-h-full flex-1">
@@ -110,7 +83,10 @@ const SignupPage = () => {
 
           <div className="mt-6">
             <div>
-              <form className="space-y-4" onSubmit={handleSubmit(onSignup)}>
+              <form
+                className="space-y-4"
+                onSubmit={handleSubmit((data) => mutate(data))}
+              >
                 <Input
                   id="username"
                   label="Username"
@@ -155,7 +131,7 @@ const SignupPage = () => {
                   <Button
                     className="w-full bg-primary text-on-primary"
                     type="submit"
-                    disabled={signingUp}
+                    disabled={isPending}
                   >
                     Sign up
                   </Button>
