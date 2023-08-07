@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Button } from "@src/components";
+import { Button } from "@src/components/buttons";
 
 type NotFoundPageProps = {
   redirectTo?: string;

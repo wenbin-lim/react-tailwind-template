@@ -5,7 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchema, LoginProps, login } from "@src/features/auth/api";
 import { useMutation } from "@tanstack/react-query";
 
-import { Input, Button } from "@src/components";
+import { Input } from "@src/components/form";
+import { Button } from "@src/components/buttons";
 import toast from "react-hot-toast";
 
 const LoginPage = () => {
@@ -19,10 +20,10 @@ const LoginPage = () => {
     formState: { errors },
   } = useForm<LoginProps>({
     resolver: zodResolver(LoginSchema),
-    // defaultValues: {
-    //   username: "admin",
-    //   password: "password123",
-    // },
+    defaultValues: {
+      username: "wenbin",
+      password: "password",
+    },
   });
 
   const { mutate, isPending } = useMutation({

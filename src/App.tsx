@@ -18,7 +18,7 @@ const App = () => {
       <QueryClientProvider client={queryClient}>
         <RouterProvider />
         <Toaster />
-        <ReactQueryDevtools initialIsOpen={false} />
+        <ReactQueryDevtools initialIsOpen={false} buttonPosition="top-left" />
       </QueryClientProvider>
     </AuthProvider>
   );

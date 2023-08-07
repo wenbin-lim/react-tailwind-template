@@ -3,7 +3,12 @@
 	Change the implementation of each methods according to the backend used
 */
 import pb from "@src/lib/pocketbase";
-import { RecordFullListQueryParams, RecordQueryParams } from "pocketbase";
+import {
+  RecordFullListQueryParams,
+  RecordListQueryParams,
+  ListResult,
+  RecordQueryParams,
+} from "pocketbase";
 
 // Fetch all records
 export async function getFullList<TRecord>({
@@ -13,19 +18,31 @@ export async function getFullList<TRecord>({
   collectionName: string;
   queryParams?: RecordFullListQueryParams;
 }): Promise<TRecord[]> {
-  try {
-    const data: TRecord[] = await pb
-      .collection(collectionName)
-      .getFullList(queryParams);
+  const data: TRecord[] = await pb
+    .collection(collectionName)
+    .getFullList(queryParams);
 
-    return data;
-  } catch (error) {
-    // throw handleError({ error });
-    throw error;
-  }
+  return data;
 }
 
 // Fetch paginated records
+export async function getPaginatedList<TRecord>({
+  collectionName,
+  page,
+  perPage,
+  queryParams,
+}: {
+  collectionName: string;
+  page: number;
+  perPage: number;
+  queryParams?: RecordListQueryParams;
+}): Promise<ListResult<TRecord>> {
+  const data: ListResult<TRecord> = await pb
+    .collection(collectionName)
+    .getList(page, perPage, queryParams);
+
+  return data;
+}
 
 // Fetch a single record
 export async function getOne<TRecord>({
@@ -37,14 +54,9 @@ export async function getOne<TRecord>({
   id: string;
   queryParams?: RecordQueryParams;
 }): Promise<TRecord[]> {
-  try {
-    const data: TRecord[] = await pb
-      .collection(collectionName)
-      .getOne(id, queryParams);
+  const data: TRecord[] = await pb
+    .collection(collectionName)
+    .getOne(id, queryParams);
 
-    return data;
-  } catch (error) {
-    // throw handleError({ error });
-    throw error;
-  }
+  return data;
 }

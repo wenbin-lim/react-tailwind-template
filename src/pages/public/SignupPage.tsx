@@ -9,7 +9,8 @@ import {
 } from "@src/features/auth/api";
 import { useMutation } from "@tanstack/react-query";
 
-import { Input, Button } from "@src/components";
+import { Input } from "@src/components/form";
+import { Button } from "@src/components/buttons";
 
 import toast from "react-hot-toast";
 import { setPbServerErrors } from "@src/utils";
@@ -26,12 +27,6 @@ const SignupPage = () => {
     formState: { errors },
   } = useForm<RegisterProps>({
     resolver: zodResolver(RegisterSchema),
-    defaultValues: {
-      username: `wenbin`,
-      email: `wenbin@email.com`,
-      password: "password",
-      passwordConfirm: "password",
-    },
     // defaultValues: {
     //   username: `admin${new Date().getTime() % 10000}`,
     //   email: `admin${new Date().getTime() % 10000}@email.com`,

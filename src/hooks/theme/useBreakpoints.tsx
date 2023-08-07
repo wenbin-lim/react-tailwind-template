@@ -1,5 +1,5 @@
 import { useMediaQuery } from "usehooks-ts";
-import { useTheme } from "@src/hooks";
+import useTheme from "./useTheme";
 
 const useBreakpoints = (breakpoint: string) => {
   const theme = useTheme();

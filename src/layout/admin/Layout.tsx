@@ -27,12 +27,12 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
         <Sidebar navItems={menuRoutes} />
       </div>
 
-      <div className="flex min-h-full flex-col lg:pl-72">
+      <div className="grid min-h-full grid-rows-[auto_1fr] lg:pl-72">
         {/* Sticky search header */}
         <StickyHeader openMobileSidebar={() => setShowMobileSidebar(true)} />
 
         {/* Outlet */}
-        <main className="flex-1">{children}</main>
+        {children}
       </div>
     </>
   );

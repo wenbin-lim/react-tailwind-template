@@ -3,11 +3,8 @@ import toast from "react-hot-toast";
 
 const queryClient = new QueryClient({
   queryCache: new QueryCache({
-    // onError: (error) => {
-    //   toast.error(error.message);
-    // },
-    onError: () => {
-      toast.error("Something went wrong");
+    onError: (error) => {
+      toast.error(error.message);
     },
   }),
 });
