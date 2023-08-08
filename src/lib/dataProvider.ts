@@ -1,6 +1,8 @@
 /* 
-	Consolidated methods which interface with Backend API
+	Data providing methods which interfaces with Backend API
 	Change the implementation of each methods according to the backend used
+
+  Current backend used: Pocketbase
 */
 import pb from "@src/lib/pocketbase";
 import {
@@ -8,6 +10,7 @@ import {
   RecordListQueryParams,
   ListResult,
   RecordQueryParams,
+  BaseQueryParams,
 } from "pocketbase";
 
 // Fetch all records
@@ -59,4 +62,53 @@ export async function getOne<TRecord>({
     .getOne(id, queryParams);
 
   return data;
+}
+
+// Add a single record
+export async function addOne<TRecord extends {}>({
+  collectionName,
+  newData,
+  queryParams,
+}: {
+  collectionName: string;
+  newData: TRecord;
+  queryParams?: RecordQueryParams;
+}): Promise<TRecord> {
+  const data: TRecord = await pb
+    .collection(collectionName)
+    .create(newData, queryParams);
+
+  return data;
+}
+
+// Update a single record
+export async function updateOne<TRecord extends {}>({
+  collectionName,
+  id,
+  newData,
+  queryParams,
+}: {
+  collectionName: string;
+  id: string;
+  newData: TRecord;
+  queryParams?: RecordQueryParams;
+}): Promise<TRecord> {
+  const data: TRecord = await pb
+    .collection(collectionName)
+    .update(id, newData, queryParams);
+
+  return data;
+}
+
+// Delete a single record
+export async function deleteOne({
+  collectionName,
+  id,
+  queryParams,
+}: {
+  collectionName: string;
+  id: string;
+  queryParams?: BaseQueryParams;
+}): Promise<boolean> {
+  return await pb.collection(collectionName).delete(id, queryParams);
 }

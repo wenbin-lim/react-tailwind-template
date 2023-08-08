@@ -52,7 +52,6 @@ const Toaster = () => {
                   <div className="-mx-1.5 -my-1.5">
                     <button
                       type="button"
-                      // className=" "
                       className={clsx(
                         "inline-flex rounded-md p-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2",
                         {

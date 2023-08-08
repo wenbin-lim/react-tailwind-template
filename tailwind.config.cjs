@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
-import colors from 'tailwindcss/colors'
-import typography from '@tailwindcss/typography'
-import forms from '@tailwindcss/forms'
+import colors from "tailwindcss/colors";
+import typography from "@tailwindcss/typography";
+import forms from "@tailwindcss/forms";
 
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
@@ -97,6 +97,18 @@ export default {
       borderRadius: {
         btn: ".25rem",
         input: ".25rem",
+      },
+      fontSize: {
+        xs: ["0.6rem", "1rem"],
+      },
+      zIndex: {
+        // https://mui.com/material-ui/customization/z-index/
+        fab: "1000",
+        appbar: "1100",
+        drawer: "1200",
+        modal: "1300",
+        toast: "1400",
+        tooltip: "1500",
       },
     },
   },

@@ -16,7 +16,7 @@ const MobileSidebarWrapper = ({
     <Transition.Root show={showSidebar} as={Fragment}>
       <Dialog
         as="div"
-        className="relative z-50 lg:hidden"
+        className="relative z-drawer lg:hidden"
         onClose={onSidebarClose}
       >
         {/* Backdrop */}

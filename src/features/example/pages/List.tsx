@@ -1,30 +1,53 @@
+/* 
+  https://tailwindui.com/components/application-ui/lists/tables
+*/
 import { useState } from "react";
-import { useGetPaginatedListExample } from "../data/hooks";
+import { useNavigate } from "react-router-dom";
+import { useGetPaginatedListExample, useDeleteOneExample } from "../data/hooks";
 
 import { ListLoader } from "@src/components/loaders";
 import { Button, MoreActionsDropdown } from "@src/components/buttons";
 import { Pagination } from "@src/components/pagination";
 
+import toast from "react-hot-toast";
+import swal, { swalWarnDeleteOption } from "@src/lib/swal";
+
 const List = () => {
+  const navigate = useNavigate();
   const [page, setPage] = useState(1);
+
+  // fetch paginated data
   const { data } = useGetPaginatedListExample(page, 12);
+
+  // delete
+  const deleteFn = useDeleteOneExample();
+  const onDelete = (id: string) => {
+    swal.fire(swalWarnDeleteOption).then((result) => {
+      if (result.isConfirmed) {
+        deleteFn.mutate(id, {
+          onSuccess: () => toast.success("Example deleted"),
+        });
+      }
+    });
+  };
 
   if (data) {
     return (
       <main className="grid grid-rows-[1fr_auto] bg-background text-on-background">
         <div className="px-4 py-4 sm:px-6 lg:px-8">
-          <div className="sm:flex sm:items-center">
-            <div className="sm:flex-auto">
-              <h1 className="text-xl font-semibold leading-6">Users</h1>
-            </div>
-            <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-              <Button className="bg-primary text-on-primary">
-                Add example
-              </Button>
-            </div>
+          {/* Header */}
+          <div className="flex items-center justify-between">
+            <h1 className="text-2xl font-semibold leading-6">Examples</h1>
+            <Button
+              className="bg-primary text-on-primary"
+              onClick={() => navigate("new")}
+            >
+              Add example
+            </Button>
           </div>
 
-          <div className="-mx-4 mt-8 sm:-mx-0">
+          {/* Table */}
+          <div className="-mx-4 mt-4 sm:-mx-0">
             <table className="min-w-full divide-y divide-gray-300">
               <thead>
                 <tr className="text-left text-sm font-semibold text-on-background">
@@ -59,11 +82,11 @@ const List = () => {
                         actions={[
                           {
                             label: "Edit",
-                            callback: () => console.log("Edit"),
+                            callback: () => navigate(`${item.id}/edit`),
                           },
                           {
                             label: "Delete",
-                            callback: () => console.log("Delete"),
+                            callback: () => onDelete(item.id),
                           },
                         ]}
                       />
@@ -75,6 +98,7 @@ const List = () => {
           </div>
         </div>
 
+        {/* Footer */}
         <Pagination
           page={data.page}
           perPage={data.perPage}

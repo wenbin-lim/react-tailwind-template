@@ -6,6 +6,9 @@
 	To add custom overrides
 	https://tailwindcss.com/docs/functions-and-directives
 */
+:root {
+  --animate-duration: 250ms !important;
+}
 
 @layer base {
   html,

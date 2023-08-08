@@ -10,7 +10,7 @@ import { queryClient } from "@src/lib/reactQuery";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 // Toasts
-import { Toaster } from "@src/components";
+import { Toaster } from "@src/components/alerts";
 
 const App = () => {
   return (
