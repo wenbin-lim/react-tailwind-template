@@ -1,9 +1,5 @@
-import { Outlet } from "react-router-dom";
-import { RouteObject } from "@src/types/routes";
+import { Outlet, RouteObject } from "react-router-dom";
 import { RequireAuth } from "@src/features/auth/components";
-
-// Icons
-import { HomeIcon } from "@heroicons/react/24/outline";
 
 // Layout
 import { Layout } from "@src/layout/admin";
@@ -20,10 +16,7 @@ const childrenRoutes: RouteObject[] = [
 ];
 
 const route: RouteObject = {
-  name: "Dashboard",
   path: "/dashboard",
-  icon: <HomeIcon />,
-  showOnSidebar: true,
   children: childrenRoutes,
   element: (
     <RequireAuth>

@@ -7,16 +7,20 @@ TODO:
 Ecosystem:
 
 1. Build Tool - Vite
-2. Styling - TailwindCSS, TailwindUI, SASS
+2. Styling - TailwindCSS, TailwindUI, HeadlessUI, SASS
 3. Data Fetching - Tanstack Query
 4. Routing - React Router
 5. Forms - React Hook Form + Zod
+6. Toast - React Hot Toast
+7. Alerts (Modal) - SweetAlert2
+8. Icons - react-icons, heroicons
 
 Utils Packages:
 
 1. usehooks-ts
 2. clsx
 3. jwt-decode
+4. animate.css
 
 Getting Started:
 
@@ -39,6 +43,41 @@ Folders inside `./src`:
 - `types`: Custom type declaration files
 - `utils`: Utility functions
 
+`Features` folder:
+
+- Each feature (eg. auth, CRUD of a new record) will be placed inside
+- Create functions, components, hooks etc that are specific to the feature
+
+`Lib` folder:
+
+1. `dataProvider.ts`
+
+- Consist of basic RESTful API methods pertaining to the backend used
+- These methods are generic and can be widely used
+- Please create your own API methods (inside `features`) if you require more specific functionality
+- Feel free to change the internal implementation if the backend is different
+
+2. `pocketbase.ts`
+
+- Pocketbase instance that has pre-defined config
+- Import this instance unless you require a clean instance from pocketbase
+
+3. `reactQuery.ts`
+
+- QueryClient instance from @tanstack/react-query that has pre-defined config
+- You can `useQueryClient` hook from react-query to access this instance
+
+4. `swal.ts`
+
+- SweetAlert2 instance that has pre-defined styling and config
+- Use this instance to fire swal alerts
+
+@tanstack/react-query practices:
+
+- https://tkdodo.eu/blog/tags/react-query
+- Favor extracting each function into a hook
+- Query Keys: https://tkdodo.eu/blog/effective-react-query-keys
+
 Backend:
 
 - Using Pocketbase for data and auth
@@ -50,9 +89,7 @@ Important Notes:
 
 - `import Example from '@src/example'
 
-2. Additional features should be added into the `features` folder with its own components, pages, hooks etc.
-
-- Folder items inside `src` such as `components` and `pages` are to shared as common items
+2.
 
 TailwindCSS:
 

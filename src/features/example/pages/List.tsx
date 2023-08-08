@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useGetPaginatedListExample, useDeleteOneExample } from "../data/hooks";
 
 import { ListLoader } from "@src/components/loaders";
+import { ListHeader } from "@src/components/ui";
 import { Button, MoreActionsDropdown } from "@src/components/buttons";
 import { Pagination } from "@src/components/pagination";
 
@@ -36,15 +37,17 @@ const List = () => {
       <main className="grid grid-rows-[1fr_auto] bg-background text-on-background">
         <div className="px-4 py-4 sm:px-6 lg:px-8">
           {/* Header */}
-          <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-semibold leading-6">Examples</h1>
-            <Button
-              className="bg-primary text-on-primary"
-              onClick={() => navigate("new")}
-            >
-              Add example
-            </Button>
-          </div>
+          <ListHeader
+            title="Examples"
+            buttons={
+              <Button
+                className="bg-primary text-on-primary"
+                onClick={() => navigate("new")}
+              >
+                Add example
+              </Button>
+            }
+          />
 
           {/* Table */}
           <div className="-mx-4 mt-4 sm:-mx-0">
@@ -80,6 +83,10 @@ const List = () => {
                     <td className=" flex justify-end py-4 pl-3 pr-4 sm:pr-0">
                       <MoreActionsDropdown
                         actions={[
+                          {
+                            label: "View",
+                            callback: () => navigate(`${item.id}`),
+                          },
                           {
                             label: "Edit",
                             callback: () => navigate(`${item.id}/edit`),

@@ -1,17 +1,14 @@
 import { cloneElement } from "react";
 import clsx from "clsx";
 import { useNavigate, NavLink } from "react-router-dom";
-import { RouteObject } from "@src/types/routes";
 import { useAuth } from "@src/features/auth/hooks";
 import toast from "react-hot-toast";
 
 import { ArrowLeftOnRectangleIcon } from "@heroicons/react/24/outline";
 
-type SidebarProps = {
-  navItems: RouteObject[];
-};
+import navigationItems from "./NavigationItems";
 
-const Sidebar = ({ navItems }: SidebarProps) => {
+const Sidebar = () => {
   const navigate = useNavigate();
   const { logout } = useAuth();
 
@@ -41,30 +38,28 @@ const Sidebar = ({ navItems }: SidebarProps) => {
         <ul role="list" className="flex flex-1 flex-col gap-y-7">
           <li>
             <ul role="list" className="-mx-2 space-y-1">
-              {navItems
-                .filter(({ showOnSidebar }) => showOnSidebar)
-                .map(({ path, name, icon }, index) => (
-                  <li key={index}>
-                    <NavLink
-                      to={path || "#"}
-                      className={({ isActive }) =>
-                        clsx(
-                          "flex w-full gap-x-3 rounded-md p-2 text-sm font-semibold leading-6",
-                          isActive
-                            ? "bg-primary-300 text-on-primary"
-                            : "text-on-primary/50 hover:bg-primary-400 hover:text-on-primary",
-                        )
-                      }
-                    >
-                      {!!icon &&
-                        cloneElement(icon, {
-                          className: "h-6 w-6 shrink-0",
-                          "aria-hidden": true,
-                        })}
-                      {name || "No name"}
-                    </NavLink>
-                  </li>
-                ))}
+              {navigationItems.map(({ path, name, icon }, index) => (
+                <li key={index}>
+                  <NavLink
+                    to={path || "#"}
+                    className={({ isActive }) =>
+                      clsx(
+                        "flex w-full gap-x-3 rounded-md p-2 text-sm font-semibold leading-6",
+                        isActive
+                          ? "bg-primary-300 text-on-primary"
+                          : "text-on-primary/50 hover:bg-primary-400 hover:text-on-primary",
+                      )
+                    }
+                  >
+                    {!!icon &&
+                      cloneElement(icon, {
+                        className: "h-6 w-6 shrink-0",
+                        "aria-hidden": true,
+                      })}
+                    {name || "No name"}
+                  </NavLink>
+                </li>
+              ))}
             </ul>
           </li>
           <li className="mt-auto">

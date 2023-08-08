@@ -1,5 +1,4 @@
-import { Navigate } from "react-router-dom";
-import { RouteObject } from "@src/types/routes";
+import { Navigate, RouteObject } from "react-router-dom";
 
 // Public Pages
 import { LoginPage, SignupPage } from "@src/pages/public";
@@ -35,15 +34,6 @@ const publicRoutes: RouteObject[] = [
 ];
 
 /* 
-  Menu routes
-  These routes are usually accessible by authenticated users
-  These routes are also used to generate the sidebar menu
-  Please note that order is important here
-  The first in array will be displayed first in the sidebar
-*/
-const menuRoutes = [dashboardRoute, exampleRoute];
-
-/* 
   Error routes
   These routes are used to display error pages
 */
@@ -66,8 +56,13 @@ const errorRoutes: RouteObject[] = [
 /* 
   Full routes of application
   Used to generate the router
-  Order is important here as errorRoutes must be destructured last to catch all routes
-*/
-const routes = [...publicRoutes, ...menuRoutes, ...errorRoutes];
+  !! errorRoutes must be destructured last to catch all routes
 
-export { routes, publicRoutes, menuRoutes, errorRoutes };
+  Feel free to create your own routes and import here
+*/
+// routes that are protected by auth and wrapped inside admin layout
+const adminRoutes = [dashboardRoute, exampleRoute];
+
+const routes = [...publicRoutes, ...adminRoutes, ...errorRoutes];
+
+export default routes;

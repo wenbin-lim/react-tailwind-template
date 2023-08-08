@@ -56,8 +56,8 @@ export async function getOne<TRecord>({
   collectionName: string;
   id: string;
   queryParams?: RecordQueryParams;
-}): Promise<TRecord[]> {
-  const data: TRecord[] = await pb
+}): Promise<TRecord> {
+  const data: TRecord = await pb
     .collection(collectionName)
     .getOne(id, queryParams);
 
@@ -65,7 +65,7 @@ export async function getOne<TRecord>({
 }
 
 // Add a single record
-export async function addOne<TRecord extends {}>({
+export async function addOne<TRecord extends object>({
   collectionName,
   newData,
   queryParams,
@@ -82,7 +82,7 @@ export async function addOne<TRecord extends {}>({
 }
 
 // Update a single record
-export async function updateOne<TRecord extends {}>({
+export async function updateOne<TRecord extends object>({
   collectionName,
   id,
   newData,

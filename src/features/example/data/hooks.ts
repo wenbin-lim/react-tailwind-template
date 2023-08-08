@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { z } from "zod";
 
 // Data provider methods
 import {
@@ -13,11 +14,14 @@ import {
 // Constants and Types
 const KEY = "examples";
 
-type Example = {
+export const ExampleSchema = z.object({
+  name: z.string(),
+  title: z.string(),
+  description: z.string(),
+});
+
+export type Example = z.infer<typeof ExampleSchema> & {
   id: string;
-  name: string;
-  title: string;
-  description: string;
 };
 
 // get full list
@@ -38,14 +42,21 @@ export const useGetPaginatedListExample = (page: number, perPage: number) => {
 };
 
 // get single record
-export const useGetOneExample = (id: string) => {
+export const useGetOneExample = ({
+  id,
+  enabled,
+}: {
+  id: string;
+  enabled?: boolean;
+}) => {
   return useQuery({
     queryKey: [KEY, "detail", id],
     queryFn: () => getOne<Example>({ collectionName: KEY, id }),
+    enabled,
   });
 };
 
-// create one record
+// add one record
 export const useAddOneExample = () => {
   const queryClient = useQueryClient();
 

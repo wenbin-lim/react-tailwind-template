@@ -1,9 +1,5 @@
-import { Outlet } from "react-router-dom";
-import { RouteObject } from "@src/types/routes";
+import { Outlet, RouteObject } from "react-router-dom";
 import { RequireAuth } from "@src/features/auth/components";
-
-// Icons
-import { GlobeAltIcon } from "@heroicons/react/24/outline";
 
 // Layout
 import { Layout } from "@src/layout/admin";
@@ -11,8 +7,7 @@ import { Layout } from "@src/layout/admin";
 // Pages
 import List from "../pages/List";
 import Show from "../pages/Show";
-import Create from "../pages/Create";
-import Edit from "../pages/Edit";
+import Form from "../pages/Form";
 
 // Routes
 const childrenRoutes: RouteObject[] = [
@@ -26,19 +21,16 @@ const childrenRoutes: RouteObject[] = [
   },
   {
     path: "new",
-    element: <Create />,
+    element: <Form type="create" />,
   },
   {
     path: ":id/edit",
-    element: <Edit />,
+    element: <Form type="edit" />,
   },
 ];
 
 const route: RouteObject = {
   path: "/examples",
-  name: "Examples",
-  icon: <GlobeAltIcon />,
-  showOnSidebar: true,
   children: childrenRoutes,
   element: (
     <RequireAuth>

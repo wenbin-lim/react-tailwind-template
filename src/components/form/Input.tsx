@@ -8,6 +8,7 @@ type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   required?: boolean;
   errorText?: string;
   helperText?: string;
+  wrapperClass?: string;
   inputHint?: React.ReactNode | JSX.Element;
 };
 
@@ -20,12 +21,13 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       errorText,
       helperText,
       inputHint,
+      wrapperClass,
       ...rest
     }: InputProps,
     ref,
   ) => {
     return (
-      <div>
+      <div className={clsx(wrapperClass)}>
         <div className="flex items-center justify-between">
           {!!label && (
             <label
