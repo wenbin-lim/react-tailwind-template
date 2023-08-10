@@ -77,6 +77,11 @@ Folders inside `./src`:
 - SweetAlert2 instance that has pre-defined styling and config
 - Use this instance to fire swal alerts
 
+Custom scripts:
+`npm run new-feature`
+
+- To add a new feature into the application
+
 @tanstack/react-query practices:
 
 - https://tkdodo.eu/blog/tags/react-query
