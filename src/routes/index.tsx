@@ -1,68 +1,31 @@
-import { Navigate, RouteObject } from "react-router-dom";
-
-// Public Pages
-import { LoginPage, SignupPage } from "@src/pages/public";
+import {
+  createBrowserRouter,
+  RouterProvider as BrowserRouterProvider,
+  RouteObject,
+  Outlet,
+  Navigate,
+} from "react-router-dom";
 
 // Routes
-import dashboardRoute from "@src/features/dashboard/routes";
-import exampleRoute from "@src/features/example/routes";
-
-// Error Pages
-import {
-  UnauthorisedPage,
-  ForbiddenPage,
-  NotFoundPage,
-} from "@src/pages/errors";
-
-/*
-  Public routes
-  These routes are accessible by everyone
-*/
-const publicRoutes: RouteObject[] = [
-  {
-    path: "/",
-    element: <Navigate to="/login" />,
-  },
-  {
-    path: "/login",
-    element: <LoginPage />,
-  },
-  {
-    path: "/signup",
-    element: <SignupPage />,
-  },
-];
-
-/* 
-  Error routes
-  These routes are used to display error pages
-*/
-const errorRoutes: RouteObject[] = [
-  {
-    path: "/access-denied",
-    element: <UnauthorisedPage redirectTo="/login" />,
-  },
-  {
-    path: "/access-forbidden",
-    element: <ForbiddenPage redirectTo="/login" />,
-  },
-  // 404 should always be the last route of the array
-  {
-    path: "*",
-    element: <NotFoundPage />,
-  },
-];
+import publicRoutes from "./publicRoutes";
+import errorRoutes from "./errorRoutes";
+import * as customRoutes from "./customRoutes";
 
 /* 
   Full routes of application
   Used to generate the router
   !! errorRoutes must be destructured last to catch all routes
-
-  Feel free to create your own routes and import here
 */
-// routes that are protected by auth and wrapped inside admin layout
-const adminRoutes = [dashboardRoute, exampleRoute];
+const routes: RouteObject[] = [
+  {
+    path: "",
+    children: [...publicRoutes, ...Object.values(customRoutes), ...errorRoutes],
+    errorElement: <Navigate to="/server-error" />,
+    element: <Outlet />,
+  },
+];
 
-const routes = [...publicRoutes, ...adminRoutes, ...errorRoutes];
+const router = createBrowserRouter(routes);
+const RouterProvider = () => <BrowserRouterProvider router={router} />;
 
-export default routes;
+export default RouterProvider;

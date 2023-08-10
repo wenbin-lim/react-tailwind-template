@@ -27,7 +27,12 @@ Getting Started:
 1. Clone and cd into project
 2. Initialise git: `git init`
 3. Install node_modules: `npm i`
-4. Start development server: `npm run dev`
+4. Create .env.local in root and add
+   a. `VITE_SERVER_PORT=6969  #frontend server port`
+   b. `VITE_API_URL=your_backend_server_url`
+5. Change these files to connect to your preferred backend service (if not pocketbase)
+   - ./src/lib/dataProvider.ts
+6. Start development server: `npm run dev`
 
 Folders inside `./src`:
 
@@ -57,7 +62,7 @@ Folders inside `./src`:
 - Please create your own API methods (inside `features`) if you require more specific functionality
 - Feel free to change the internal implementation if the backend is different
 
-2. `pocketbase.ts`
+2. `backend.ts` (Current: Pocketbase)
 
 - Pocketbase instance that has pre-defined config
 - Import this instance unless you require a clean instance from pocketbase

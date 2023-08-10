@@ -19,8 +19,8 @@ const NotFoundPage = ({ redirectTo = "/" }: NotFoundPageProps) => {
         </p>
         <div className="mt-10 flex items-center justify-center gap-x-6">
           <Button
-            className="w-full bg-primary text-on-primary"
-            onClick={() => navigate(redirectTo)}
+            className="bg-primary text-on-primary"
+            onClick={() => navigate(redirectTo, { replace: true })}
           >
             Go back
           </Button>

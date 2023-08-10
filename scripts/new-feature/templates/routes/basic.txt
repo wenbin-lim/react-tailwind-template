@@ -1,0 +1,36 @@
+import { Outlet, RouteObject } from "react-router-dom";
+// import { RequireAuth } from "@src/features/auth/components";
+
+// Layouts import
+
+// Pages import
+import EntryPage from "../pages/EntryPage";
+
+// Routes
+const childrenRoutes: RouteObject[] = [
+  {
+    path: "",
+    element: <EntryPage />,
+  },
+];
+
+// // use this if you want to require authentication for this feature
+// const route: RouteObject = {
+//   path: "/%featureParamCase%",
+//   children: childrenRoutes,
+//   element: (
+//     <RequireAuth>
+//       <Outlet />
+//     </RequireAuth>
+//   ),
+// };
+
+const route: RouteObject = {
+  path: "/%featureParamCase%",
+  children: childrenRoutes,
+  element: (
+    <Outlet />
+  ),
+};
+
+export default route;

@@ -1,4 +1,4 @@
-import pb from "@src/lib/pocketbase";
+import backend from "@src/lib/backend";
 import { z } from "zod";
 
 /* 
@@ -51,7 +51,7 @@ export const register = async ({
   password,
   passwordConfirm,
 }: RegisterProps) => {
-  const res = await pb
+  const res = await backend
     .collection("users")
     .create({ username, email, password, passwordConfirm });
 
@@ -66,7 +66,9 @@ export const LoginSchema = z.object({
 export type LoginProps = z.infer<typeof LoginSchema>;
 
 export const login = async ({ username, password }: LoginProps) => {
-  const res = await pb.collection("users").authWithPassword(username, password);
+  const res = await backend
+    .collection("users")
+    .authWithPassword(username, password);
 
   return res;
 };

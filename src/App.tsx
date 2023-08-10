@@ -1,5 +1,5 @@
 // React router
-import RouterProvider from "@src/routes/RouterProvider";
+import RouterProvider from "@src/routes";
 
 // Auth
 import { AuthProvider } from "@src/features/auth/provider";
@@ -8,6 +8,8 @@ import { AuthProvider } from "@src/features/auth/provider";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@src/lib/reactQuery";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
+// Error boundary
 
 // Toasts
 import { Toaster } from "@src/components/alerts";

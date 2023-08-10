@@ -1,7 +1,7 @@
 import { createContext, useCallback, useState, useEffect } from "react";
 import { useInterval } from "usehooks-ts";
 
-import pb from "@src/lib/pocketbase";
+import backend from "@src/lib/backend";
 import { Record, Admin } from "pocketbase";
 
 import jwtDecode, { JwtPayload } from "jwt-decode";
@@ -29,28 +29,28 @@ export const AuthContext = createContext<AuthContextType>({
 });
 
 export const AuthProvider = ({ children }: AuthProviderType) => {
-  const [token, setToken] = useState(pb.authStore.token);
-  const [user, setUser] = useState(pb.authStore.model);
+  const [token, setToken] = useState(backend.authStore.token);
+  const [user, setUser] = useState(backend.authStore.model);
 
   useEffect(() => {
-    return pb.authStore.onChange((token, model) => {
+    return backend.authStore.onChange((token, model) => {
       setToken(token);
       setUser(model);
     });
   }, []);
 
   const logout = useCallback(() => {
-    pb.authStore.clear();
+    backend.authStore.clear();
   }, []);
 
   const refreshSession = useCallback(async () => {
-    if (!pb.authStore.isValid) return;
+    if (!backend.authStore.isValid) return;
 
     const decoded = jwtDecode<JwtPayload>(token);
     const tokenExpiration = decoded.exp ?? 0;
     const expirationWithBuffer = (tokenExpiration + fiveMinutesInMs) / 1000;
     if (tokenExpiration < expirationWithBuffer) {
-      await pb.collection("users").authRefresh();
+      await backend.collection("users").authRefresh();
     }
   }, [token]);
 

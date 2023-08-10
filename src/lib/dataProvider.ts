@@ -4,7 +4,7 @@
 
   Current backend used: Pocketbase
 */
-import pb from "@src/lib/pocketbase";
+import backend from "@src/lib/backend";
 import {
   RecordFullListQueryParams,
   RecordListQueryParams,
@@ -21,7 +21,7 @@ export async function getFullList<TRecord>({
   collectionName: string;
   queryParams?: RecordFullListQueryParams;
 }): Promise<TRecord[]> {
-  const data: TRecord[] = await pb
+  const data: TRecord[] = await backend
     .collection(collectionName)
     .getFullList(queryParams);
 
@@ -40,7 +40,7 @@ export async function getPaginatedList<TRecord>({
   perPage: number;
   queryParams?: RecordListQueryParams;
 }): Promise<ListResult<TRecord>> {
-  const data: ListResult<TRecord> = await pb
+  const data: ListResult<TRecord> = await backend
     .collection(collectionName)
     .getList(page, perPage, queryParams);
 
@@ -57,7 +57,7 @@ export async function getOne<TRecord>({
   id: string;
   queryParams?: RecordQueryParams;
 }): Promise<TRecord> {
-  const data: TRecord = await pb
+  const data: TRecord = await backend
     .collection(collectionName)
     .getOne(id, queryParams);
 
@@ -74,7 +74,7 @@ export async function addOne<TRecord extends object>({
   newData: TRecord;
   queryParams?: RecordQueryParams;
 }): Promise<TRecord> {
-  const data: TRecord = await pb
+  const data: TRecord = await backend
     .collection(collectionName)
     .create(newData, queryParams);
 
@@ -93,7 +93,7 @@ export async function updateOne<TRecord extends object>({
   newData: TRecord;
   queryParams?: RecordQueryParams;
 }): Promise<TRecord> {
-  const data: TRecord = await pb
+  const data: TRecord = await backend
     .collection(collectionName)
     .update(id, newData, queryParams);
 
@@ -110,5 +110,5 @@ export async function deleteOne({
   id: string;
   queryParams?: BaseQueryParams;
 }): Promise<boolean> {
-  return await pb.collection(collectionName).delete(id, queryParams);
+  return await backend.collection(collectionName).delete(id, queryParams);
 }

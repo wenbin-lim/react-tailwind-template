@@ -1,7 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
 
-// Data provider methods
+/* 
+	Data provider methods
+	- create your own data provider methods or use the ones provided by @src/lib/dataProvider
+*/
 import {
   getFullList,
   getPaginatedList,
@@ -11,38 +14,42 @@ import {
   deleteOne,
 } from "@src/lib/dataProvider";
 
-// Constants and Types
-const KEY = "examples123";
+/* 
+	Constants and Types
 
-export const ExampleSchema = z.object({
+	Query Keys: https://tkdodo.eu/blog/effective-react-query-keys
+*/
+const KEY = "%featurePascalCase%";
+
+export const %featurePascalCase%Schema = z.object({
   name: z.string(),
   title: z.string(),
   description: z.string(),
 });
 
-export type Example = z.infer<typeof ExampleSchema> & {
+export type %featurePascalCase% = z.infer<typeof %featurePascalCase%Schema> & {
   id: string;
 };
 
 // get full list
-export const useGetFullListExample = () => {
+export const useGetFullList%featurePascalCase% = () => {
   return useQuery({
     queryKey: [KEY, "list"],
-    queryFn: () => getFullList<Example>({ collectionName: KEY }),
+    queryFn: () => getFullList<%featurePascalCase%>({ collectionName: KEY }),
   });
 };
 
 // get paginated list
-export const useGetPaginatedListExample = (page: number, perPage: number) => {
+export const useGetPaginatedList%featurePascalCase% = (page: number, perPage: number) => {
   return useQuery({
     queryKey: [KEY, "list", { pagination: { page, perPage } }],
     queryFn: () =>
-      getPaginatedList<Example>({ collectionName: KEY, page, perPage }),
+      getPaginatedList<%featurePascalCase%>({ collectionName: KEY, page, perPage }),
   });
 };
 
 // get single record
-export const useGetOneExample = ({
+export const useGetOne%featurePascalCase% = ({
   id,
   enabled,
 }: {
@@ -51,18 +58,18 @@ export const useGetOneExample = ({
 }) => {
   return useQuery({
     queryKey: [KEY, "detail", id],
-    queryFn: () => getOne<Example>({ collectionName: KEY, id }),
+    queryFn: () => getOne<%featurePascalCase%>({ collectionName: KEY, id }),
     enabled,
   });
 };
 
 // add one record
-export const useAddOneExample = () => {
+export const useAddOne%featurePascalCase% = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (newData: Example) =>
-      addOne<Example>({ collectionName: KEY, newData }),
+    mutationFn: (newData: %featurePascalCase%) =>
+      addOne<%featurePascalCase%>({ collectionName: KEY, newData }),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [KEY, "list"],
@@ -72,12 +79,12 @@ export const useAddOneExample = () => {
 };
 
 // update one record
-export const useUpdateOneExample = (id: string) => {
+export const useUpdateOne%featurePascalCase% = (id: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (newData: Example) =>
-      updateOne<Example>({ collectionName: KEY, id, newData }),
+    mutationFn: (newData: %featurePascalCase%) =>
+      updateOne<%featurePascalCase%>({ collectionName: KEY, id, newData }),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [KEY, "list"],
@@ -87,7 +94,7 @@ export const useUpdateOneExample = (id: string) => {
 };
 
 // delete one record
-export const useDeleteOneExample = () => {
+export const useDeleteOne%featurePascalCase% = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
