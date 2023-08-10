@@ -81,8 +81,10 @@ const Pagination = ({
           <p className="text-sm text-on-background">
             Showing{" "}
             <span className="font-medium">{(page - 1) * perPage + 1}</span> to{" "}
-            <span className="font-medium">{page * perPage}</span> of{" "}
-            <span className="font-medium">{totalItems}</span> results
+            <span className="font-medium">
+              {page * perPage <= totalItems ? page * perPage : totalItems}
+            </span>{" "}
+            of <span className="font-medium">{totalItems}</span> results
           </p>
         </div>
         <div>
