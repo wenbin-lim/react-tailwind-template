@@ -12,7 +12,7 @@ import {
 } from "@src/lib/dataProvider";
 
 // Constants and Types
-const KEY = "examples123";
+const KEY = "examples";
 
 export const ExampleSchema = z.object({
   name: z.string(),
