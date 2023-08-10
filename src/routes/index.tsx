@@ -3,7 +3,6 @@ import {
   RouterProvider as BrowserRouterProvider,
   RouteObject,
   Outlet,
-  Navigate,
 } from "react-router-dom";
 
 // Routes
@@ -20,7 +19,7 @@ const routes: RouteObject[] = [
   {
     path: "",
     children: [...publicRoutes, ...Object.values(customRoutes), ...errorRoutes],
-    errorElement: <Navigate to="/server-error" />,
+    // errorElement: <Navigate to="/server-error" />,
     element: <Outlet />,
   },
 ];

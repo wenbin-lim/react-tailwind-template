@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 
 import { ArrowLeftOnRectangleIcon } from "@heroicons/react/24/outline";
 
-import navigationItems from "./NavigationItems";
+import navigationItems from "./navigationItems";
 
 const Sidebar = () => {
   const navigate = useNavigate();
