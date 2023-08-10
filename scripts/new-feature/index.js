@@ -241,7 +241,7 @@ try {
     "utf-8",
   );
 
-  let exportStatement = `export { default as ${changeCase.pascalCase(
+  let exportStatement = `export { default as ${changeCase.camelCase(
     featureName,
   )}Route } from "@src/features/${featureName}/routes";`;
 
