@@ -1,24 +1,36 @@
 import { Fragment } from "react";
 import clsx from "clsx";
+import { useNavigate } from "react-router-dom";
 
 import { Bars3Icon } from "@heroicons/react/24/solid";
 import { Cog6ToothIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import { Menu, Transition } from "@headlessui/react";
 
 interface StickyHeaderProps {
-  openMobileSidebar: () => void;
+  openMobileSidebar?: () => void;
 }
 const StickyHeader = ({ openMobileSidebar }: StickyHeaderProps) => {
+  const navigate = useNavigate();
+
   return (
     <div className="sticky top-0 z-appbar flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-background px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
-      <button
-        type="button"
-        className="-m-2.5 p-2.5 text-gray-700 lg:hidden"
-        onClick={openMobileSidebar}
-      >
-        <span className="sr-only">Open sidebar</span>
-        <Bars3Icon className="h-6 w-6" aria-hidden="true" />
-      </button>
+      {!!openMobileSidebar ? (
+        <button
+          type="button"
+          className="-m-2.5 p-2.5 text-gray-700 lg:hidden"
+          onClick={openMobileSidebar}
+        >
+          <span className="sr-only">Open sidebar</span>
+          <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+        </button>
+      ) : (
+        <img
+          className="mx-auto h-6 w-auto cursor-pointer"
+          src="/brand/logo_long.svg"
+          alt="Company Brand"
+          onClick={() => navigate("/dashboard")}
+        />
+      )}
 
       <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
         <div className="ml-auto flex items-center gap-x-4 lg:gap-x-6">
