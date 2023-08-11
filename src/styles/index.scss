@@ -19,6 +19,8 @@
   #root {
     @apply h-full;
     @apply min-h-screen;
+    @apply bg-background text-on-background;
+    @apply dark:bg-background-dark dark:text-on-background-dark;
   }
 }
 

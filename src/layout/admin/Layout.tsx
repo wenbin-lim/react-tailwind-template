@@ -1,33 +1,46 @@
 import { useState } from "react";
+import clsx from "clsx";
 
-import StickyHeader from "./StickyHeader";
+import TopBar from "./TopBar";
 import Sidebar from "./Sidebar";
 import MobileSidebarWrapper from "./MobileSidebarWrapper";
 
 type AdminLayoutProps = {
+  showTopbar?: boolean;
+  showSidebar?: boolean;
   children?: React.ReactNode;
 };
 
-const AdminLayout = ({ children }: AdminLayoutProps) => {
+const AdminLayout = ({ showSidebar = false, children }: AdminLayoutProps) => {
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
 
   return (
     <>
-      <MobileSidebarWrapper
-        showSidebar={showMobileSidebar}
-        onSidebarClose={() => setShowMobileSidebar(false)}
+      {showSidebar && (
+        <>
+          <MobileSidebarWrapper
+            showSidebar={showMobileSidebar}
+            onSidebarClose={() => setShowMobileSidebar(false)}
+          >
+            <Sidebar />
+          </MobileSidebarWrapper>
+
+          {/* Static sidebar for desktop */}
+          <div className="hidden lg:fixed lg:inset-y-0 lg:z-appbar lg:flex lg:w-sidebar lg:flex-col">
+            <Sidebar />
+          </div>
+        </>
+      )}
+
+      <div
+        className={clsx("grid min-h-screen grid-rows-[auto_1fr] flex-col", {
+          "lg:pl-sidebar": showSidebar,
+        })}
       >
-        <Sidebar />
-      </MobileSidebarWrapper>
-
-      {/* Static sidebar for desktop */}
-      <div className="hidden lg:fixed lg:inset-y-0 lg:z-appbar lg:flex lg:w-72 lg:flex-col">
-        <Sidebar />
-      </div>
-
-      <div className="grid min-h-full grid-rows-[auto_1fr] lg:pl-72">
-        {/* Sticky search header */}
-        <StickyHeader openMobileSidebar={() => setShowMobileSidebar(true)} />
+        <TopBar
+          showMobileSidebarToggle={false}
+          openMobileSidebar={() => setShowMobileSidebar(true)}
+        />
 
         {/* Outlet */}
         {children}
