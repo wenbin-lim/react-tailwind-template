@@ -15,8 +15,8 @@ export default defineConfig(({ mode }) => {
     },
     resolve: {
       alias: {
-        "@root": "/",
         "@src": "/src",
+        "@root": "/",
         "@tailwind-config": "/tailwind.config.cjs",
       },
     },

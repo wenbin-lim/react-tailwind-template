@@ -18,6 +18,7 @@ export type AuthProviderType = {
 type AuthContextType = {
   user: Record | Admin | null;
   token: string;
+  isValidToken: boolean;
   logout: () => void;
 };
 
@@ -25,17 +26,20 @@ type AuthContextType = {
 export const AuthContext = createContext<AuthContextType>({
   user: null,
   token: "",
+  isValidToken: false,
   logout: () => {},
 });
 
 export const AuthProvider = ({ children }: AuthProviderType) => {
   const [token, setToken] = useState(backend.authStore.token);
   const [user, setUser] = useState(backend.authStore.model);
+  const [isValidToken, setIsValidToken] = useState(backend.authStore.isValid);
 
   useEffect(() => {
     return backend.authStore.onChange((token, model) => {
       setToken(token);
       setUser(model);
+      setIsValidToken(backend.authStore.isValid);
     });
   }, []);
 
@@ -61,7 +65,7 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
   */
 
   return (
-    <AuthContext.Provider value={{ logout, user, token }}>
+    <AuthContext.Provider value={{ logout, user, token, isValidToken }}>
       {children}
     </AuthContext.Provider>
   );

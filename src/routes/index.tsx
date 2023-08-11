@@ -5,6 +5,9 @@ import {
   Outlet,
   Navigate,
 } from "react-router-dom";
+import { PageLoader } from "@src/components/loaders";
+
+import App from "@src/App";
 
 // Routes
 import publicRoutes from "./publicRoutes";
@@ -16,16 +19,25 @@ import * as customRoutes from "./customRoutes";
   Used to generate the router
   !! errorRoutes must be destructured last to catch all routes
 */
+const appRoutes = [
+  ...publicRoutes,
+  ...Object.values(customRoutes),
+  ...errorRoutes,
+];
+
 const routes: RouteObject[] = [
   {
+    // entry point
     path: "",
-    children: [...publicRoutes, ...Object.values(customRoutes), ...errorRoutes],
+    children: appRoutes,
     errorElement: <Navigate to="/server-error" />,
-    element: <Outlet />,
+    element: <App />,
   },
 ];
 
 const router = createBrowserRouter(routes);
-const RouterProvider = () => <BrowserRouterProvider router={router} />;
+const RouterProvider = () => (
+  <BrowserRouterProvider router={router} fallbackElement={<PageLoader />} />
+);
 
 export default RouterProvider;

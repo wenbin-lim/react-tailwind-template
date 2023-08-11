@@ -1,16 +1,27 @@
 import { Fragment } from "react";
 import clsx from "clsx";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@src/features/auth/hooks";
+import toast from "react-hot-toast";
 
-import { Bars3Icon } from "@heroicons/react/24/solid";
+import { Bars3Icon, UserCircleIcon } from "@heroicons/react/24/solid";
 import { Cog6ToothIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import { Menu, Transition } from "@headlessui/react";
 
+import { getPbImageUrl } from "@src/utils/pocketbase";
 interface StickyHeaderProps {
   openMobileSidebar?: () => void;
 }
 const StickyHeader = ({ openMobileSidebar }: StickyHeaderProps) => {
   const navigate = useNavigate();
+
+  const { logout, user } = useAuth();
+
+  const onLogout = () => {
+    logout();
+    navigate("/login");
+    toast.success("You have successfully logged out!");
+  };
 
   return (
     <div className="sticky top-0 z-appbar flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-background px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
@@ -37,6 +48,7 @@ const StickyHeader = ({ openMobileSidebar }: StickyHeaderProps) => {
           <button
             type="button"
             className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500"
+            onClick={() => navigate("/settings")}
           >
             <span className="sr-only">Settings</span>
             <Cog6ToothIcon className="h-6 w-6" aria-hidden="true" />
@@ -52,17 +64,25 @@ const StickyHeader = ({ openMobileSidebar }: StickyHeaderProps) => {
           <Menu as="div" className="relative">
             <Menu.Button className="-m-1.5 flex items-center p-1.5">
               <span className="sr-only">Open user menu</span>
-              <img
-                className="h-8 w-8 rounded-full bg-gray-50"
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                alt=""
-              />
+              {user ? (
+                <img
+                  className="h-8 w-8 rounded-full bg-background"
+                  src={getPbImageUrl({
+                    collection: "users",
+                    recordId: user.id,
+                    fileName: user.avatar,
+                  })}
+                  alt="user profile picture"
+                />
+              ) : (
+                <UserCircleIcon className="h-8 w-8 rounded-full text-gray-400" />
+              )}
               <span className="hidden lg:flex lg:items-center">
                 <span
-                  className="ml-4 text-sm font-semibold leading-6 text-gray-900"
+                  className="ml-4 text-sm font-semibold leading-6"
                   aria-hidden="true"
                 >
-                  John Doe
+                  {user ? user.email : ""}
                 </span>
                 <ChevronDownIcon
                   className="ml-2 h-5 w-5 text-gray-400"
@@ -83,12 +103,13 @@ const StickyHeader = ({ openMobileSidebar }: StickyHeaderProps) => {
                 <Menu.Item>
                   {({ active }) => (
                     <button
+                      onClick={onLogout}
                       className={clsx(
-                        "block w-full px-3 py-1 text-sm leading-6 text-gray-900",
+                        "block w-full px-3 py-1 text-left text-sm leading-6 text-gray-900",
                         { "bg-gray-50": active },
                       )}
                     >
-                      View Profile
+                      Logout
                     </button>
                   )}
                 </Menu.Item>
