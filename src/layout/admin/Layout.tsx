@@ -11,7 +11,7 @@ type AdminLayoutProps = {
   children?: React.ReactNode;
 };
 
-const AdminLayout = ({ showSidebar = false, children }: AdminLayoutProps) => {
+const AdminLayout = ({ showSidebar = true, children }: AdminLayoutProps) => {
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
 
   return (
@@ -38,7 +38,7 @@ const AdminLayout = ({ showSidebar = false, children }: AdminLayoutProps) => {
         })}
       >
         <TopBar
-          showMobileSidebarToggle={false}
+          showMobileSidebarToggle={true}
           openMobileSidebar={() => setShowMobileSidebar(true)}
         />
 

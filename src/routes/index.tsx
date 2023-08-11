@@ -2,7 +2,6 @@ import {
   createBrowserRouter,
   RouterProvider as BrowserRouterProvider,
   RouteObject,
-  Outlet,
   Navigate,
 } from "react-router-dom";
 import { PageLoader } from "@src/components/loaders";
