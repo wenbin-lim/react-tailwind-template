@@ -24,7 +24,7 @@ const LoginPage = () => {
   } = useForm<LoginProps>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
-      email: "wenbin@email.com",
+      username: "wenbin",
       password: "password",
     },
   });
@@ -63,13 +63,13 @@ const LoginPage = () => {
           onSubmit={handleSubmit((data) => mutate(data))}
         >
           <Input
-            id="email"
-            label="Email"
+            id="username"
+            label="Username"
             type="text"
             autoFocus
-            autoComplete="email"
-            errorText={errors.email?.message}
-            {...register("email")}
+            autoComplete="username"
+            errorText={errors.username?.message}
+            {...register("username")}
           />
           <Input
             id="password"
