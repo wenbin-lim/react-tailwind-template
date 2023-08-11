@@ -9,10 +9,16 @@ import { Cog6ToothIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import { Menu, Transition } from "@headlessui/react";
 
 import { getPbImageUrl } from "@src/utils/pocketbase";
-interface StickyHeaderProps {
+interface TopBarProps {
+  sticky?: boolean;
+  showMobileSidebarToggle?: boolean;
   openMobileSidebar?: () => void;
 }
-const StickyHeader = ({ openMobileSidebar }: StickyHeaderProps) => {
+const TopBar = ({
+  sticky = true,
+  showMobileSidebarToggle = true,
+  openMobileSidebar,
+}: TopBarProps) => {
   const navigate = useNavigate();
 
   const { logout, user } = useAuth();
@@ -24,11 +30,19 @@ const StickyHeader = ({ openMobileSidebar }: StickyHeaderProps) => {
   };
 
   return (
-    <div className="sticky top-0 z-appbar flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-background px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
-      {openMobileSidebar ? (
+    <div
+      className={clsx(
+        "z-appbar flex h-topbar shrink-0 items-center gap-x-4 border-b border-gray-200 px-4 shadow-sm dark:border-gray-700 sm:gap-x-6 sm:px-6 lg:px-8",
+        {
+          "sticky top-0 bg-background text-on-background dark:bg-background-dark dark:text-on-background-dark":
+            sticky,
+        },
+      )}
+    >
+      {showMobileSidebarToggle ? (
         <button
           type="button"
-          className="-m-2.5 p-2.5 text-gray-700 lg:hidden"
+          className="-m-2.5 p-2.5 lg:hidden"
           onClick={openMobileSidebar}
         >
           <span className="sr-only">Open sidebar</span>
@@ -56,7 +70,7 @@ const StickyHeader = ({ openMobileSidebar }: StickyHeaderProps) => {
 
           {/* Separator */}
           <div
-            className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10"
+            className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10 lg:dark:bg-gray-100/10"
             aria-hidden="true"
           />
 
@@ -66,7 +80,7 @@ const StickyHeader = ({ openMobileSidebar }: StickyHeaderProps) => {
               <span className="sr-only">Open user menu</span>
               {user ? (
                 <img
-                  className="h-8 w-8 rounded-full bg-background"
+                  className="h-8 w-8 rounded-full"
                   src={getPbImageUrl({
                     collection: "users",
                     recordId: user.id,
@@ -75,7 +89,7 @@ const StickyHeader = ({ openMobileSidebar }: StickyHeaderProps) => {
                   alt="user profile picture"
                 />
               ) : (
-                <UserCircleIcon className="h-8 w-8 rounded-full text-gray-400" />
+                <UserCircleIcon className="h-8 w-8 rounded-full text-gray-500" />
               )}
               <span className="hidden lg:flex lg:items-center">
                 <span
@@ -84,10 +98,7 @@ const StickyHeader = ({ openMobileSidebar }: StickyHeaderProps) => {
                 >
                   {user ? user.email : ""}
                 </span>
-                <ChevronDownIcon
-                  className="ml-2 h-5 w-5 text-gray-400"
-                  aria-hidden="true"
-                />
+                <ChevronDownIcon className="ml-2 h-5 w-5" aria-hidden="true" />
               </span>
             </Menu.Button>
             <Transition
@@ -99,14 +110,14 @@ const StickyHeader = ({ openMobileSidebar }: StickyHeaderProps) => {
               leaveFrom="transform opacity-100 scale-100"
               leaveTo="transform opacity-0 scale-95"
             >
-              <Menu.Items className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
+              <Menu.Items className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-background py-2 text-on-background shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
                 <Menu.Item>
                   {({ active }) => (
                     <button
                       onClick={onLogout}
                       className={clsx(
-                        "block w-full px-3 py-1 text-left text-sm leading-6 text-gray-900",
-                        { "bg-gray-50": active },
+                        "block w-full px-3 py-1 text-left text-sm leading-6",
+                        { "hover:bg-neutral-200": active },
                       )}
                     >
                       Logout
@@ -121,4 +132,4 @@ const StickyHeader = ({ openMobileSidebar }: StickyHeaderProps) => {
     </div>
   );
 };
-export default StickyHeader;
+export default TopBar;

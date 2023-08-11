@@ -10,20 +10,18 @@ export default {
     extend: {
       colors: {
         primary: {
-          DEFAULT: "#30455B",
-          light: "#30455B",
-          dark: "#30455B",
-          50: "#84A1BE",
-          100: "#7796B7",
-          200: "#5C82A9",
-          300: "#4C6E90",
-          400: "#3E5976",
-          500: "#30455B",
-          600: "#1D2936",
-          700: "#090D12",
-          800: "#000000",
-          900: "#000000",
-          950: "#000000",
+          DEFAULT: "#e45d56",
+          light: "#e45d56",
+          dark: "#e45d56",
+          100: "#fadfdd",
+          200: "#f4bebb",
+          300: "#ef9e9a",
+          400: "#e97d78",
+          500: "#e45d56",
+          600: "#b64a45",
+          700: "#893834",
+          800: "#5b2522",
+          900: "#2e1311",
         },
         secondary: {
           DEFAULT: "#44C8F5",
@@ -41,31 +39,15 @@ export default {
           900: "#044054",
           950: "#032C39",
         },
-        tertiary: {
-          DEFAULT: "#70C7AD",
-          light: "#70C7AD",
-          dark: "#70C7AD",
-          50: "#F4FBF9",
-          100: "#E5F5F0",
-          200: "#C8E9DF",
-          300: "#ABDECF",
-          400: "#8DD2BE",
-          500: "#70C7AD",
-          600: "#48B796",
-          700: "#388F75",
-          800: "#286754",
-          900: "#183E33",
-          950: "#102A22",
-        },
         background: {
           DEFAULT: colors.neutral[50],
           light: colors.neutral[50],
-          dark: colors.neutral[900],
+          dark: colors.neutral[800],
         },
         surface: {
-          DEFAULT: colors.neutral[100],
-          light: colors.neutral[100],
-          dark: colors.neutral[700],
+          DEFAULT: colors.white,
+          light: colors.white,
+          dark: colors.neutral[900],
         },
         "on-primary": {
           DEFAULT: colors.white,
@@ -73,11 +55,6 @@ export default {
           dark: colors.white,
         },
         "on-secondary": {
-          DEFAULT: colors.black,
-          light: colors.black,
-          dark: colors.black,
-        },
-        "on-tertiary": {
           DEFAULT: colors.black,
           light: colors.black,
           dark: colors.black,
@@ -94,6 +71,11 @@ export default {
         },
         "input-focus": colors.blue[400],
       },
+      spacing: {
+        topbar: "4rem",
+        sidebar: "18rem",
+        bottombar: "4rem",
+      },
       borderRadius: {
         btn: ".25rem",
         input: ".25rem",
@@ -104,7 +86,7 @@ export default {
       zIndex: {
         // https://mui.com/material-ui/customization/z-index/
         fab: "1000",
-        appbar: "1100",
+        appbar: "1100", // topbar, bottombar, sidebar
         drawer: "1200",
         modal: "1300",
         toast: "1400",
