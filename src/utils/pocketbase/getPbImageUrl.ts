@@ -20,7 +20,7 @@ const getPbImageUrl = ({
   thumbFormat,
 }: Props) =>
   `${BASE_URL}/api/files/${collection}/${recordId}/${fileName}${
-    !!thumbFormat ? `?thumb=${thumbFormat}` : ""
+    thumbFormat ? `?thumb=${thumbFormat}` : ""
   }`;
 
 export default getPbImageUrl;
