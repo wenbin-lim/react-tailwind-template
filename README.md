@@ -99,7 +99,9 @@ Important Notes:
 
 - `import Example from '@src/example'
 
-2.
+React App Struture
+
+- Import `<Providers/>` in main.tsx
 
 TailwindCSS:
 

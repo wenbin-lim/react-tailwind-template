@@ -1,9 +1,11 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchema, LoginProps, login } from "@src/features/auth/api";
 import { useMutation } from "@tanstack/react-query";
+
+import { useAuth } from "@src/features/auth/hooks";
 
 import { Input } from "@src/components/form";
 import { Button } from "@src/components/buttons";
@@ -11,6 +13,7 @@ import toast from "react-hot-toast";
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const { isValidToken } = useAuth();
 
   // Form
   const {
@@ -21,7 +24,7 @@ const LoginPage = () => {
   } = useForm<LoginProps>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
-      username: "wenbin",
+      email: "wenbin@email.com",
       password: "password",
     },
   });
@@ -29,7 +32,6 @@ const LoginPage = () => {
   const { mutate, isPending } = useMutation({
     mutationFn: login,
     onSuccess: () => {
-      navigate("/dashboard");
       toast.success("Login Successful");
     },
     onError: () => {
@@ -37,6 +39,10 @@ const LoginPage = () => {
       resetField("password");
     },
   });
+
+  if (isValidToken) {
+    return <Navigate to="/dashboard" />;
+  }
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -57,13 +63,13 @@ const LoginPage = () => {
           onSubmit={handleSubmit((data) => mutate(data))}
         >
           <Input
-            id="username"
-            label="Username"
+            id="email"
+            label="Email"
             type="text"
             autoFocus
-            autoComplete="username"
-            errorText={errors.username?.message}
-            {...register("username")}
+            autoComplete="email"
+            errorText={errors.email?.message}
+            {...register("email")}
           />
           <Input
             id="password"
