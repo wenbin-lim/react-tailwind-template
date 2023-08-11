@@ -13,7 +13,7 @@ import { Input } from "@src/components/form";
 import { Button } from "@src/components/buttons";
 
 import toast from "react-hot-toast";
-import { setPbServerErrors } from "@src/utils";
+import { setPbServerErrors } from "@src/utils/pocketbase";
 
 const SignupPage = () => {
   const navigate = useNavigate();

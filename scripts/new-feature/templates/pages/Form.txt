@@ -12,7 +12,7 @@ import {
 } from "../data/hooks";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { setPbServerErrors } from "@src/utils";
+import { setPbServerErrors } from "@src/utils/pocketbase";
 
 import { FormLoader } from "@src/components/loaders";
 import { Input } from "@src/components/form";
