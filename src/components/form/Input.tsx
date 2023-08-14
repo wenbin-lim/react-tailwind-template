@@ -10,6 +10,7 @@ type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   helperText?: string;
   wrapperClass?: string;
   inputHint?: React.ReactNode | JSX.Element;
+  disabled?: boolean;
 };
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
@@ -22,6 +23,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       helperText,
       inputHint,
       wrapperClass,
+      disabled,
       ...rest
     }: InputProps,
     ref,
@@ -50,9 +52,11 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               errorText
                 ? "pr-10 text-red-500 placeholder-red-300 ring-red-300 focus:border-red-500 focus:ring-red-500 dark:placeholder-red-700 dark:ring-red-700"
                 : "placeholder-gray-400 ring-gray-300 focus:ring-input-focus dark:placeholder-gray-600 dark:ring-gray-700",
+              { "cursor-not-allowed opacity-50": disabled },
             )}
             aria-invalid={errorText ? "true" : "false"}
             required={required}
+            disabled={disabled}
             ref={ref}
             {...rest}
           />
