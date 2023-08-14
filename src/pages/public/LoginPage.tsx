@@ -23,10 +23,10 @@ const LoginPage = () => {
     formState: { errors },
   } = useForm<LoginProps>({
     resolver: zodResolver(LoginSchema),
-    defaultValues: {
-      username: "wenbin",
-      password: "password",
-    },
+    // defaultValues: {
+    //   username: "wenbin",
+    //   password: "password",
+    // },
   });
 
   const { mutate, isPending } = useMutation({
@@ -69,6 +69,7 @@ const LoginPage = () => {
             autoFocus
             autoComplete="username"
             errorText={errors.username?.message}
+            disabled={isPending}
             {...register("username")}
           />
           <Input
@@ -77,6 +78,7 @@ const LoginPage = () => {
             type="password"
             autoComplete="current-password"
             errorText={errors.password?.message}
+            disabled={isPending}
             {...register("password")}
             inputHint={
               <a className="cursor-pointer font-semibold text-secondary-600 hover:text-secondary-500">

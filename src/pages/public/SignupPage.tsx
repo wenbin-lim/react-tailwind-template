@@ -88,6 +88,7 @@ const SignupPage = () => {
                   type="text"
                   autoComplete="username"
                   required
+                  disabled={isPending}
                   errorText={errors.username?.message}
                   {...register("username")}
                 />
@@ -98,6 +99,7 @@ const SignupPage = () => {
                   type="text"
                   autoComplete="email"
                   required
+                  disabled={isPending}
                   errorText={errors.email?.message}
                   {...register("email")}
                 />
@@ -108,6 +110,7 @@ const SignupPage = () => {
                   type="password"
                   autoComplete="current-password"
                   required
+                  disabled={isPending}
                   errorText={errors.password?.message}
                   {...register("password")}
                 />
@@ -118,6 +121,7 @@ const SignupPage = () => {
                   type="password"
                   autoComplete="current-password"
                   required
+                  disabled={isPending}
                   errorText={errors.passwordConfirm?.message}
                   {...register("passwordConfirm")}
                 />
