@@ -1,6 +1,6 @@
 const FormLoader = () => {
   return (
-    <div className="flex h-full w-full items-center justify-center bg-background">
+    <div className="flex h-full w-full items-center justify-center">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width={48}
