@@ -53,13 +53,13 @@ const Pagination = ({
   totalPages,
 }: PaginationProps) => {
   return (
-    <div className="flex items-center justify-between border-t border-gray-200 bg-background px-4 py-3 sm:px-6">
+    <div className="flex items-center justify-between px-4 py-3 sm:px-6">
       <div className="flex flex-1 justify-between sm:hidden">
         <button
           onClick={() => page > 1 && setPage(page - 1)}
           className={clsx(
-            "relative inline-flex items-center rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700",
-            page === 1 ? "cursor-not-allowed opacity-50" : "hover:bg-surface",
+            "relative inline-flex items-center rounded-md border border-gray-300 px-4 py-2 text-sm font-medium dark:border-gray-700",
+            { "cursor-not-allowed opacity-50": page === 1 },
           )}
         >
           Previous
@@ -67,10 +67,8 @@ const Pagination = ({
         <button
           onClick={() => page < totalPages && setPage(page + 1)}
           className={clsx(
-            "relative ml-3 inline-flex items-center rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700",
-            page === totalPages
-              ? "cursor-not-allowed opacity-50"
-              : "hover:bg-surface",
+            "relative ml-3 inline-flex items-center rounded-md border border-gray-300 px-4 py-2 text-sm font-medium dark:border-gray-700",
+            { "cursor-not-allowed opacity-50": page === totalPages },
           )}
         >
           Next
@@ -78,7 +76,7 @@ const Pagination = ({
       </div>
       <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
         <div>
-          <p className="text-sm text-on-background">
+          <p className="text-sm">
             Showing{" "}
             <span className="font-medium">{(page - 1) * perPage + 1}</span> to{" "}
             <span className="font-medium">
@@ -95,10 +93,8 @@ const Pagination = ({
             <button
               onClick={() => page > 1 && setPage(page - 1)}
               className={clsx(
-                "relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 focus:z-20 focus:outline-offset-0",
-                page === 1
-                  ? "cursor-not-allowed opacity-50"
-                  : "hover:bg-gray-50",
+                "relative inline-flex items-center rounded-l-md px-2 py-2 ring-1 ring-inset ring-gray-300 focus:z-20 focus:outline-offset-0 dark:ring-gray-700",
+                { "cursor-not-allowed opacity-50": page === 1 },
               )}
               disabled={page === 1}
             >
@@ -111,10 +107,11 @@ const Pagination = ({
                 onClick={() => typeof i === "number" && setPage(i)}
                 aria-current={page === i ? "page" : undefined}
                 className={clsx(
-                  "relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 focus:z-20 focus:outline-offset-0",
-                  page === i
-                    ? "z-10 bg-primary text-on-primary focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    : "hover:bg-gray-50",
+                  "relative inline-flex items-center px-4 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 focus:outline-offset-0 dark:ring-gray-700",
+                  {
+                    "focus-visible:outline-focus bg-primary text-on-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2":
+                      page === i,
+                  },
                 )}
               >
                 {i}
@@ -123,10 +120,8 @@ const Pagination = ({
             <button
               onClick={() => page < totalPages && setPage(page + 1)}
               className={clsx(
-                "relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 focus:z-20 focus:outline-offset-0",
-                page === totalPages
-                  ? "cursor-not-allowed opacity-50"
-                  : "hover:bg-gray-50",
+                "relative inline-flex items-center rounded-r-md px-2 py-2 ring-1 ring-inset ring-gray-300 focus:z-20 focus:outline-offset-0 dark:ring-gray-700",
+                { "cursor-not-allowed opacity-50": page === totalPages },
               )}
             >
               <span className="sr-only">Next</span>

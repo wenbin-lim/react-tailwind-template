@@ -44,12 +44,12 @@ export default {
         background: {
           DEFAULT: colors.neutral[50],
           light: colors.neutral[50],
-          dark: colors.neutral[800],
+          dark: colors.gray[950],
         },
         surface: {
           DEFAULT: colors.white,
           light: colors.white,
-          dark: colors.neutral[900],
+          dark: colors.gray[900],
         },
         "on-primary": {
           DEFAULT: colors.white,
