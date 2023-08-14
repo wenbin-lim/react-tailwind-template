@@ -34,7 +34,7 @@ const List = () => {
 
   if (data) {
     return (
-      <main className="grid grid-rows-[1fr_auto] bg-background text-on-background">
+      <main className="grid grid-rows-[1fr_auto]">
         <div className="px-4 py-4 sm:px-6 lg:px-8">
           {/* Header */}
           <ListHeader
@@ -51,9 +51,9 @@ const List = () => {
 
           {/* Table */}
           <div className="-mx-4 mt-4 sm:-mx-0">
-            <table className="min-w-full divide-y divide-gray-300">
+            <table className="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
               <thead>
-                <tr className="text-left text-sm font-semibold text-on-background">
+                <tr className="text-left text-sm font-semibold">
                   <th scope="col" className="py-3.5 pl-4 pr-3 sm:pl-0">
                     Name
                   </th>
@@ -68,7 +68,7 @@ const List = () => {
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
                 {data.items.map((item) => (
                   <tr key={item.id} className="text-sm">
                     <td className="w-full max-w-0 py-4 pl-4 pr-3 sm:w-auto sm:max-w-none sm:pl-0">

@@ -27,7 +27,6 @@ interface FormProps {
 const Form = ({ type }: FormProps) => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const listRoute = "/examples";
 
   // fetch data if editing
   const { data: fetchedData } = useGetOneExample({
@@ -36,7 +35,12 @@ const Form = ({ type }: FormProps) => {
   });
 
   // form
-  const { register, handleSubmit, setError } = useForm<Example>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError,
+  } = useForm<Example>({
     resolver: zodResolver(ExampleSchema),
     values: fetchedData,
   });
@@ -47,7 +51,7 @@ const Form = ({ type }: FormProps) => {
 
   const onSuccess = () => {
     toast.success("Saved successfully");
-    navigate(listRoute);
+    navigate("/examples");
   };
 
   const onError = (error: Error) => {
@@ -74,17 +78,15 @@ const Form = ({ type }: FormProps) => {
 
   if (type === "create" || (type === "edit" && fetchedData)) {
     return (
-      <main className="bg-background px-4 py-4 text-on-background sm:px-6 lg:px-8">
+      <main className="px-4 py-4 sm:px-6 lg:px-8">
         <form
           className="grid h-full grid-rows-[1fr_auto]"
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className="space-y-12">
             <div className="pb-12">
-              <h2 className="text-base font-semibold leading-7 text-gray-900">
-                New Example
-              </h2>
-              <p className="mt-1 text-sm leading-6 text-gray-600">
+              <h2 className="text-base font-semibold leading-7">New Example</h2>
+              <p className="mt-1 text-sm leading-6 text-gray-700 dark:text-gray-400">
                 Create a new example
               </p>
 
@@ -94,28 +96,31 @@ const Form = ({ type }: FormProps) => {
                   label="Name"
                   wrapperClass="sm:col-span-full"
                   {...register("name")}
+                  errorText={errors.name?.message}
                 />
                 <Input
                   id="title"
                   label="Title"
                   wrapperClass="sm:col-span-full"
                   {...register("title")}
+                  errorText={errors.title?.message}
                 />
                 <Input
                   id="description"
                   label="Description"
                   wrapperClass="sm:col-span-full"
                   {...register("description")}
+                  errorText={errors.description?.message}
                 />
               </div>
             </div>
           </div>
 
-          <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 pt-6">
+          <div className="flex items-center justify-end gap-x-6 pt-6">
             <Button
               shadow={false}
               type="button"
-              onClick={() => navigate(listRoute)}
+              onClick={() => navigate("/examples")}
             >
               Cancel
             </Button>
