@@ -11,6 +11,7 @@ export default defineConfig(({ mode }) => {
     plugins: [react(), svgr(), reactClickToComponent()],
     server: {
       port: parseInt(env.VITE_SERVER_PORT),
+      host: true,
       // strictPort: true,
     },
     resolve: {
