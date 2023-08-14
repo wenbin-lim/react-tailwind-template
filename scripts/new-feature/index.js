@@ -186,10 +186,9 @@ try {
         "utf-8",
       );
 
-      hooksContent = hooksContent.replaceAll(
-        "%featurePascalCase%",
-        changeCase.pascalCase(featureName),
-      );
+      hooksContent = hooksContent
+        .replaceAll("%featurePascalCase%", changeCase.pascalCase(featureName))
+        .replaceAll("%featureCamelCase%", changeCase.camelCase(featureName));
 
       hooksContent = await prettier.format(hooksContent, {
         parser: "babel-ts",

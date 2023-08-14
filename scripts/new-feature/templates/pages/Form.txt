@@ -96,23 +96,33 @@ const Form = ({ type }: FormProps) => {
                 <Input
                   id="name"
                   label="Name"
+                  autoFocus
                   wrapperClass="sm:col-span-full"
-                  {...register("name")}
                   errorText={errors.name?.message}
+                  disabled={
+                    type === "edit" ? updateFn.isPending : addFn.isPending
+                  } 
+                  {...register("name")}
                 />
                 <Input
                   id="title"
                   label="Title"
                   wrapperClass="sm:col-span-full"
-                  {...register("title")}
                   errorText={errors.title?.message}
+                  disabled={
+                    type === "edit" ? updateFn.isPending : addFn.isPending
+                  } 
+                  {...register("title")}
                 />
                 <Input
                   id="description"
                   label="Description"
                   wrapperClass="sm:col-span-full"
-                  {...register("description")}
                   errorText={errors.description?.message}
+                  disabled={
+                    type === "edit" ? updateFn.isPending : addFn.isPending
+                  } 
+                  {...register("description")}
                 />
               </div>
             </div>
@@ -126,7 +136,13 @@ const Form = ({ type }: FormProps) => {
             >
               Cancel
             </Button>
-            <Button className="bg-primary text-on-primary" type="submit">
+            <Button 
+              className="bg-primary text-on-primary" 
+              type="submit"
+              disabled={
+                type === "edit" ? updateFn.isPending : addFn.isPending
+              }
+            >
               Save
             </Button>
           </div>

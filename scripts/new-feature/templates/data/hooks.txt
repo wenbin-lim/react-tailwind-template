@@ -19,7 +19,7 @@ import {
 
 	Query Keys: https://tkdodo.eu/blog/effective-react-query-keys
 */
-const KEY = "%featurePascalCase%";
+const KEY = "%featureCamelCase%";
 
 export const %featurePascalCase%Schema = z.object({
   name: z.string(),

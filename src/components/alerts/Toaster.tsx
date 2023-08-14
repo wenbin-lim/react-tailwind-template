@@ -21,6 +21,7 @@ const Toaster = () => {
       position={isMobile ? "bottom-center" : "top-right"}
       reverseOrder={true}
       toastOptions={{
+        duration: 6000,
         className:
           "rounded-md p-4 !bg-background !text-on-background max-sm:!flex-1 max-sm:!max-w-full",
         success: {
