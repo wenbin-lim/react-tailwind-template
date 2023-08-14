@@ -52,7 +52,7 @@ const LoginPage = () => {
           src="/brand/logo.svg"
           alt="Company Brand"
         />
-        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight">
           Sign in to your account
         </h2>
       </div>
@@ -79,7 +79,7 @@ const LoginPage = () => {
             errorText={errors.password?.message}
             {...register("password")}
             inputHint={
-              <a className="cursor-pointer font-semibold text-primary-600 hover:text-primary-500">
+              <a className="cursor-pointer font-semibold text-secondary-600 hover:text-secondary-500">
                 Forgot password?
               </a>
             }
@@ -98,7 +98,7 @@ const LoginPage = () => {
           Not a member?{" "}
           <a
             onClick={() => navigate("/signup")}
-            className="cursor-pointer font-semibold leading-6 text-primary-600 hover:text-primary-500"
+            className="cursor-pointer font-semibold leading-6 text-secondary-600 hover:text-secondary-500"
           >
             Sign up now
           </a>

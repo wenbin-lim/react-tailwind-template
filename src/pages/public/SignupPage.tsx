@@ -62,14 +62,14 @@ const SignupPage = () => {
               src="/brand/logo.svg"
               alt="Company Brand"
             />
-            <h2 className="mt-8 text-2xl font-bold leading-9 tracking-tight text-gray-900">
+            <h2 className="mt-8 text-2xl font-bold leading-9 tracking-tight">
               Create a new account
             </h2>
             <p className="mt-2 text-sm leading-6 text-gray-500">
               Already have an account?{" "}
               <a
                 onClick={() => navigate("/login")}
-                className="cursor-pointer font-semibold leading-6 text-primary-600 hover:text-primary-500"
+                className="cursor-pointer font-semibold leading-6 text-secondary-600 hover:text-secondary-500"
               >
                 Log in now
               </a>
