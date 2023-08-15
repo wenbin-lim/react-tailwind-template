@@ -42,14 +42,19 @@ export default {
           950: "#032C39",
         },
         background: {
-          DEFAULT: colors.neutral[50],
-          light: colors.neutral[50],
+          DEFAULT: colors.gray[100],
+          light: colors.gray[100],
           dark: colors.gray[950],
         },
         surface: {
-          DEFAULT: colors.white,
-          light: colors.white,
+          DEFAULT: colors.gray[50],
+          light: colors.gray[50],
           dark: colors.gray[900],
+        },
+        "surface-variant": {
+          DEFAULT: colors.gray[200],
+          light: colors.gray[200],
+          dark: colors.gray[800],
         },
         "on-primary": {
           DEFAULT: colors.white,
@@ -67,6 +72,11 @@ export default {
           dark: colors.white,
         },
         "on-surface": {
+          DEFAULT: colors.black,
+          light: colors.black,
+          dark: colors.white,
+        },
+        "on-surface-variant": {
           DEFAULT: colors.black,
           light: colors.black,
           dark: colors.white,
