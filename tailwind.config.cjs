@@ -93,7 +93,7 @@ export default {
         input: ".25rem",
       },
       fontSize: {
-        xs: ["0.6rem", "1rem"],
+        xs: ["0.75rem", "1rem"],
       },
       zIndex: {
         // https://mui.com/material-ui/customization/z-index/
