@@ -6,7 +6,8 @@ import Swal, { SweetAlertOptions } from "sweetalert2";
 const swal = Swal.mixin({
   buttonsStyling: false,
   customClass: {
-    container: "flex justify-center z-modal transition duration-500",
+    container:
+      "flex justify-center z-modal transition duration-500 backdrop-blur-sm !bg-modal-backdrop dark:!bg-modal-backdrop-dark",
     popup:
       "rounded-lg bg-background px-4 pb-4 pt-5 text-left shadow-xl mt-auto sm:m-0 sm:w-full sm:max-w-lg sm:p-6 gap-y-2",
     icon: "my-0 text-xs",

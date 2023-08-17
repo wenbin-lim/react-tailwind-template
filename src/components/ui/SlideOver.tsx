@@ -1,4 +1,5 @@
 import { Fragment } from "react";
+import clsx from "clsx";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 
@@ -6,9 +7,11 @@ type Props = {
   open: boolean;
   setOpen: (open: boolean) => void;
   children?: React.ReactNode;
+  /** tailwind max-width class */
+  panelWidth?: string;
 };
 
-const SlideOver = ({ open, setOpen, children }: Props) => {
+const SlideOver = ({ open, setOpen, panelWidth, children }: Props) => {
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative z-modal" onClose={setOpen}>
@@ -16,9 +19,9 @@ const SlideOver = ({ open, setOpen, children }: Props) => {
           as={Fragment}
           enter="ease-in-out duration-500"
           enterFrom="backdrop-blur-none bg-transparent"
-          enterTo="backdrop-blur-sm bg-gray-900/20 dark:bg-gray-100/10"
+          enterTo="backdrop-blur-sm bg-modal-backdrop dark:bg-modal-backdrop-dark"
           leave="ease-in-out duration-200"
-          leaveFrom="backdrop-blur-sm bg-gray-900/20 dark:bg-gray-100/10"
+          leaveFrom="backdrop-blur-sm bg-modal-backdrop dark:bg-modal-backdrop-dark"
           leaveTo="backdrop-blur-none bg-transparent"
         >
           <div className="fixed inset-0 overflow-hidden ">
@@ -33,7 +36,12 @@ const SlideOver = ({ open, setOpen, children }: Props) => {
                   leaveFrom="translate-x-0"
                   leaveTo="translate-x-full"
                 >
-                  <Dialog.Panel className="pointer-events-auto relative w-screen max-w-md">
+                  <Dialog.Panel
+                    className={clsx(
+                      "pointer-events-auto relative w-screen",
+                      !!panelWidth ? panelWidth : "max-w-md",
+                    )}
+                  >
                     <Transition.Child
                       as={Fragment}
                       enter="ease-in-out duration-500"

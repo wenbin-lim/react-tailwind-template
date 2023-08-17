@@ -56,6 +56,11 @@ export default {
           light: colors.gray[200],
           dark: colors.gray[800],
         },
+        "modal-backdrop": {
+          DEFAULT: "rgba(17, 24, 39, 0.4)",
+          light: "rgba(17, 24, 39, 0.4)",
+          dark: "rgba(243, 244, 246, 0.05)",
+        },
         "on-primary": {
           DEFAULT: colors.white,
           light: colors.white,
