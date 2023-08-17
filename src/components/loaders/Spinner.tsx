@@ -1,15 +1,18 @@
+import clsx from "clsx";
+
 type Props = {
   /** Positive number */
   scale?: number;
+  className?: string;
 };
 
-const Spinner = ({ scale = 1 }: Props) => {
+const Spinner = ({ scale = 1, className = "stroke-primary" }: Props) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width={48 * scale}
       height={48 * scale}
-      className="stroke-primary"
+      className={clsx(className)}
     >
       <style>
         {`@keyframes spinner_zKoa{to{transform:rotate(360deg)}}@keyframes spinner_YpZS{0%{stroke-dasharray:0 ${
