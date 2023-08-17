@@ -102,6 +102,7 @@ export default {
       },
       zIndex: {
         // https://mui.com/material-ui/customization/z-index/
+        popover: "900",
         fab: "1000",
         appbar: "1100", // topbar, bottombar, sidebar
         drawer: "1200",
