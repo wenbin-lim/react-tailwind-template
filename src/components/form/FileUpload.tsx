@@ -21,6 +21,7 @@ interface Props {
   helperText?: string;
   onChange: (value: any) => void;
   multiple?: boolean;
+  current?: JSX.Element | React.ReactNode;
   options?: DropzoneOptions;
 }
 
@@ -34,6 +35,7 @@ const FileUpload = ({
   multiple,
   options,
   onChange,
+  current,
 }: Props) => {
   const [files, setFiles] = useState<PreviewFile[]>([]);
   const [rejectedFiles, setRejectedFiles] = useState<FileRejection[]>([]);
@@ -95,11 +97,10 @@ const FileUpload = ({
           ),
         })}
       >
-        <div className="text-center">
-          <PhotoIcon
-            className="mx-auto h-12 w-12 text-gray-300"
-            aria-hidden="true"
-          />
+        <div className="flex flex-col items-center text-center">
+          {current || (
+            <PhotoIcon className="h-12 w-12 text-gray-300" aria-hidden="true" />
+          )}
           <div className="mt-4 flex text-sm leading-6 text-gray-600">
             <label
               htmlFor={id || `file_input_${new Date().getTime()}`}
