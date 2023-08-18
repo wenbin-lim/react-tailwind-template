@@ -1,9 +1,5 @@
 REACTJS TEMPLATE
 
-TODO:
-
-1. Implement dark mode
-
 Ecosystem:
 
 1. Build Tool - Vite
@@ -81,6 +77,9 @@ Custom scripts:
 `npm run new-feature`
 
 - To add a new feature into the application
+- Troubleshoot:
+
+1. Check KEY in `features/hooks/data.ts` and see if it matches with your backend
 
 @tanstack/react-query practices:
 
