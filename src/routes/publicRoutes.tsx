@@ -3,7 +3,7 @@
   These routes are accessible by everyone
 */
 import { RouteObject, Navigate } from "react-router-dom";
-import { LoginPage, SignupPage } from "@src/pages/public";
+import { LoginPage, SignupPage, ForgotPassword } from "@src/pages/public";
 
 const publicRoutes: RouteObject[] = [
   {
@@ -17,6 +17,10 @@ const publicRoutes: RouteObject[] = [
   {
     path: "/signup",
     element: <SignupPage />,
+  },
+  {
+    path: "/forgot-password",
+    element: <ForgotPassword />,
   },
 ];
 

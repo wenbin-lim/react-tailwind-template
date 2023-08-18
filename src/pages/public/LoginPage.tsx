@@ -81,7 +81,10 @@ const LoginPage = () => {
             disabled={isPending}
             {...register("password")}
             inputHint={
-              <a className="cursor-pointer font-semibold text-secondary-600 hover:text-secondary-500">
+              <a
+                onClick={() => navigate("/forgot-password")}
+                className="cursor-pointer font-semibold text-secondary-600 hover:text-secondary-500"
+              >
                 Forgot password?
               </a>
             }

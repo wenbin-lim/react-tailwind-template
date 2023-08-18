@@ -72,3 +72,19 @@ export const login = async ({ username, password }: LoginProps) => {
 
   return res;
 };
+
+export const RequestPasswordChangeSchema = z.object({
+  email: z.string().trim().min(1, "Please enter your email"),
+});
+
+export type RequestPasswordChangeProps = z.infer<
+  typeof RequestPasswordChangeSchema
+>;
+
+export const requestPasswordChange = async ({
+  email,
+}: RequestPasswordChangeProps) => {
+  const res = await backend.collection("users").requestPasswordReset(email);
+
+  return res;
+};
