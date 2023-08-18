@@ -34,7 +34,7 @@ const List = () => {
 
   if (data) {
     return (
-      <main className="grid grid-rows-[1fr_auto]">
+      <main className="grid h-full grid-rows-[1fr_auto]">
         <div className="px-4 py-4 sm:px-6 lg:px-8">
           {/* Header */}
           <ListHeader
@@ -44,7 +44,7 @@ const List = () => {
                 className="bg-primary text-on-primary"
                 onClick={() => navigate("new")}
               >
-                Add %featureCapitalCase%
+                New %featureCapitalCase%
               </Button>
             }
           />

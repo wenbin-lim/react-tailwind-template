@@ -255,7 +255,7 @@ try {
     customRouteContent,
   );
 
-  logGreen(`Added route into ./src/routes/customRoutes.tsx`);
+  logGreen(`\nAdded route into ./src/routes/customRoutes.tsx`);
 
   log(divider);
 
@@ -263,7 +263,10 @@ try {
   logYellow(
     `➜    http://localhost:${env.VITE_SERVER_PORT}/${changeCase.paramCase(
       featureName,
-    )}\n`,
+    )}`,
+  );
+  logYellow(
+    `➜    Remember to change your KEY in ./src/features/${featureName}/data/hooks.ts\n`,
   );
 } catch (error) {
   log(chalk.red("Something went wrong:\n", error));

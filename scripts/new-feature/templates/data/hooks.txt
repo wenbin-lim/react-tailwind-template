@@ -3,7 +3,6 @@ import { z } from "zod";
 
 /* 
 	Data provider methods
-	- create your own data provider methods or use the ones provided by @src/lib/dataProvider
 */
 import {
   getFullList,
@@ -88,6 +87,9 @@ export const useUpdateOne%featurePascalCase% = (id: string) => {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [KEY, "list"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [KEY, "detail", id],
       });
     },
   });

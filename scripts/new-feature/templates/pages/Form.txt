@@ -51,7 +51,6 @@ const Form = ({ type }: FormProps) => {
 
   const onSuccess = () => {
     toast.success("Saved successfully");
-    navigate('/%featureParamCase%');
   };
 
   const onError = (error: Error) => {
@@ -68,7 +67,9 @@ const Form = ({ type }: FormProps) => {
         onSuccess,
         onError,
       });
-    } else {
+    } 
+    
+    if (type === "create") {
       addFn.mutate(newData, {
         onSuccess,
         onError,
@@ -78,7 +79,7 @@ const Form = ({ type }: FormProps) => {
 
   if (type === "create" || (type === "edit" && fetchedData)) {
     return (
-      <main className="px-4 py-4 sm:px-6 lg:px-8">
+      <main className="h-full px-4 py-4 sm:px-6 lg:px-8">
         <form
           className="grid h-full grid-rows-[1fr_auto]"
           onSubmit={handleSubmit(onSubmit)}
