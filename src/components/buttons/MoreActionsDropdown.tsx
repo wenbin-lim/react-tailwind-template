@@ -29,7 +29,11 @@ const MoreActionsDropdown = ({ actions }: MoreActionsDropdownProps) => {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-surface py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
+        <Menu.Items
+          className={clsx(
+            "absolute right-0 z-10 mt-2 min-w-[128px] max-w-[256px] origin-top-right rounded-md bg-surface py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none",
+          )}
+        >
           {actions.map(({ label, callback }, index) => (
             <Menu.Item key={`more-actions-dropdown-menu-item-${index}`}>
               {({ active }) => (
