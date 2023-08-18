@@ -1,6 +1,6 @@
-REACTJS TEMPLATE
+# REACTJS TEMPLATE
 
-Ecosystem:
+## Ecosystem:
 
 1. Build Tool - Vite
 2. Styling - TailwindCSS, TailwindUI, HeadlessUI, SASS
@@ -11,15 +11,16 @@ Ecosystem:
 7. Alerts (Modal) - SweetAlert2
 8. Icons - react-icons, heroicons
 
-Utils Packages:
+## Utils Packages:
 
 1. usehooks-ts
 2. clsx
 3. jwt-decode
 4. animate.css
 
-Getting Started:
+## Getting Started:
 
+```sh
 1. Clone and cd into project
 2. Initialise git: `git init`
 3. Install node_modules: `npm i`
@@ -29,8 +30,9 @@ Getting Started:
 5. Change these files to connect to your preferred backend service (if not pocketbase)
    - ./src/lib/dataProvider.ts
 6. Start development server: `npm run dev`
+```
 
-Folders inside `./src`:
+## Folders inside `./src`:
 
 - `assets`: Common images, icons etc
 - `components`: Reusable components
@@ -44,12 +46,12 @@ Folders inside `./src`:
 - `types`: Custom type declaration files
 - `utils`: Utility functions
 
-`Features` folder:
+## `Features` folder:
 
 - Each feature (eg. auth, CRUD of a new record) will be placed inside
 - Create functions, components, hooks etc that are specific to the feature
 
-`Lib` folder:
+## `Lib` folder:
 
 1. `dataProvider.ts`
 
@@ -73,7 +75,8 @@ Folders inside `./src`:
 - SweetAlert2 instance that has pre-defined styling and config
 - Use this instance to fire swal alerts
 
-Custom scripts:
+## Custom scripts:
+
 `npm run new-feature`
 
 - To add a new feature into the application
@@ -81,18 +84,18 @@ Custom scripts:
 
 1. Check KEY in `features/hooks/data.ts` and see if it matches with your backend
 
-@tanstack/react-query practices:
+## @tanstack/react-query practices:
 
 - https://tkdodo.eu/blog/tags/react-query
 - Favor extracting each function into a hook
 - Query Keys: https://tkdodo.eu/blog/effective-react-query-keys
 
-Backend:
+## Backend:
 
 - Using Pocketbase for data and auth
 - https://github.com/pocketbase/js-sdk
 
-Important Notes:
+## Important Notes:
 
 1. Import files using Vite's alias (@src = './src')
 
