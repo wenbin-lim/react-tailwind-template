@@ -74,7 +74,7 @@ const ColorPicker = ({
           <span>{getHexFromValue(value)}</span>
           <div
             className={clsx(
-              "w-10 rounded-sm text-sm ring-2 ring-gray-400 dark:ring-gray-300",
+              "w-10 rounded-sm text-xs ring-2 ring-gray-300 dark:ring-gray-700",
             )}
             style={{
               backgroundColor: getHexFromValue(value),

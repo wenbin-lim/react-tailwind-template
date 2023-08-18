@@ -26,7 +26,7 @@ const Sidebar = () => {
     - icons: h-6 w-6 (24px 24px)
   */
   return (
-    <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-primary-500 px-6 pb-4">
+    <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-primary px-6 pb-4 text-on-primary">
       <div className="flex h-16 shrink-0 items-center justify-center">
         <img
           className="h-16 w-auto"
@@ -67,7 +67,7 @@ const Sidebar = () => {
               <li>
                 <button
                   onClick={onLogout}
-                  className="flex w-full gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-on-primary hover:bg-primary-400"
+                  className="flex w-full gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 hover:bg-primary-400"
                 >
                   <ArrowLeftOnRectangleIcon
                     className="h-6 w-6 shrink-0"
