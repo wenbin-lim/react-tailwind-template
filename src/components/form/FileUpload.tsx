@@ -128,7 +128,10 @@ const FileUpload = ({
             {files
               .filter((file) => !file.type.includes("image"))
               .map((file) => (
-                <div className="group flex items-center gap-x-1">
+                <div
+                  key={file.name}
+                  className="group flex items-center gap-x-1"
+                >
                   <DocumentTextIcon className="h-6 w-6 text-gray-300 group-hover:hidden" />
                   <button
                     type="button"

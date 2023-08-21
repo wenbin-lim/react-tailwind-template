@@ -4,6 +4,7 @@ import typography from "@tailwindcss/typography";
 import forms from "@tailwindcss/forms";
 
 export default {
+  // darkMode: "class",   // to toggle dark mode via class
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   plugins: [typography, forms],
   theme: {
