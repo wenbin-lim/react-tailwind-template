@@ -2,7 +2,7 @@ import clsx from "clsx";
 
 import { Popover } from "@headlessui/react";
 import { useFloating, flip, shift, autoUpdate } from "@floating-ui/react";
-import { ChromePicker } from "react-color";
+import { ChromePicker, ColorResult } from "react-color";
 
 interface ColorPickerProps {
   id?: string;
@@ -12,8 +12,9 @@ interface ColorPickerProps {
   helperText?: string;
   wrapperClass?: string;
   disabled?: boolean;
-  value: any;
-  onChange: (value: any) => void;
+  value?: ColorResult;
+  onChange: (value: ColorResult) => void;
+  displayAs?: "hex" | "rgb" | "hsl";
 }
 
 const ColorPicker = ({
@@ -26,6 +27,7 @@ const ColorPicker = ({
   disabled,
   value,
   onChange,
+  displayAs = "hex",
 }: ColorPickerProps) => {
   const { refs, floatingStyles } = useFloating({
     placement: "bottom-end",
@@ -33,16 +35,24 @@ const ColorPicker = ({
     middleware: [flip(), shift()],
   });
 
-  const getHexFromValue = (value: any) => {
-    if (typeof value === "string") {
-      return value;
-    } else if (
-      typeof value === "object" &&
-      Object.keys(value).find((e) => e === "hex")
-    ) {
-      return value.hex;
+  const getDisplayValue = () => {
+    if (value) {
+      switch (displayAs) {
+        case "rgb":
+          return `r: ${value.rgb.r}, g: ${value.rgb.g}, b: ${value.rgb.b}`;
+        case "hsl": {
+          const h = value.hsl.h.toFixed(2);
+          const s = value.hsl.s.toFixed(2);
+          const l = value.hsl.l.toFixed(2);
+          return `h: ${h}, s: ${s}, l: ${l}`;
+        }
+        case "hex":
+        default:
+          return value.hex;
+      }
     }
-    return "#fff";
+
+    return "Wrong color format";
   };
 
   return (
@@ -71,13 +81,13 @@ const ColorPicker = ({
           disabled={disabled}
           ref={refs.setReference}
         >
-          <span>{getHexFromValue(value)}</span>
+          <span>{getDisplayValue()}</span>
           <div
             className={clsx(
               "w-10 rounded-sm text-xs ring-2 ring-gray-300 dark:ring-gray-700",
             )}
             style={{
-              backgroundColor: getHexFromValue(value),
+              backgroundColor: value ? value.hex : "#fff",
             }}
           >
             &nbsp;
@@ -90,7 +100,10 @@ const ColorPicker = ({
           style={floatingStyles}
         >
           <div className="m-2 overflow-hidden rounded-md shadow-lg">
-            <ChromePicker onChangeComplete={onChange} color={value} />
+            <ChromePicker
+              onChangeComplete={onChange}
+              color={value && value.hex}
+            />
           </div>
         </Popover.Panel>
       </Popover>
