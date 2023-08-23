@@ -39,7 +39,7 @@ const SlideOver = ({ open, setOpen, panelWidth, children }: Props) => {
                   <Dialog.Panel
                     className={clsx(
                       "pointer-events-auto relative w-screen",
-                      !!panelWidth ? panelWidth : "max-w-md",
+                      panelWidth ? panelWidth : "max-w-md",
                     )}
                   >
                     <Transition.Child
