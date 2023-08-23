@@ -2,7 +2,7 @@ import clsx from "clsx";
 
 import { Popover } from "@headlessui/react";
 import { useFloating, flip, shift, autoUpdate } from "@floating-ui/react";
-import { ChromePicker, ColorResult } from "react-color";
+import { SketchPicker, ColorResult } from "react-color";
 
 interface ColorPickerProps {
   id?: string;
@@ -100,7 +100,7 @@ const ColorPicker = ({
           style={floatingStyles}
         >
           <div className="m-2 overflow-hidden rounded-md shadow-lg">
-            <ChromePicker
+            <SketchPicker
               onChangeComplete={onChange}
               color={value && value.hex}
             />
