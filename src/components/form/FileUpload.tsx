@@ -19,7 +19,7 @@ interface Props {
   required?: boolean;
   errorText?: string;
   helperText?: string;
-  onChange: (value: any) => void;
+  onChange: (value: File | File[]) => void;
   multiple?: boolean;
   current?: JSX.Element | React.ReactNode;
   options?: DropzoneOptions;
@@ -44,12 +44,13 @@ const FileUpload = ({
     if (multiple) {
       onChange(newFiles);
     } else {
-      onChange(newFiles[0]);
+      onChange(newFiles[0]!);
     }
   };
 
-  const { getRootProps, getInputProps } = useDropzone({
+  const { getRootProps, getInputProps, open } = useDropzone({
     ...options,
+    noClick: true,
     onDrop(acceptedFiles, fileRejections) {
       setRejectedFiles(fileRejections);
 
@@ -90,32 +91,31 @@ const FileUpload = ({
       <div
         {...getRootProps({
           className: clsx(
-            "mt-2 flex justify-center rounded-lg border border-dashed px-6 py-10 ",
+            "mt-2 flex cursor-pointer justify-center rounded-lg border border-dashed px-6 py-10",
             errorText
               ? "border-red-400 dark:border-red-500"
               : "border-gray-900/25 dark:border-gray-100/25",
           ),
         })}
+        onClick={open}
       >
         <div className="flex flex-col items-center text-center">
           {current || (
             <PhotoIcon className="h-12 w-12 text-gray-300" aria-hidden="true" />
           )}
           <div className="mt-4 flex text-sm leading-6 text-gray-600">
-            <label
-              htmlFor={id || `file_input_${new Date().getTime()}`}
-              className={clsx(
-                "relative cursor-pointer rounded-md font-semibold text-primary focus-within:outline-none focus-within:ring-2 focus-within:ring-input-focus focus-within:ring-offset-2",
-              )}
+            <input
+              id={id || `file_input_${new Date().getTime()}`}
+              type="file"
+              className="sr-only"
+              {...getInputProps()}
+              hidden
+            />
+            <span
+              className={clsx("relative rounded-md font-semibold text-primary")}
             >
-              <span>Upload a file</span>
-              <input
-                id={id || `file_input_${new Date().getTime()}`}
-                type="file"
-                className="sr-only"
-                {...getInputProps()}
-              />
-            </label>
+              Upload a file
+            </span>
             <p className="pl-1">or drag and drop</p>
           </div>
           <p className="text-xs leading-5 text-gray-600">{helperText}</p>
