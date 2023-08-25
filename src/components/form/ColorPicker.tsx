@@ -57,20 +57,19 @@ const ColorPicker = ({
 
   return (
     <div className={clsx(wrapperClass)}>
-      <div className="flex items-center justify-between">
-        {!!label && (
-          <label
-            htmlFor={id || `input_${new Date().getTime()}`}
-            className={clsx("block text-sm font-medium leading-6", {
-              "text-red-500": !!errorText,
-            })}
-          >
-            {label} {required && <span className="text-red-500">*</span>}
-          </label>
-        )}
-      </div>
+      {label && (
+        <label
+          htmlFor={id || `input_${new Date().getTime()}`}
+          className={clsx("mb-2 block text-sm font-medium leading-6", {
+            "text-red-500": !!errorText,
+            "after:text-red-500 after:content-['*']": required,
+          })}
+        >
+          {label}
+        </label>
+      )}
 
-      <Popover className="relative mt-2 rounded-md shadow-sm">
+      <Popover className="relative rounded-md shadow-sm">
         <Popover.Button
           className={clsx(
             "flex h-9 w-full items-center justify-between rounded-input border-0 bg-inherit px-3 py-1.5 shadow-sm ring-1 ring-inset sm:text-sm sm:leading-6",
@@ -108,13 +107,15 @@ const ColorPicker = ({
         </Popover.Panel>
       </Popover>
 
-      <p
-        className={clsx("mt-2 text-xs", {
-          "text-red-500": !!errorText,
-        })}
-      >
-        {errorText || helperText}
-      </p>
+      {(errorText || helperText) && (
+        <p
+          className={clsx("mt-2 text-xs", {
+            "text-red-500": !!errorText,
+          })}
+        >
+          {errorText || helperText}
+        </p>
+      )}
     </div>
   );
 };

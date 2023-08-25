@@ -78,20 +78,23 @@ const FileUpload = ({
       {!!label && (
         <label
           htmlFor={id || `file_input_${new Date().getTime()}`}
-          className={clsx("block text-sm font-medium leading-6", {
+          className={clsx("mb-2 block text-sm font-medium leading-6", {
             "text-red-500": !!errorText,
+            "after:text-red-500 after:content-['*']": required,
           })}
         >
-          {label} {required && <span className="text-red-500">*</span>}
+          {label}
         </label>
       )}
+
       {!!errorText && (
-        <p className="text-sm leading-6 text-red-500">{errorText}</p>
+        <p className="mb-2 text-sm leading-6 text-red-500">{errorText}</p>
       )}
+
       <div
         {...getRootProps({
           className: clsx(
-            "mt-2 flex cursor-pointer justify-center rounded-lg border border-dashed px-6 py-10",
+            "flex cursor-pointer justify-center rounded-lg border border-dashed px-6 py-10",
             errorText
               ? "border-red-400 dark:border-red-500"
               : "border-gray-900/25 dark:border-gray-100/25",
@@ -121,6 +124,7 @@ const FileUpload = ({
           <p className="text-xs leading-5 text-gray-600">{helperText}</p>
         </div>
       </div>
+
       {!!files.length && (
         <div className="mt-2">
           {/* other files */}

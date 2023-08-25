@@ -42,16 +42,17 @@ const Select = ({
           {/* label */}
           {!!label && (
             <Listbox.Label
-              className={clsx("block text-sm font-medium leading-6", {
+              className={clsx("mb-2 block text-sm font-medium leading-6", {
                 "text-red-500": !!errorText,
+                "after:text-red-500 after:content-['*']": required,
               })}
             >
-              {label} {required && <span className="text-red-500">*</span>}
+              {label}
             </Listbox.Label>
           )}
 
           {/* selected */}
-          <div className="relative mt-2">
+          <div className="relative">
             <Listbox.Button
               className={clsx(
                 "relative w-full cursor-default rounded-input bg-inherit py-1.5 pl-3 pr-10 text-left shadow-sm ring-1 ring-inset focus:outline-none focus:ring-2 sm:text-sm sm:leading-6",
@@ -124,13 +125,15 @@ const Select = ({
           </div>
 
           {/* errortext or helpertext */}
-          <p
-            className={clsx("mt-2 text-xs", {
-              "text-red-500": !!errorText,
-            })}
-          >
-            {errorText || helperText}
-          </p>
+          {(errorText || helperText) && (
+            <p
+              className={clsx("mt-2 text-xs", {
+                "text-red-500": !!errorText,
+              })}
+            >
+              {errorText || helperText}
+            </p>
+          )}
         </div>
       )}
     </Listbox>

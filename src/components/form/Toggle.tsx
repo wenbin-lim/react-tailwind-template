@@ -34,16 +34,18 @@ const Toggle = ({
             as="span"
             className={clsx("text-sm font-semibold leading-6", {
               "text-red-500": errorText,
+              "after:text-red-500 after:content-['*']": required,
             })}
             passive
           >
-            {label} {required && <span className="text-red-500">*</span>}
+            {label}
           </Switch.Label>
           <Switch.Description
             as="span"
-            className={clsx("text-sm text-gray-500", {
-              "text-red-500": errorText,
-            })}
+            className={clsx(
+              "text-sm",
+              errorText ? "text-red-500" : "text-gray-500",
+            )}
           >
             {errorText || helperText}
           </Switch.Description>
