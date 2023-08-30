@@ -4,6 +4,37 @@ import clsx from "clsx";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 
+type SelectedOptionBadgeProps = {
+  label?: string;
+  onClickRemove?: () => void;
+  wrapperClass?: string;
+};
+const SelectedOptionBadge = ({
+  label = "",
+  onClickRemove,
+  wrapperClass,
+}: SelectedOptionBadgeProps) => (
+  <span
+    className={clsx(
+      "inline-flex items-center gap-x-0.5 rounded-md bg-primary px-2 py-1 text-xs font-medium text-on-primary",
+      wrapperClass,
+    )}
+  >
+    {label || ""}
+    <button
+      type="button"
+      className="group relative -mr-1 h-3.5 w-3.5 rounded-sm"
+      onClick={onClickRemove}
+    >
+      <span className="sr-only">Remove</span>
+      <svg viewBox="0 0 14 14" className="h-3.5 w-3.5 stroke-on-primary">
+        <path d="M4 4l6 6m0-6l-6 6" />
+      </svg>
+      <span className="absolute -inset-1" />
+    </button>
+  </span>
+);
+
 type Option = {
   id: string | number;
   name: string;
@@ -14,19 +45,31 @@ type SelectProps = {
   label?: string;
   wrapperClass?: string;
   options: Option[];
-  value: string;
-  onChange: (value: string) => void;
   placeholder?: string;
   required?: boolean;
   errorText?: string;
   helperText?: string;
   disabled?: boolean;
+  multiOptionBadgeClass?: string;
+};
+
+type SelectSingleOptionProps = SelectProps & {
+  multiple?: false;
+  value: string;
+  onChange: (value: string) => void;
+};
+
+type SelectMultiOptionProps = SelectProps & {
+  multiple: true;
+  value: string[];
+  onChange: (value: string[]) => void;
 };
 
 const Select = ({
   label,
   wrapperClass,
   options,
+  multiple,
   value,
   onChange,
   placeholder = "Select a value",
@@ -34,9 +77,15 @@ const Select = ({
   errorText,
   helperText,
   disabled,
-}: SelectProps) => {
+  multiOptionBadgeClass,
+}: SelectSingleOptionProps | SelectMultiOptionProps) => {
   return (
-    <Listbox value={value} onChange={onChange} disabled={disabled}>
+    <Listbox
+      value={value}
+      onChange={onChange}
+      disabled={disabled}
+      multiple={multiple}
+    >
       {({ open }) => (
         <div className={clsx(wrapperClass)}>
           {/* label */}
@@ -61,10 +110,31 @@ const Select = ({
                   : "placeholder-gray-400 ring-gray-300 focus:ring-input-focus dark:placeholder-gray-600 dark:ring-gray-700",
               )}
             >
-              <span className="block truncate">
-                {options.find((option) => option.value === value)?.name ||
-                  placeholder}
-              </span>
+              {multiple ? (
+                value.length > 0 ? (
+                  <div className="flex flex-wrap gap-1">
+                    {value.map((v) => (
+                      <SelectedOptionBadge
+                        key={v}
+                        label={
+                          options.find((option) => option.value === v)?.name
+                        }
+                        wrapperClass={multiOptionBadgeClass}
+                        onClickRemove={() => {
+                          onChange(value.filter((val) => val !== v));
+                        }}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  placeholder
+                )
+              ) : (
+                <div className="block truncate">
+                  {options.find((option) => option.value === value)?.name ||
+                    placeholder}{" "}
+                </div>
+              )}
               <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                 <ChevronUpDownIcon
                   className="h-5 w-5 text-gray-400"
