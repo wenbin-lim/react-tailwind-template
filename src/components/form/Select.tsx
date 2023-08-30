@@ -21,8 +21,7 @@ const SelectedOptionBadge = ({
     )}
   >
     {label || ""}
-    <button
-      type="button"
+    <a
       className="group relative -mr-1 h-3.5 w-3.5 rounded-sm"
       onClick={onClickRemove}
     >
@@ -31,7 +30,7 @@ const SelectedOptionBadge = ({
         <path d="M4 4l6 6m0-6l-6 6" />
       </svg>
       <span className="absolute -inset-1" />
-    </button>
+    </a>
   </span>
 );
 
