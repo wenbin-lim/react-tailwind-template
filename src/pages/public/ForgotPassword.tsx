@@ -13,6 +13,7 @@ import { Input } from "@src/components/form";
 import { Button } from "@src/components/buttons";
 
 import toast from "react-hot-toast";
+import { getGenericToastMessage } from "@src/utils/toast";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
@@ -40,9 +41,7 @@ const ForgotPassword = () => {
       },
       onError: () => {
         reset();
-        toast.error(
-          "Something went wrong, please try again later or contact admin for support",
-        );
+        toast.error(getGenericToastMessage("error"));
       },
     });
   };
