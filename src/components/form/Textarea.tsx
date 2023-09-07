@@ -2,15 +2,15 @@ import { ExclamationCircleIcon } from "@heroicons/react/20/solid";
 import clsx from "clsx";
 import { forwardRef } from "react";
 
-type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
+type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
   invalid?: boolean;
 };
 
-const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ invalid, ...rest }: InputProps, ref) => {
+const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
+  ({ invalid, ...rest }: TextareaProps, ref) => {
     return (
       <div className="relative rounded-md">
-        <input
+        <textarea
           className={clsx("input dark:input-dark", {
             "input-invalid pr-10": invalid,
           })}
@@ -18,7 +18,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           {...rest}
         />
-
         {invalid && (
           <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
             <ExclamationCircleIcon
@@ -31,4 +30,4 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     );
   },
 );
-export default Input;
+export default Textarea;

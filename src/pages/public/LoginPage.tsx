@@ -7,8 +7,12 @@ import { useMutation } from "@tanstack/react-query";
 
 import { useAuth } from "@src/features/auth/hooks";
 
-import { Input } from "@src/components/form";
-import { Button } from "@src/components/buttons";
+import {
+  InputWrapper,
+  Label,
+  Input,
+  HelperErrorText,
+} from "@src/components/form";
 import toast from "react-hot-toast";
 
 const LoginPage = () => {
@@ -45,61 +49,68 @@ const LoginPage = () => {
   }
 
   return (
-    <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+    <div className="grid h-screen grid-rows-[1fr_2fr] gap-y-10 p-6 lg:px-8">
+      <div className="mx-auto self-end">
         <img
           className="mx-auto h-24 w-auto"
           src="/brand/logo.svg"
           alt="Company Brand"
         />
-        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight">
+        <h2 className="text-center text-2xl font-bold leading-9 tracking-tight">
           Sign in to your account
         </h2>
       </div>
 
-      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+      <div className="mx-auto w-full sm:max-w-sm">
         <form
           className="space-y-6"
           onSubmit={handleSubmit((data) => mutate(data))}
         >
-          <Input
-            id="username"
-            label="Username"
-            type="text"
-            autoFocus
-            autoComplete="username"
-            errorText={errors.username?.message}
-            disabled={isPending}
-            {...register("username")}
-          />
-          <Input
-            id="password"
-            label="Password"
-            type="password"
-            autoComplete="current-password"
-            errorText={errors.password?.message}
-            disabled={isPending}
-            {...register("password")}
-            inputHint={
+          <InputWrapper>
+            <Label htmlFor="username">Username</Label>
+            <Input
+              id="username"
+              type="text"
+              autoComplete="username"
+              autoFocus
+              disabled={isPending}
+              invalid={!!errors.username}
+              {...register("username")}
+            />
+            <HelperErrorText>{errors.username?.message}</HelperErrorText>
+          </InputWrapper>
+
+          <InputWrapper>
+            <div className="flex items-center justify-between">
+              <Label htmlFor="password">Password</Label>
               <a
+                className="cursor-pointer text-sm font-semibold text-secondary-500 hover:text-secondary-600"
                 onClick={() => navigate("/forgot-password")}
-                className="cursor-pointer font-semibold text-secondary-600 hover:text-secondary-500"
               >
                 Forgot password?
               </a>
-            }
-          />
+            </div>
+            <Input
+              id="password"
+              type="password"
+              autoComplete="current-password"
+              disabled={isPending}
+              invalid={!!errors.password}
+              {...register("password")}
+            />
+            <HelperErrorText>{errors.password?.message}</HelperErrorText>
+          </InputWrapper>
 
-          <Button
-            className="w-full bg-primary text-on-primary"
+          <button
+            className="btn w-full bg-primary text-on-primary"
             type="submit"
             disabled={isPending}
           >
             Sign in
-          </Button>
+          </button>
         </form>
 
-        <p className="mt-10 text-center text-sm text-gray-500">
+        <p className="my-10 text-center text-sm text-gray-500">
           Not a member?{" "}
           <a
             onClick={() => navigate("/signup")}

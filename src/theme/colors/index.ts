@@ -37,19 +37,19 @@ export default {
     950: "#032C39",
   },
   background: {
-    DEFAULT: colors.gray[100],
-    light: colors.gray[100],
+    DEFAULT: colors.gray[50],
+    light: colors.gray[50],
     dark: colors.gray[900],
   },
   surface: {
-    DEFAULT: colors.gray[200],
-    light: colors.gray[200],
+    DEFAULT: colors.gray[100],
+    light: colors.gray[100],
     dark: colors.gray[800],
   },
   focus: colors.blue[400],
   "surface-container": {
-    DEFAULT: colors.gray[300],
-    light: colors.gray[300],
+    DEFAULT: colors.gray[200],
+    light: colors.gray[200],
     dark: colors.gray[700],
   },
   "modal-backdrop": {

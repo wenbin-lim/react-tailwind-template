@@ -1,6 +1,9 @@
 export { default as ColorPicker } from "./ColorPicker";
 export { default as Combobox } from "./Combobox";
 export { default as FileUpload } from "./FileUpload";
+export { default as HelperErrorText } from "./HelperErrorText";
 export { default as Input } from "./Input";
+export { default as InputWrapper } from "./InputWrapper";
+export { default as Label } from "./Label";
 export { default as Select } from "./Select";
 export { default as Toggle } from "./Toggle";
