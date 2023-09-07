@@ -3,6 +3,7 @@ import useTheme from "./useTheme";
 
 const useBreakpoints = (breakpoint: string) => {
   const theme = useTheme();
+  console.log(theme);
   const availableBreakpoints = theme.screens;
 
   // check if breakpoint is available
