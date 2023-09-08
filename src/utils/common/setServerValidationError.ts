@@ -2,13 +2,14 @@ import { ClientResponseError } from "pocketbase";
 import { FieldValues, UseFormSetError, Path } from "react-hook-form";
 
 /* 
-	For pocketbase errors only
-  To set errors in react-hook-form
+  To set errors in react-hook-form from server validation errors
+
+	Implemented for pocketbase, change accordingly to your backend if required
 
   return true if error.response.data is not empty
   return false if error.response.data is empty
 */
-function setPbServerErrors<T extends FieldValues>(
+function setServerValidationError<T extends FieldValues>(
   error: unknown,
   setError: UseFormSetError<T>,
 ) {
@@ -29,4 +30,4 @@ function setPbServerErrors<T extends FieldValues>(
   return false;
 }
 
-export default setPbServerErrors;
+export default setServerValidationError;

@@ -1,4 +1,4 @@
-export const getGenericToastMessage = (type: "success" | "error") => {
+const getGenericToastMessage = (type: "success" | "error") => {
   switch (type) {
     case "success":
       return "You have successfully completed the action!";
@@ -8,3 +8,5 @@ export const getGenericToastMessage = (type: "success" | "error") => {
       return "Default message";
   }
 };
+
+export default getGenericToastMessage;

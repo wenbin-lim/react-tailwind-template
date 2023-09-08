@@ -12,7 +12,7 @@ import {
 } from "../data/hooks";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { setPbServerErrors } from "@src/utils/pocketbase";
+import { setServerValidationError } from "@src/utils/common";
 
 import { FormLoader } from "@src/components/loaders";
 import { Input } from "@src/components/form";
@@ -55,7 +55,7 @@ const Form = ({ type }: FormProps) => {
   };
 
   const onError = (error: Error) => {
-    if (setPbServerErrors(error, setError)) {
+    if (setServerValidationError(error, setError)) {
       toast.error("Please check form for invalid values");
     } else {
       toast.error("Failed to save, please try again later");

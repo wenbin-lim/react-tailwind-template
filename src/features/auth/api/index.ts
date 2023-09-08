@@ -10,14 +10,17 @@ import { z } from "zod";
   - Dots (.)
   - Underscores (_)
 
-	Passwords cannot have any spaces within (simple)
+	Passwords cannot have any spaces (simple)
   Passwords need 1 symbol, upper and lowercase and a digit (complex)
 */
 const USERNAME_REGEX = /^[a-zA-Z0-9_.]+$/;
 const PASSWORD_REGEX = /^\S{8,}$/;
 // const PASSWORD_REGEX = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]){8,}$/;
 
-export const RegisterSchema = z
+/* 
+  Sign up user
+*/
+export const SignupSchema = z
   .object({
     username: z
       .string()
@@ -43,14 +46,14 @@ export const RegisterSchema = z
     path: ["passwordConfirm"],
   });
 
-export type RegisterProps = z.infer<typeof RegisterSchema>;
+export type SignupProps = z.infer<typeof SignupSchema>;
 
-export const register = async ({
+export const signup = async ({
   username,
   email,
   password,
   passwordConfirm,
-}: RegisterProps) => {
+}: SignupProps) => {
   const res = await backend
     .collection("users")
     .create({ username, email, password, passwordConfirm });
@@ -58,6 +61,9 @@ export const register = async ({
   return res;
 };
 
+/* 
+  Login user
+*/
 export const LoginSchema = z.object({
   username: z.string().min(1, "Please enter your username"),
   password: z.string().min(1, "Please enter your password"),
@@ -73,6 +79,9 @@ export const login = async ({ username, password }: LoginProps) => {
   return res;
 };
 
+/* 
+  Request password change for user
+*/
 export const RequestPasswordChangeSchema = z.object({
   email: z.string().trim().min(1, "Please enter your email"),
 });

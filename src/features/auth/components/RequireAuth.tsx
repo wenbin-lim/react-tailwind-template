@@ -1,9 +1,6 @@
-import { Navigate, useLocation } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../hooks";
 
-/* 
-	RBAC logic not included, implement your own
-*/
 type RequireAuthProps = {
   redirectTo?: string;
   children?: React.ReactNode;
@@ -13,13 +10,10 @@ const RequireAuth = ({
   redirectTo = "/access-denied",
   children,
 }: RequireAuthProps) => {
-  const { user } = useAuth();
-  const location = useLocation();
+  const { isAuthenticated } = useAuth();
 
-  if (!user) {
-    return (
-      <Navigate to={{ pathname: redirectTo }} state={{ location }} replace />
-    );
+  if (!isAuthenticated) {
+    return <Navigate to={{ pathname: redirectTo }} replace />;
   }
 
   return children;

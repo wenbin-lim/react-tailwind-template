@@ -2,18 +2,21 @@ import { useNavigate } from "react-router-dom";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  RegisterProps,
-  RegisterSchema,
-  register as signup,
-} from "@src/features/auth/api";
-import { useMutation } from "@tanstack/react-query";
+import { SignupProps, SignupSchema } from "@src/features/auth/api";
+import { useSignup } from "@src/features/auth/hooks";
 
-import { Input } from "@src/components/form";
-import { Button } from "@src/components/buttons";
+import {
+  InputWrapper,
+  Label,
+  Input,
+  HelperErrorText,
+} from "@src/components/form";
 
 import toast from "react-hot-toast";
-import { setPbServerErrors } from "@src/utils/pocketbase";
+import {
+  setServerValidationError,
+  getGenericToastMessage,
+} from "@src/utils/common";
 
 const SignupPage = () => {
   const navigate = useNavigate();
@@ -25,129 +28,151 @@ const SignupPage = () => {
     resetField,
     setError,
     formState: { errors },
-  } = useForm<RegisterProps>({
-    resolver: zodResolver(RegisterSchema),
-    // defaultValues: {
-    //   username: `admin${new Date().getTime() % 10000}`,
-    //   email: `admin${new Date().getTime() % 10000}@email.com`,
-    //   password: "password",
-    //   passwordConfirm: "password",
-    // },
+  } = useForm<SignupProps>({
+    resolver: zodResolver(SignupSchema),
+    defaultValues: {
+      username: `admin${new Date().getTime() % 10000}`,
+      email: `admin${new Date().getTime() % 10000}@email.com`,
+      password: "password",
+      passwordConfirm: "password",
+    },
   });
 
-  const { mutate, isPending } = useMutation({
-    mutationFn: signup,
-    onSuccess: () => {
-      navigate("/login");
-      toast.success("Signup Successful");
-    },
-    onError: (error) => {
-      resetField("password");
-      resetField("passwordConfirm");
-      if (setPbServerErrors(error, setError)) {
-        toast.error("Please check form for invalid values");
-      } else {
-        toast.error("Failed to register account, please try again later");
-      }
-    },
-  });
+  // signup logic
+  const signupFn = useSignup();
+
+  const onSignup = (newUser: SignupProps) => {
+    signupFn.mutate(newUser, {
+      onSuccess: () => {
+        navigate("/login");
+        toast.success("Signup Successful");
+      },
+      onError: (error) => {
+        resetField("password");
+        resetField("passwordConfirm");
+
+        if (!setServerValidationError(error, setError)) {
+          toast.error(getGenericToastMessage("error"));
+        }
+      },
+    });
+  };
 
   return (
-    <div className="flex min-h-full flex-1">
-      <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
-        <div className="mx-auto w-full max-w-sm lg:w-96">
-          <div>
-            <img
-              className="mx-auto h-24 w-auto"
-              src="/brand/logo.svg"
-              alt="Company Brand"
+    <main className="flex min-h-screen">
+      <article className="flex flex-1 flex-col items-center justify-center gap-y-8 p-6 lg:flex-none lg:px-20">
+        <section className="flex flex-col items-center gap-y-2">
+          <img
+            className="h-24 w-auto"
+            src="/brand/logo.svg"
+            alt="Company Brand"
+          />
+          <h2 className="text-2xl font-bold leading-9 tracking-tight">
+            Create a new account
+          </h2>
+          <p className="text-sm leading-6 text-gray-500">
+            Already have an account?{" "}
+            <a
+              className="cursor-pointer font-semibold leading-6 text-secondary-600 hover:text-secondary-500"
+              onClick={() => navigate("/login")}
+            >
+              Log in now
+            </a>
+          </p>
+        </section>
+
+        <form
+          className="flex w-full max-w-sm flex-col gap-y-4 lg:w-96"
+          onSubmit={handleSubmit(onSignup)}
+        >
+          <InputWrapper>
+            <Label htmlFor="username">Username</Label>
+            <Input
+              id="username"
+              type="text"
+              autoComplete="username"
+              autoFocus
+              disabled={signupFn.isPending}
+              invalid={!!errors.username}
+              {...register("username")}
             />
-            <h2 className="mt-8 text-2xl font-bold leading-9 tracking-tight">
-              Create a new account
-            </h2>
-            <p className="mt-2 text-sm leading-6 text-gray-500">
-              Already have an account?{" "}
-              <a
-                onClick={() => navigate("/login")}
-                className="cursor-pointer font-semibold leading-6 text-secondary-600 hover:text-secondary-500"
-              >
-                Log in now
-              </a>
-            </p>
-          </div>
+            <HelperErrorText isError={true}>
+              {errors.username?.message}
+            </HelperErrorText>
+          </InputWrapper>
 
-          <div className="mt-6">
-            <div>
-              <form
-                className="space-y-4"
-                onSubmit={handleSubmit((data) => mutate(data))}
-              >
-                <Input
-                  id="username"
-                  label="Username"
-                  type="text"
-                  autoComplete="username"
-                  required
-                  disabled={isPending}
-                  errorText={errors.username?.message}
-                  {...register("username")}
-                />
+          <InputWrapper>
+            <Label htmlFor="email" required>
+              Email
+            </Label>
+            <Input
+              id="email"
+              type="email"
+              autoComplete="email"
+              required
+              disabled={signupFn.isPending}
+              invalid={!!errors.email}
+              {...register("email")}
+            />
+            <HelperErrorText isError={true}>
+              {errors.email?.message}
+            </HelperErrorText>
+          </InputWrapper>
 
-                <Input
-                  id="email"
-                  label="Email"
-                  type="text"
-                  autoComplete="email"
-                  required
-                  disabled={isPending}
-                  errorText={errors.email?.message}
-                  {...register("email")}
-                />
+          <InputWrapper>
+            <Label htmlFor="password" required>
+              Password
+            </Label>
+            <Input
+              id="password"
+              type="password"
+              autoComplete="current-password"
+              required
+              disabled={signupFn.isPending}
+              invalid={!!errors.password}
+              {...register("password")}
+            />
+            <HelperErrorText isError={true}>
+              {errors.password?.message}
+            </HelperErrorText>
+          </InputWrapper>
 
-                <Input
-                  id="password"
-                  label="Password"
-                  type="password"
-                  autoComplete="current-password"
-                  required
-                  disabled={isPending}
-                  errorText={errors.password?.message}
-                  {...register("password")}
-                />
+          <InputWrapper>
+            <Label htmlFor="passwordConfirm" required>
+              Confirm Password
+            </Label>
+            <Input
+              id="passwordConfirm"
+              type="password"
+              autoComplete="current-password"
+              required
+              disabled={signupFn.isPending}
+              invalid={!!errors.password || !!errors.passwordConfirm}
+              {...register("passwordConfirm")}
+            />
+            <HelperErrorText isError={true}>
+              {errors.password?.message || errors.passwordConfirm?.message}
+            </HelperErrorText>
+          </InputWrapper>
 
-                <Input
-                  id="passwordConfirm"
-                  label="Confirm Password"
-                  type="password"
-                  autoComplete="current-password"
-                  required
-                  disabled={isPending}
-                  errorText={errors.passwordConfirm?.message}
-                  {...register("passwordConfirm")}
-                />
+          <button
+            className="btn mt-6 w-full bg-primary text-on-primary"
+            type="submit"
+            disabled={signupFn.isPending}
+          >
+            Sign up
+          </button>
+        </form>
+      </article>
 
-                <div className="pt-6">
-                  <Button
-                    className="w-full bg-primary text-on-primary"
-                    type="submit"
-                    disabled={isPending}
-                  >
-                    Sign up
-                  </Button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="relative hidden w-0 flex-1 lg:block">
+      <figure className="relative hidden w-0 flex-1 lg:block">
+        <figcaption>Sign up page image</figcaption>
         <img
           className="absolute inset-0 h-full w-full object-cover"
           src="https://images.unsplash.com/photo-1496917756835-20cb06e75b4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1908&q=80"
-          alt=""
         />
-      </div>
-    </div>
+      </figure>
+    </main>
   );
 };
 export default SignupPage;

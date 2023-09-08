@@ -29,6 +29,7 @@
    b. `VITE_API_URL=your_backend_server_url`
 5. Change these files to connect to your preferred backend service (if not pocketbase)
    - ./src/lib/dataProvider.ts
+   - ./src/features/auth (api, provider)
 6. Start development server: `npm run dev`
 ```
 
@@ -43,6 +44,7 @@
 - `pages`: Unique pages, screens and views
 - `routes`: App routes
 - `styles`: Custom .scss files, tailwindCSS
+- `theme`: tailwind theme files
 - `types`: Custom type declaration files
 - `utils`: Utility functions
 

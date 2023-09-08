@@ -13,7 +13,7 @@ import { Input } from "@src/components/form";
 import { Button } from "@src/components/buttons";
 
 import toast from "react-hot-toast";
-import { getGenericToastMessage } from "@src/utils/toast";
+import { getGenericToastMessage } from "@src/utils/common";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();

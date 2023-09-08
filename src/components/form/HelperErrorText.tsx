@@ -9,7 +9,7 @@ const HelperErrorText = ({ isError, children }: HelperErrorTextProps) => {
   return (
     children && (
       <p
-        className={clsx("text-sm", {
+        className={clsx("text-xs", {
           "text-red-500": isError,
         })}
       >
