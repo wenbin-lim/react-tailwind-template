@@ -7,7 +7,7 @@ import {
   UnauthorisedPage,
   ForbiddenPage,
   NotFoundPage,
-  ApplicationErrorPage,
+  // ApplicationErrorPage,
 } from "@src/pages/errors";
 
 const errorRoutes: RouteObject[] = [
@@ -19,10 +19,10 @@ const errorRoutes: RouteObject[] = [
     path: "/access-forbidden",
     element: <ForbiddenPage redirectTo="/login" />,
   },
-  {
-    path: "/server-error",
-    element: <ApplicationErrorPage redirectTo="/" />,
-  },
+  // {
+  //   path: "/server-error",
+  //   element: <ApplicationErrorPage redirectTo="/" />,
+  // },
   // 404 should always be the last route of the array
   {
     path: "*",

@@ -2,7 +2,14 @@ import { useContext } from "react";
 import { useMutation } from "@tanstack/react-query";
 
 import { AuthContext } from "../provider";
-import { signup, SignupProps, login, LoginProps } from "../api";
+import {
+  signup,
+  SignupProps,
+  login,
+  LoginProps,
+  requestPasswordChange,
+  RequestPasswordChangeProps,
+} from "../api";
 
 // useAuth hook to get the auth context
 export const useAuth = () => useContext(AuthContext);
@@ -18,5 +25,13 @@ export const useSignup = () => {
 export const useLogin = () => {
   return useMutation({
     mutationFn: (credentials: LoginProps) => login(credentials),
+  });
+};
+
+// useRequestPasswordChange hook
+export const useRequestPasswordChange = () => {
+  return useMutation({
+    mutationFn: (data: RequestPasswordChangeProps) =>
+      requestPasswordChange(data),
   });
 };

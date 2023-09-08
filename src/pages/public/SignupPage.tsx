@@ -82,6 +82,7 @@ const SignupPage = () => {
         </section>
 
         <form
+          id="sign-up-form"
           className="flex w-full max-w-sm flex-col gap-y-4 lg:w-96"
           onSubmit={handleSubmit(onSignup)}
         >

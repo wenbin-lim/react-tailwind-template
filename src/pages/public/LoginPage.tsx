@@ -59,7 +59,7 @@ const LoginPage = () => {
       </section>
 
       <form
-        id="loginForm"
+        id="login-form"
         className="flex w-full flex-col gap-y-6 sm:max-w-sm"
         onSubmit={handleSubmit(onLogin)}
       >

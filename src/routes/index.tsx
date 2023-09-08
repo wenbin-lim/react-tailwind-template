@@ -2,11 +2,11 @@ import {
   createBrowserRouter,
   RouterProvider as BrowserRouterProvider,
   RouteObject,
-  Navigate,
+  // Navigate,
 } from "react-router-dom";
 import { PageLoader } from "@src/components/loaders";
-
 import App from "@src/App";
+import { ApplicationErrorPage } from "@src/pages/errors";
 
 // Routes
 import publicRoutes from "./publicRoutes";
@@ -29,7 +29,8 @@ const routes: RouteObject[] = [
     // entry point
     path: "",
     children: appRoutes,
-    errorElement: <Navigate to="/server-error" />,
+    errorElement: <ApplicationErrorPage redirectTo="/" />,
+    // errorElement: <Navigate to="/server-error" />,
     element: <App />,
   },
 ];
