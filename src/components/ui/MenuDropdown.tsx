@@ -1,13 +1,7 @@
 import { Fragment } from "react";
 import clsx from "clsx";
 
-import {
-  useFloating,
-  flip,
-  autoUpdate,
-  Placement,
-  shift,
-} from "@floating-ui/react";
+import { useFloating, autoUpdate, Placement, flip } from "@floating-ui/react";
 import { Menu, Transition } from "@headlessui/react";
 import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
 
@@ -16,7 +10,7 @@ type Action = {
   callback: () => void;
 };
 
-interface MoreActionsDropdownProps {
+interface MenuDropdownProps {
   triggerButton?: JSX.Element | React.ReactNode;
   actions: Action[];
   menuPlacement?: Placement;
@@ -24,26 +18,26 @@ interface MoreActionsDropdownProps {
   menuMaxWidth?: number;
 }
 
-const MoreActionsDropdown = ({
+const MenuDropdown = ({
   actions,
   triggerButton,
   menuPlacement = "left-start",
-  menuMinWidth = 128,
-  menuMaxWidth = 256,
-}: MoreActionsDropdownProps) => {
+  menuMinWidth = 100,
+  menuMaxWidth = 250,
+}: MenuDropdownProps) => {
   const { refs, floatingStyles } = useFloating({
     placement: menuPlacement,
     whileElementsMounted: autoUpdate,
-    middleware: [flip(), shift()],
+    middleware: [flip()],
   });
 
   return (
-    <Menu as="div" className="relative flex-none">
+    <Menu>
       <Menu.Button ref={refs.setReference} type="button">
+        <span className="sr-only">Open menu</span>
         {triggerButton || (
-          <div className="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900 dark:hover:text-gray-100">
-            <span className="sr-only">Open options</span>
-            <EllipsisVerticalIcon className="h-5 w-5" aria-hidden="true" />
+          <div className="-m-2 p-2 text-gray-500 hover:text-gray-900 dark:hover:text-gray-100">
+            <EllipsisVerticalIcon className="h-5 w-5" />
           </div>
         )}
       </Menu.Button>
@@ -52,14 +46,12 @@ const MoreActionsDropdown = ({
         enter="transition-opacity ease-out duration-300"
         enterFrom="transform opacity-0"
         enterTo="transform opacity-100"
-        leave="transition-opacity ease-in duration-75"
+        leave="transition-opacity ease-in duration-100"
         leaveFrom="transform opacity-100"
         leaveTo="transform opacity-0"
       >
         <Menu.Items
-          className={clsx(
-            "absolute right-0 z-popover mt-2 w-max origin-top-right rounded-md bg-surface py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none",
-          )}
+          className="overflow-hidden rounded-md bg-gray-50 shadow-lg ring-1 ring-gray-900/5"
           ref={refs.setFloating}
           style={{
             ...floatingStyles,
@@ -67,16 +59,14 @@ const MoreActionsDropdown = ({
             maxWidth: menuMaxWidth,
           }}
         >
-          {actions.map(({ label, callback }, index) => (
-            <Menu.Item key={`more-actions-dropdown-menu-item-${index}`}>
+          {actions.map(({ label, callback }) => (
+            <Menu.Item key={label}>
               {({ active }) => (
                 <button
                   type="button"
                   className={clsx(
                     "block w-full overflow-hidden truncate px-3 py-1 text-left text-sm leading-6",
-                    active
-                      ? "bg-background text-on-background"
-                      : "text-on-surface",
+                    active ? "bg-gray-100 text-black" : "text-black",
                   )}
                   onClick={callback}
                 >
@@ -90,4 +80,4 @@ const MoreActionsDropdown = ({
     </Menu>
   );
 };
-export default MoreActionsDropdown;
+export default MenuDropdown;

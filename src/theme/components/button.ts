@@ -26,9 +26,6 @@ export default plugin(function ({ addComponents, theme }) {
         "--tw-ring-inset": "inset",
         boxShadow:
           "var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color)",
-        "&:hover": {
-          opacity: theme("opacity.100"),
-        },
       },
       "&.btn-sm": {
         padding: `${theme("padding[1]")} ${theme("padding[2]")}`,

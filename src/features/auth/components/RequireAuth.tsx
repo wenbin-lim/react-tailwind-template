@@ -10,13 +10,17 @@ const RequireAuth = ({
   redirectTo = "/access-denied",
   children,
 }: RequireAuthProps) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticating, isAuthenticated } = useAuth();
 
-  if (!isAuthenticated) {
-    return <Navigate to={{ pathname: redirectTo }} replace />;
+  if (isAuthenticating) {
+    return null;
   }
 
-  return children;
+  if (isAuthenticated) {
+    return children;
+  }
+
+  return <Navigate to={{ pathname: redirectTo }} replace />;
 };
 
 export default RequireAuth;

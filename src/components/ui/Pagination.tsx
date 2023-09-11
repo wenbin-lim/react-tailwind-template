@@ -34,8 +34,6 @@ function pagination(c: number, m: number) {
 
 /* 
   https://tailwindui.com/components/application-ui/navigation/pagination
-
-  TODO: rows per page
 */
 
 interface PaginationProps {
@@ -45,6 +43,7 @@ interface PaginationProps {
   totalItems: number;
   totalPages: number;
 }
+
 const Pagination = ({
   page,
   setPage,
@@ -53,76 +52,81 @@ const Pagination = ({
   totalPages,
 }: PaginationProps) => {
   return (
-    <div className="flex items-center justify-between px-4 py-3 sm:px-6">
+    <div className="flex">
+      {/* mobile */}
       <div className="flex flex-1 justify-between sm:hidden">
         <button
-          onClick={() => page > 1 && setPage(page - 1)}
-          className={clsx(
-            "relative inline-flex items-center rounded-md border border-gray-300 px-4 py-2 text-sm font-medium dark:border-gray-700",
-            { "cursor-not-allowed opacity-50": page === 1 },
-          )}
+          type="button"
+          onClick={() => setPage(page - 1)}
+          disabled={page === 1}
+          className="btn btn-outline ring-gray-300 dark:ring-gray-700"
         >
           Previous
         </button>
         <button
-          onClick={() => page < totalPages && setPage(page + 1)}
-          className={clsx(
-            "relative ml-3 inline-flex items-center rounded-md border border-gray-300 px-4 py-2 text-sm font-medium dark:border-gray-700",
-            { "cursor-not-allowed opacity-50": page === totalPages },
-          )}
+          type="button"
+          onClick={() => setPage(page + 1)}
+          disabled={page === totalPages}
+          className="btn btn-outline ring-gray-300 dark:ring-gray-700"
         >
           Next
         </button>
       </div>
+
+      {/* desktop */}
       <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
-        <div>
-          <p className="text-sm">
-            Showing{" "}
-            <span className="font-medium">{(page - 1) * perPage + 1}</span> to{" "}
-            <span className="font-medium">
-              {page * perPage <= totalItems ? page * perPage : totalItems}
-            </span>{" "}
-            of <span className="font-medium">{totalItems}</span> results
-          </p>
-        </div>
+        <p className="text-sm">
+          <span>Showing&nbsp;</span>
+          <span className="font-semibold">{(page - 1) * perPage + 1}</span>
+          <span>&nbsp;to&nbsp;</span>
+          <span className="font-semibold">
+            {page * perPage <= totalItems ? page * perPage : totalItems}
+          </span>
+          <span>&nbsp;of&nbsp;</span>
+          <span className="font-semibold">{totalItems}</span>
+          <span>&nbsp;results</span>
+        </p>
+
         <div>
           <nav
             className="isolate inline-flex -space-x-px rounded-md shadow-sm"
             aria-label="Pagination"
           >
             <button
-              onClick={() => page > 1 && setPage(page - 1)}
-              className={clsx(
-                "relative inline-flex items-center rounded-l-md px-2 py-2 ring-1 ring-inset ring-gray-300 focus:z-20 focus:outline-offset-0 dark:ring-gray-700",
-                { "cursor-not-allowed opacity-50": page === 1 },
-              )}
+              type="button"
+              onClick={() => setPage(page - 1)}
               disabled={page === 1}
+              className="btn btn-outline rounded-l-full rounded-r-none ring-gray-300 dark:ring-gray-700"
             >
               <span className="sr-only">Previous</span>
               <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
             </button>
-            {pagination(page, totalPages).map((i, index) => (
+
+            {pagination(page, totalPages).map((i) => (
               <button
-                key={`pagination-btn-${i}-${index}`}
+                type="button"
+                key={i}
                 onClick={() => typeof i === "number" && setPage(i)}
                 aria-current={page === i ? "page" : undefined}
                 className={clsx(
-                  "relative inline-flex items-center px-4 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 focus:outline-offset-0 dark:ring-gray-700",
+                  "btn btn-outline rounded-none px-4 py-2 ring-gray-300 dark:ring-gray-700",
                   {
-                    "focus-visible:outline-focus bg-primary text-on-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2":
-                      page === i,
+                    "bg-primary text-on-primary ring-primary": page === i,
+                  },
+                  {
+                    "cursor-default focus:outline-none": typeof i !== "number",
                   },
                 )}
               >
                 {i}
               </button>
             ))}
+
             <button
-              onClick={() => page < totalPages && setPage(page + 1)}
-              className={clsx(
-                "relative inline-flex items-center rounded-r-md px-2 py-2 ring-1 ring-inset ring-gray-300 focus:z-20 focus:outline-offset-0 dark:ring-gray-700",
-                { "cursor-not-allowed opacity-50": page === totalPages },
-              )}
+              type="button"
+              onClick={() => setPage(page + 1)}
+              disabled={page === totalPages}
+              className="btn btn-outline rounded-l-none rounded-r-full ring-gray-300 dark:ring-gray-700"
             >
               <span className="sr-only">Next</span>
               <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />

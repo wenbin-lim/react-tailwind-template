@@ -25,7 +25,7 @@ const childrenRoutes: RouteObject[] = [
   },
   {
     path: ":id/edit",
-    element: <Form type="edit" />,
+    element: <Form type="update" />,
   },
 ];
 

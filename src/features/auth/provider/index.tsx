@@ -18,6 +18,7 @@ export type AuthProviderType = {
 type AuthContextType = {
   user: AuthModel | null;
   token: string;
+  isAuthenticating: boolean;
   isAuthenticated: boolean;
   logout: () => void;
 };
@@ -26,6 +27,7 @@ type AuthContextType = {
 export const AuthContext = createContext<AuthContextType>({
   user: null,
   token: "",
+  isAuthenticating: true,
   isAuthenticated: false,
   logout: () => {},
 });
@@ -33,6 +35,7 @@ export const AuthContext = createContext<AuthContextType>({
 export const AuthProvider = ({ children }: AuthProviderType) => {
   const [user, setUser] = useState(backend.authStore.model);
   const [token, setToken] = useState(backend.authStore.token);
+  const [isAuthenticating, setIsAuthenticating] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   /* 
@@ -45,7 +48,10 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
     backend.authStore.clear();
   }, []);
 
-  const authenticateToken = useCallback(async () => {
+  // on load check if token is valid
+  const authenticateToken = async () => {
+    setIsAuthenticating(true);
+
     try {
       await backend.collection("users").authRefresh();
       setIsAuthenticated(true);
@@ -54,7 +60,9 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
       logout();
       setIsAuthenticated(false);
     }
-  }, []);
+
+    setIsAuthenticating(false);
+  };
 
   const refreshAuthSession = useCallback(async () => {
     if (!token) return;
@@ -74,7 +82,7 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
       setIsAuthenticated(false);
       return logout();
     }
-  }, [token]);
+  }, [token, logout]);
 
   /* 
     On app load
@@ -94,7 +102,9 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
   useInterval(refreshAuthSession, token ? REFRESH_INTERVAL_MS : null);
 
   return (
-    <AuthContext.Provider value={{ user, token, logout, isAuthenticated }}>
+    <AuthContext.Provider
+      value={{ user, token, logout, isAuthenticating, isAuthenticated }}
+    >
       {children}
     </AuthContext.Provider>
   );

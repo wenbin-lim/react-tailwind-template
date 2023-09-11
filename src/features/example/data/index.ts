@@ -1,7 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
 
-// Data provider methods
 import {
   getFullList,
   getPaginatedList,
@@ -9,50 +8,47 @@ import {
   addOne,
   updateOne,
   deleteOne,
-} from "@src/lib/dataProvider";
+} from "@src/lib/backend";
 
-// Constants and Types
-const KEY = "examples";
+/* 
+  Query keys, schemas and types
+*/
+const EXAMPLE_KEY = "examples";
 
 export const ExampleSchema = z.object({
   name: z.string(),
-  title: z.string(),
-  description: z.string(),
 });
 
 export type Example = z.infer<typeof ExampleSchema> & {
   id: string;
 };
 
+/* 
+  Data provider hooks
+*/
 // get full list
 export const useGetFullListExample = () => {
   return useQuery({
-    queryKey: [KEY, "list"],
-    queryFn: () => getFullList<Example>({ collectionName: KEY }),
+    queryKey: [EXAMPLE_KEY, "list"],
+    queryFn: () => getFullList<Example>({ collection: EXAMPLE_KEY }),
   });
 };
 
 // get paginated list
 export const useGetPaginatedListExample = (page: number, perPage: number) => {
   return useQuery({
-    queryKey: [KEY, "list", { pagination: { page, perPage } }],
+    queryKey: [EXAMPLE_KEY, "list", { pagination: { page, perPage } }],
     queryFn: () =>
-      getPaginatedList<Example>({ collectionName: KEY, page, perPage }),
+      getPaginatedList<Example>({ collection: EXAMPLE_KEY, page, perPage }),
   });
 };
 
 // get single record
-export const useGetOneExample = ({
-  id,
-  enabled,
-}: {
-  id: string;
-  enabled?: boolean;
-}) => {
+export const useGetOneExample = (id: string) => {
   return useQuery({
-    queryKey: [KEY, "detail", id],
-    queryFn: () => getOne<Example>({ collectionName: KEY, id }),
-    enabled,
+    queryKey: [EXAMPLE_KEY, "detail", id],
+    queryFn: () => getOne<Example>({ collection: EXAMPLE_KEY, id }),
+    enabled: !!id,
   });
 };
 
@@ -61,11 +57,11 @@ export const useAddOneExample = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (newData: Example) =>
-      addOne<Example>({ collectionName: KEY, newData }),
+    mutationFn: (newRecord: Example) =>
+      addOne<Example>({ collection: EXAMPLE_KEY, newRecord }),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [KEY, "list"],
+        queryKey: [EXAMPLE_KEY, "list"],
       });
     },
   });
@@ -76,11 +72,11 @@ export const useUpdateOneExample = (id: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (newData: Example) =>
-      updateOne<Example>({ collectionName: KEY, id, newData }),
+    mutationFn: (newRecord: Example) =>
+      updateOne<Example>({ collection: EXAMPLE_KEY, id, newRecord }),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [KEY, "list"],
+        queryKey: [EXAMPLE_KEY, "list"],
       });
     },
   });
@@ -91,10 +87,10 @@ export const useDeleteOneExample = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: string) => deleteOne({ collectionName: KEY, id }),
+    mutationFn: (id: string) => deleteOne({ collection: EXAMPLE_KEY, id }),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [KEY, "list"],
+        queryKey: [EXAMPLE_KEY, "list"],
       });
     },
   });
