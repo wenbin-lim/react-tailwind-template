@@ -14,6 +14,7 @@ interface MenuDropdownProps {
   triggerButton?: JSX.Element | React.ReactNode;
   actions: Action[];
   menuPlacement?: Placement;
+  menuClassName?: string;
   menuMinWidth?: number;
   menuMaxWidth?: number;
 }
@@ -22,8 +23,9 @@ const MenuDropdown = ({
   actions,
   triggerButton,
   menuPlacement = "left-start",
-  menuMinWidth = 100,
-  menuMaxWidth = 250,
+  menuMinWidth = 128,
+  menuMaxWidth = 128,
+  menuClassName,
 }: MenuDropdownProps) => {
   const { refs, floatingStyles } = useFloating({
     placement: menuPlacement,
@@ -51,7 +53,10 @@ const MenuDropdown = ({
         leaveTo="transform opacity-0"
       >
         <Menu.Items
-          className="z-tooltip overflow-hidden rounded-md bg-gray-50 shadow-lg ring-1 ring-gray-900/5"
+          className={clsx(
+            "z-tooltip overflow-hidden rounded-md bg-gray-50 py-2 shadow-lg ring-1 ring-gray-900/5",
+            menuClassName,
+          )}
           ref={refs.setFloating}
           style={{
             ...floatingStyles,
@@ -66,7 +71,7 @@ const MenuDropdown = ({
                   type="button"
                   className={clsx(
                     "block w-full overflow-hidden truncate px-3 py-1 text-left text-sm leading-6",
-                    active ? "bg-gray-100 text-black" : "text-black",
+                    active ? "bg-gray-200 text-black" : "text-black",
                   )}
                   onClick={callback}
                 >

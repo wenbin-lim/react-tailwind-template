@@ -51,7 +51,6 @@ const Pagination = ({
   totalItems,
   totalPages,
 }: PaginationProps) => {
-  console.log(totalPages);
   return (
     <div className="flex">
       {/* mobile */}

@@ -1,1 +1,1 @@
-export { default as getPbImageUrl } from "./getPbImageUrl";
+export { default as getPbFileUrl } from "./getPbFileUrl";

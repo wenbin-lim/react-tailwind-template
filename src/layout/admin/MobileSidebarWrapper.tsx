@@ -22,14 +22,14 @@ const MobileSidebarWrapper = ({
         {/* Backdrop */}
         <Transition.Child
           as={Fragment}
-          enter="transition-opacity ease-linear duration-300"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="transition-opacity ease-linear duration-300"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
+          enter="transition ease-linear duration-300"
+          enterFrom="opacity-0 backdrop-blur-none"
+          enterTo="opacity-100 backdrop-blur-sm"
+          leave="transition ease-linear duration-300"
+          leaveFrom="opacity-100  backdrop-blur-sm"
+          leaveTo="opacity-0 backdrop-blur-none"
         >
-          <div className="fixed inset-0 bg-gray-900/80" />
+          <div className="fixed inset-0 bg-modal-backdrop dark:bg-modal-backdrop-dark" />
         </Transition.Child>
 
         <div className="fixed inset-0 flex">

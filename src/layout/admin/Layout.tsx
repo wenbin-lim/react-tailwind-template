@@ -26,18 +26,19 @@ const AdminLayout = ({ showSidebar = true, children }: AdminLayoutProps) => {
           </MobileSidebarWrapper>
 
           {/* Static sidebar for desktop */}
-          <div className="hidden lg:fixed lg:inset-y-0 lg:z-appbar lg:flex lg:w-sidebar lg:flex-col">
+          <div className="hidden lg:fixed lg:inset-y-0 lg:z-appbar lg:flex lg:w-sidebar">
             <Sidebar />
           </div>
         </>
       )}
 
       <div
-        className={clsx("grid min-h-screen grid-rows-[auto_1fr] flex-col", {
+        className={clsx("grid min-h-screen grid-rows-[auto_1fr]", {
           "lg:pl-sidebar": showSidebar,
         })}
       >
         <TopBar
+          sticky={true}
           showMobileSidebarToggle={true}
           openMobileSidebar={() => setShowMobileSidebar(true)}
         />

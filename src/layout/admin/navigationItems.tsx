@@ -2,15 +2,21 @@
 import { HomeIcon } from "@heroicons/react/24/outline";
 import { GlobeAltIcon } from "@heroicons/react/24/outline";
 
-const navigationItems = [
+type NavigationItem = {
+  path: string;
+  name: string;
+  icon?: React.ReactElement | JSX.Element;
+};
+
+const navigationItems: NavigationItem[] = [
   {
     path: "/dashboard",
     name: "Dashboard",
     icon: <HomeIcon />,
   },
   {
-    path: "/examples",
-    name: "Examples",
+    path: "/crud-example",
+    name: "CRUD Example",
     icon: <GlobeAltIcon />,
   },
 ];
