@@ -1,10 +1,10 @@
 import { Outlet, RouteObject } from "react-router-dom";
 import { RequireAuth } from "@src/features/auth/components";
 
-// Layout
+// Layouts import
 import { Layout } from "@src/layout/admin";
 
-// Pages
+// Pages import
 import List from "../pages/List";
 import Show from "../pages/Show";
 import Form from "../pages/Form";
@@ -29,8 +29,9 @@ const childrenRoutes: RouteObject[] = [
   },
 ];
 
+// authenticated route
 const route: RouteObject = {
-  path: "/examples",
+  path: "/crud-example",
   children: childrenRoutes,
   element: (
     <RequireAuth>
@@ -40,5 +41,12 @@ const route: RouteObject = {
     </RequireAuth>
   ),
 };
+
+// // unauthenticated route
+// const route: RouteObject = {
+//   path: "/crud-example",
+//   children: childrenRoutes,
+//   element: <Outlet />,
+// };
 
 export default route;

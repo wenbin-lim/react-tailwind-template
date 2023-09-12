@@ -4,35 +4,39 @@
 import { useParams, useNavigate } from "react-router-dom";
 
 import {
-  %featurePascalCase%Schema,
-  %featurePascalCase%,
-  useGetOne%featurePascalCase%,
-  useAddOne%featurePascalCase%,
-  useUpdateOne%featurePascalCase%,
-} from "../data/hooks";
+  %recordPascalName%Schema,
+  %recordPascalName%,
+  useGetOne%recordPascalName%,
+  useAddOne%recordPascalName%,
+  useUpdateOne%recordPascalName%,
+} from "../data";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { setServerValidationError } from "@src/utils/common";
 
+import {
+  InputWrapper,
+  Label,
+  Input,
+  HelperErrorText,
+} from "@src/components/form";
 import { FormLoader } from "@src/components/loaders";
-import { Input } from "@src/components/form";
-import { Button } from "@src/components/buttons";
 
 import toast from "react-hot-toast";
+import {
+  setServerValidationError,
+  getGenericToastMessage,
+} from "@src/utils/common";
 
 interface FormProps {
-  type: "create" | "edit";
+  type: "create" | "update";
 }
 
 const Form = ({ type }: FormProps) => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // fetch data if editing
-  const { data: fetchedData } = useGetOne%featurePascalCase%({
-    id: id || "",
-    enabled: type === "edit" && !!id,
-  });
+  // fetch data if updating
+  const { data: fetchedData } = useGetOne%recordPascalName%(id || "");
 
   // form
   const {
@@ -40,114 +44,86 @@ const Form = ({ type }: FormProps) => {
     handleSubmit,
     formState: { errors },
     setError,
-  } = useForm<%featurePascalCase%>({
-    resolver: zodResolver(%featurePascalCase%Schema),
+  } = useForm<%recordPascalName%>({
+    resolver: zodResolver(%recordPascalName%Schema),
     values: fetchedData,
   });
 
   // mutation
-  const addFn = useAddOne%featurePascalCase%();
-  const updateFn = useUpdateOne%featurePascalCase%(id || "");
+  const addFn = useAddOne%recordPascalName%();
+  const updateFn = useUpdateOne%recordPascalName%(id || "");
 
-  const onSuccess = () => {
-    toast.success("Saved successfully");
+  const onSubmit = (newData: %recordPascalName%) => {
+    const mutateFn = type === "create" ? addFn : updateFn;
+
+    mutateFn.mutate(newData, {
+      onSuccess: () => {
+        toast.success("Saved!");
+        navigate("/%routeName%");
+      },
+      onError: (error) => {
+        if (!setServerValidationError(error, setError)) {
+          toast.error(getGenericToastMessage("error"));
+        }
+      },
+    });
   };
 
-  const onError = (error: Error) => {
-    if (setServerValidationError(error, setError)) {
-      toast.error("Please check form for invalid values");
-    } else {
-      toast.error("Failed to save, please try again later");
-    }
-  };
-
-  const onSubmit = (newData: %featurePascalCase%) => {
-    if (type === "edit" && !!id) {
-      updateFn.mutate(newData, {
-        onSuccess,
-        onError,
-      });
-    } 
-    
-    if (type === "create") {
-      addFn.mutate(newData, {
-        onSuccess,
-        onError,
-      });
-    }
-  };
-
-  if (type === "create" || (type === "edit" && fetchedData)) {
+  if (type === "create" || (type === "update" && !!id && fetchedData)) {
     return (
-      <main className="h-full px-4 py-4 sm:px-6 lg:px-8">
+      <main className="flex flex-col gap-y-6 py-4 sm:px-6 lg:px-8">
+        <header className="px-4 sm:px-0">
+          <h3 className="text-lg font-semibold">
+            {type === "create" ? "New" : "Update"}
+          </h3>
+          <p className="mt-1 text-sm text-gray-700 dark:text-gray-400">
+            More information...
+          </p>
+        </header>
+
         <form
-          className="grid h-full grid-rows-[1fr_auto]"
+          id={`${type}-%recordParamName%-form`}
+          className="flex flex-1 flex-col gap-y-10 border-y border-gray-300 px-4 py-6 dark:border-gray-700 sm:px-0"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <div className="space-y-12">
-            <div className="pb-12">
-              <h2 className="text-base font-semibold leading-7">
-                New %featureCapitalCase%
-              </h2>
-              <p className="mt-1 text-sm leading-6 text-gray-700 dark:text-gray-400">
-                Create a new %featureCapitalCase%
-              </p>
-
-              <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                <Input
-                  id="name"
-                  label="Name"
-                  autoFocus
-                  wrapperClass="sm:col-span-full"
-                  errorText={errors.name?.message}
-                  disabled={
-                    type === "edit" ? updateFn.isPending : addFn.isPending
-                  } 
-                  {...register("name")}
-                />
-                <Input
-                  id="title"
-                  label="Title"
-                  wrapperClass="sm:col-span-full"
-                  errorText={errors.title?.message}
-                  disabled={
-                    type === "edit" ? updateFn.isPending : addFn.isPending
-                  } 
-                  {...register("title")}
-                />
-                <Input
-                  id="description"
-                  label="Description"
-                  wrapperClass="sm:col-span-full"
-                  errorText={errors.description?.message}
-                  disabled={
-                    type === "edit" ? updateFn.isPending : addFn.isPending
-                  } 
-                  {...register("description")}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="flex items-center justify-end gap-x-6 pt-6">
-            <Button
-              shadow={false}
-              type="button"
-              onClick={() => navigate("/%featureParamCase%")}
-            >
-              Cancel
-            </Button>
-            <Button 
-              className="bg-primary text-on-primary" 
-              type="submit"
-              disabled={
-                type === "edit" ? updateFn.isPending : addFn.isPending
-              }
-            >
-              Save
-            </Button>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-6">
+            <InputWrapper className="sm:col-span-4">
+              <Label htmlFor="name">Name</Label>
+              <Input
+                id="name"
+                type="text"
+                autoComplete="name"
+                disabled={
+                  type === "create" ? addFn.isPending : updateFn.isPending
+                }
+                invalid={!!errors.name}
+                {...register("name")}
+              />
+              <HelperErrorText isError={true}>
+                {errors.name?.message}
+              </HelperErrorText>
+            </InputWrapper>
           </div>
         </form>
+
+        <footer className="flex items-center justify-end gap-x-6 px-4 sm:px-0">
+          <button
+            type="button"
+            onClick={() => navigate("/%routeName%")}
+            className="btn btn-outline ring-gray-300 dark:ring-gray-700"
+          >
+            Cancel
+          </button>
+
+          <button
+            form={`${type}-%recordParamName%-form`}
+            type="submit"
+            disabled={type === "create" ? addFn.isPending : updateFn.isPending}
+            className="btn bg-primary text-on-primary"
+          >
+            Save
+          </button>
+        </footer>
       </main>
     );
   }

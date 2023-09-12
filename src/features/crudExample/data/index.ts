@@ -12,8 +12,10 @@ import {
 
 /* 
   Query keys, schemas and types
+
+	Structure query keys: https://tkdodo.eu/blog/effective-react-query-keys
 */
-const EXAMPLE_KEY = "examples";
+export const KEY = "examples";
 
 export const ExampleSchema = z.object({
   name: z.string(),
@@ -29,25 +31,38 @@ export type Example = z.infer<typeof ExampleSchema> & {
 // get full list
 export const useGetFullListExample = () => {
   return useQuery({
-    queryKey: [EXAMPLE_KEY, "list"],
-    queryFn: () => getFullList<Example>({ collection: EXAMPLE_KEY }),
+    queryKey: [KEY, "list"],
+    queryFn: () =>
+      getFullList<Example>({
+        collection: KEY,
+        options: {
+          sort: "-created",
+        },
+      }),
   });
 };
 
 // get paginated list
 export const useGetPaginatedListExample = (page: number, perPage: number) => {
   return useQuery({
-    queryKey: [EXAMPLE_KEY, "list", { pagination: { page, perPage } }],
+    queryKey: [KEY, "list", { pagination: { page, perPage } }],
     queryFn: () =>
-      getPaginatedList<Example>({ collection: EXAMPLE_KEY, page, perPage }),
+      getPaginatedList<Example>({
+        collection: KEY,
+        page,
+        perPage,
+        options: {
+          sort: "-created",
+        },
+      }),
   });
 };
 
 // get single record
 export const useGetOneExample = (id: string) => {
   return useQuery({
-    queryKey: [EXAMPLE_KEY, "detail", id],
-    queryFn: () => getOne<Example>({ collection: EXAMPLE_KEY, id }),
+    queryKey: [KEY, "detail", id],
+    queryFn: () => getOne<Example>({ collection: KEY, id }),
     enabled: !!id,
   });
 };
@@ -58,10 +73,10 @@ export const useAddOneExample = () => {
 
   return useMutation({
     mutationFn: (newRecord: Example) =>
-      addOne<Example>({ collection: EXAMPLE_KEY, newRecord }),
+      addOne<Example>({ collection: KEY, newRecord }),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [EXAMPLE_KEY, "list"],
+        queryKey: [KEY, "list"],
       });
     },
   });
@@ -73,10 +88,13 @@ export const useUpdateOneExample = (id: string) => {
 
   return useMutation({
     mutationFn: (newRecord: Example) =>
-      updateOne<Example>({ collection: EXAMPLE_KEY, id, newRecord }),
+      updateOne<Example>({ collection: KEY, id, newRecord }),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [EXAMPLE_KEY, "list"],
+        queryKey: [KEY, "list"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [KEY, "detail", id],
       });
     },
   });
@@ -87,10 +105,10 @@ export const useDeleteOneExample = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: string) => deleteOne({ collection: EXAMPLE_KEY, id }),
+    mutationFn: (id: string) => deleteOne({ collection: KEY, id }),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [EXAMPLE_KEY, "list"],
+        queryKey: [KEY, "list"],
       });
     },
   });

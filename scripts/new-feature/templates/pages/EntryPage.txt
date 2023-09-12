@@ -1,4 +1,5 @@
 const EntryPage = () => {
-  return <div>%featureCapitalCase% Entry Page</div>;
+  return <div>Entry page for /%routeName%</div>;
 };
+
 export default EntryPage;

@@ -25,6 +25,7 @@
     "baseUrl": "./",
     "paths": {
       "@src/*": ["./src/*"],
+      "@features/*": ["./src/features/*"],
       "@root/*": ["./*"],
       "@tailwind-config": ["./tailwind.config.cjs"]
     }

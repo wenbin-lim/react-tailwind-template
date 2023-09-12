@@ -47,8 +47,8 @@ const List = () => {
 
           {/* Table */}
           <section className="-mx-4 mt-4 sm:-mx-0">
-            <table className="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
-              <thead>
+            <table className="min-w-full">
+              <thead className="border-b border-gray-300 dark:border-gray-700">
                 <tr className="text-left text-sm font-semibold">
                   <th scope="col" className="py-3 pl-4 pr-3 sm:pl-0">
                     Name

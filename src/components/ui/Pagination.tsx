@@ -51,6 +51,7 @@ const Pagination = ({
   totalItems,
   totalPages,
 }: PaginationProps) => {
+  console.log(totalPages);
   return (
     <div className="flex">
       {/* mobile */}
@@ -66,7 +67,7 @@ const Pagination = ({
         <button
           type="button"
           onClick={() => setPage(page + 1)}
-          disabled={page === totalPages}
+          disabled={page === totalPages || totalPages === 0}
           className="btn btn-outline ring-gray-300 dark:ring-gray-700"
         >
           Next
@@ -77,7 +78,9 @@ const Pagination = ({
       <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
         <p className="text-sm">
           <span>Showing&nbsp;</span>
-          <span className="font-semibold">{(page - 1) * perPage + 1}</span>
+          <span className="font-semibold">
+            {totalItems === 0 ? 0 : (page - 1) * perPage + 1}
+          </span>
           <span>&nbsp;to&nbsp;</span>
           <span className="font-semibold">
             {page * perPage <= totalItems ? page * perPage : totalItems}
@@ -106,12 +109,15 @@ const Pagination = ({
               <button
                 type="button"
                 key={i}
-                onClick={() => typeof i === "number" && setPage(i)}
+                onClick={() =>
+                  typeof i === "number" && page !== i && setPage(i)
+                }
                 aria-current={page === i ? "page" : undefined}
                 className={clsx(
                   "btn btn-outline rounded-none px-4 py-2 ring-gray-300 dark:ring-gray-700",
                   {
-                    "bg-primary text-on-primary ring-primary": page === i,
+                    "cursor-default bg-primary text-on-primary ring-primary hover:opacity-100 focus:outline-none":
+                      page === i,
                   },
                   {
                     "cursor-default focus:outline-none": typeof i !== "number",
@@ -125,7 +131,7 @@ const Pagination = ({
             <button
               type="button"
               onClick={() => setPage(page + 1)}
-              disabled={page === totalPages}
+              disabled={page === totalPages || totalPages === 0}
               className="btn btn-outline rounded-l-none rounded-r-full ring-gray-300 dark:ring-gray-700"
             >
               <span className="sr-only">Next</span>

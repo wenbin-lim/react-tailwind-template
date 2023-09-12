@@ -14,9 +14,9 @@ const childrenRoutes: RouteObject[] = [
   },
 ];
 
-// // use this if you want to require authentication for this feature
+// // authenticated route
 // const route: RouteObject = {
-//   path: "/%featureParamCase%",
+//   path: "/%routeName%",
 //   children: childrenRoutes,
 //   element: (
 //     <RequireAuth>
@@ -25,12 +25,11 @@ const childrenRoutes: RouteObject[] = [
 //   ),
 // };
 
+// unauthenticated route
 const route: RouteObject = {
-  path: "/%featureParamCase%",
+  path: "/%routeName%",
   children: childrenRoutes,
-  element: (
-    <Outlet />
-  ),
+  element: <Outlet />,
 };
 
 export default route;

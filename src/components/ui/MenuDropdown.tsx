@@ -51,7 +51,7 @@ const MenuDropdown = ({
         leaveTo="transform opacity-0"
       >
         <Menu.Items
-          className="overflow-hidden rounded-md bg-gray-50 shadow-lg ring-1 ring-gray-900/5"
+          className="z-tooltip overflow-hidden rounded-md bg-gray-50 shadow-lg ring-1 ring-gray-900/5"
           ref={refs.setFloating}
           style={{
             ...floatingStyles,

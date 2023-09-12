@@ -59,7 +59,7 @@ const Form = ({ type }: FormProps) => {
     mutateFn.mutate(newData, {
       onSuccess: () => {
         toast.success("Saved!");
-        navigate("/examples");
+        navigate("/crud-example");
       },
       onError: (error) => {
         if (!setServerValidationError(error, setError)) {
@@ -109,7 +109,7 @@ const Form = ({ type }: FormProps) => {
         <footer className="flex items-center justify-end gap-x-6 px-4 sm:px-0">
           <button
             type="button"
-            onClick={() => navigate("/examples")}
+            onClick={() => navigate("/crud-example")}
             className="btn btn-outline ring-gray-300 dark:ring-gray-700"
           >
             Cancel

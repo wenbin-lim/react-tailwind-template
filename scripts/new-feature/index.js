@@ -16,44 +16,40 @@ const logGreen = (text) => log(chalk.green(text));
 const logYellow = (text) => log(chalk.yellow(text));
 
 const divider = chalk.gray("\n----------------------------------------\n");
+
+// Regex
+const folderNameRegex = /^[a-zA-Z][\w-]*$/; // characters, digits, underscore and hypen, must start with character
+const routeNameRegex = /^[a-zA-Z][\w-]*$/; // characters, digits, underscore and hypen, must start with character
+const recordNameRegex = /^[a-zA-Z][\w-]*$/; // characters, digits, underscore and hypen, must start with character
+const collectionNameRegex = /^[a-zA-Z][\w-]*$/; // characters, digits, underscore and hypen, must start with character
+const queryKeyRegex = /^[a-zA-Z][\w-]*$/; // characters, digits, underscore and hypen, must start with character
+
 // regex characters, digits, underscore and hyphen only
 const featureNameRegex = /^[\w-]+$/;
 
 log(divider);
+logBlue("Create a new feature in project\n");
 
 try {
-  // Ask for the name of the feature
-  logBlue("Create a new feature in project\n");
+  /* 
+    Basic:
+    1. create feature folder in 'src/features'
+    2. create route in 'src/features/routes/index.tsx'
+    3. create EntryPage in 'src/features/pages'
+    4. link the route in 'src/routes/customRoutes.tsx'
 
-  // Check if name already exist inside 'src/features' folder
-  let featureName = await input({
-    message: "Name for the new feature: ",
-    validate: (value) => {
-      if (value.length === 0) {
-        return "Please enter a name!";
-      }
-      if (fs.existsSync(`./src/features/${value}`)) {
-        return "Feature already exists";
-      }
-      if (!featureNameRegex.test(value)) {
-        return "Name contains only consist characters, digits, underscores or hyphens";
-      }
-      return true;
-    },
-  });
-
-  // console.log(changeCase.capitalCase(featureName));
-
-  if (!featureName) throw "Feature name is undefined";
-
-  // Ask type of feature
-  // 1. Basic (clean)
-  // 2. CRUD
-  let featureType = await select({
+    CRUD:
+    1. create feature folder in 'src/features'
+    2. create route in 'src/features/routes/index.tsx'
+    3. create List, Show and Form pages in 'src/features/pages'
+    4. create hooks, keys, schemas and types in 'src/features/data/index.ts'
+    5. link the route in 'src/routes/customRoutes.tsx'
+  */
+  const featureType = await select({
     message: "Type of new feature:",
     choices: [
       {
-        name: "Basic",
+        name: "Basic (Route and simple entry page)",
         value: "basic",
       },
       {
@@ -63,186 +59,246 @@ try {
     ],
   });
 
-  log("\n");
+  // Ask for name of feature folder
+  const folderName = await input({
+    message: "Name of folder: ",
+    validate: (value) => {
+      if (value.length === 0) {
+        return "Please enter a name!";
+      }
+      if (fs.existsSync(`./src/features/${value}`)) {
+        return "Folder with the same name already exists!";
+      }
+      if (!folderNameRegex.test(value)) {
+        return "Characters, digits, underscores or hyphens only and must start with a character!";
+      }
+      return true;
+    },
+  });
 
-  // Create folder inside 'src/features' with the name of the feature
+  // Ask for route name
+  const routeName = await input({
+    message: "Name of route: ",
+    validate: (value) => {
+      if (value.length === 0) {
+        return "Please enter a name!";
+      }
+      if (!routeNameRegex.test(value)) {
+        return "Characters, digits, underscores or hyphens only and must start with a character!";
+      }
+      return true;
+    },
+  });
 
-  await fsPromises.mkdir(`./src/features/${featureName}`);
+  // throw error if featureType, folderName and routeName is undefined
+  if (!featureType || typeof featureType !== "string")
+    throw "Feature type is undefined";
+  if (!folderName || typeof folderName !== "string")
+    throw "Folder name is undefined";
+  if (!routeName || typeof routeName !== "string")
+    throw "Route name is undefined";
 
-  logGreen(`Created folder '${featureName}' in ./src/features/${featureName}`);
+  // folder paths
+  const scriptTemplatePath = "./scripts/new-feature/templates";
+  const featureFolderPath = `./src/features/${folderName}`;
+
+  // Create folder inside 'src/features'
+  await fsPromises.mkdir(featureFolderPath);
+  logGreen(`Created folder: ${featureFolderPath}`);
 
   /* 
-    Create
+    Routes
 
-    1. Basic
-    - Create a simple page component inside 'pages'
-    - Create a routes file inside 'routes'
-
-    2. CRUD
-    - Create List, Show, Form inside 'pages' based on template
-    - Create a data folder with 'hooks.ts' that will be used in List, Show, Form
-    - Create a routes file inside 'routes'
-	*/
-
-  // create route folder and file
-  await fsPromises.mkdir(`./src/features/${featureName}/routes`);
+    1. create route folder
+    2. create route index file
+  */
+  await fsPromises.mkdir(`${featureFolderPath}/routes`);
 
   let routeIndexContent = await fsPromises.readFile(
-    `./scripts/new-feature/templates/routes/${featureType}.txt`,
+    `${scriptTemplatePath}/routes/${featureType}.txt`,
     "utf-8",
   );
 
-  routeIndexContent = routeIndexContent.replaceAll(
-    "%featureParamCase%",
-    changeCase.paramCase(featureName),
-  );
+  routeIndexContent = routeIndexContent.replaceAll("%routeName%", routeName);
 
   routeIndexContent = await prettier.format(routeIndexContent, {
     parser: "babel-ts",
   });
 
   await fsPromises.writeFile(
-    `./src/features/${featureName}/routes/index.tsx`,
+    `${featureFolderPath}/routes/index.tsx`,
     routeIndexContent,
   );
 
-  logGreen(
-    `Created routes file in ./src/features/${featureName}/routes/index.tsx`,
-  );
-  // create pages folder and files
-  await fsPromises.mkdir(`./src/features/${featureName}/pages`);
+  logGreen(`Created route: ${featureFolderPath}/routes/index.tsx`);
 
-  switch (featureType) {
-    case "crud":
-      // create list page (pascalCase, capitalCase)
-      // create show page (pascalCase, capitalCase, paramCase)
-      // create form page (pascalCase, capitalCase, paramCase)
-      let listPageContent = await fsPromises.readFile(
-        `./scripts/new-feature/templates/pages/List.txt`,
-        "utf-8",
-      );
-      let showPageContent = await fsPromises.readFile(
-        `./scripts/new-feature/templates/pages/Show.txt`,
-        "utf-8",
-      );
-      let formPageContent = await fsPromises.readFile(
-        `./scripts/new-feature/templates/pages/Form.txt`,
-        "utf-8",
-      );
+  // create pages folder
+  await fsPromises.mkdir(`${featureFolderPath}/pages`);
 
-      listPageContent = listPageContent
-        .replaceAll("%featurePascalCase%", changeCase.pascalCase(featureName))
-        .replaceAll("%featureCapitalCase%", changeCase.capitalCase(featureName))
-        .replaceAll("%featureParamCase%", changeCase.paramCase(featureName));
+  /* 
+    1. create entry page in pages folder
+  */
+  if (featureType === "basic") {
+    let entryPageContent = await fsPromises.readFile(
+      `${scriptTemplatePath}/pages/EntryPage.txt`,
+      "utf-8",
+    );
 
-      showPageContent = showPageContent
-        .replaceAll("%featurePascalCase%", changeCase.pascalCase(featureName))
-        .replaceAll("%featureCapitalCase%", changeCase.capitalCase(featureName))
-        .replaceAll("%featureParamCase%", changeCase.paramCase(featureName));
+    entryPageContent = entryPageContent.replaceAll("%routeName%", routeName);
 
-      formPageContent = formPageContent
-        .replaceAll("%featurePascalCase%", changeCase.pascalCase(featureName))
-        .replaceAll("%featureCapitalCase%", changeCase.capitalCase(featureName))
-        .replaceAll("%featureParamCase%", changeCase.paramCase(featureName));
+    entryPageContent = await prettier.format(entryPageContent, {
+      parser: "babel-ts",
+    });
 
-      listPageContent = await prettier.format(listPageContent, {
-        parser: "babel-ts",
-      });
-      showPageContent = await prettier.format(showPageContent, {
-        parser: "babel-ts",
-      });
-      formPageContent = await prettier.format(formPageContent, {
-        parser: "babel-ts",
-      });
+    await fsPromises.writeFile(
+      `${featureFolderPath}/pages/EntryPage.tsx`,
+      entryPageContent,
+    );
 
-      await fsPromises.writeFile(
-        `./src/features/${featureName}/pages/List.tsx`,
-        listPageContent,
-      );
-      await fsPromises.writeFile(
-        `./src/features/${featureName}/pages/Show.tsx`,
-        showPageContent,
-      );
-      await fsPromises.writeFile(
-        `./src/features/${featureName}/pages/Form.tsx`,
-        formPageContent,
-      );
-
-      logGreen(
-        `Created List.tsx in ./src/features/${featureName}/pages/List.tsx`,
-      );
-      logGreen(
-        `Created Show.tsx in ./src/features/${featureName}/pages/Show.tsx`,
-      );
-      logGreen(
-        `Created Form.tsx in ./src/features/${featureName}/pages/Form.tsx`,
-      );
-
-      // Create data folder with hooks
-      await fsPromises.mkdir(`./src/features/${featureName}/data`);
-
-      let hooksContent = await fsPromises.readFile(
-        `./scripts/new-feature/templates/data/hooks.txt`,
-        "utf-8",
-      );
-
-      hooksContent = hooksContent
-        .replaceAll("%featurePascalCase%", changeCase.pascalCase(featureName))
-        .replaceAll("%featureCamelCase%", changeCase.camelCase(featureName));
-
-      hooksContent = await prettier.format(hooksContent, {
-        parser: "babel-ts",
-      });
-
-      await fsPromises.writeFile(
-        `./src/features/${featureName}/data/hooks.ts`,
-        hooksContent,
-      );
-
-      logGreen(
-        `Created hooks.ts in ./src/features/${featureName}/data/hooks.ts`,
-      );
-
-      break;
-    case "basic":
-    default:
-      let entryPageContent = await fsPromises.readFile(
-        `./scripts/new-feature/templates/pages/EntryPage.txt`,
-        "utf-8",
-      );
-
-      entryPageContent = entryPageContent.replaceAll(
-        "%featureCapitalCase%",
-        changeCase.capitalCase(featureName),
-      );
-
-      entryPageContent = await prettier.format(entryPageContent, {
-        parser: "babel-ts",
-      });
-
-      await fsPromises.writeFile(
-        `./src/features/${featureName}/pages/EntryPage.tsx`,
-        entryPageContent,
-      );
-
-      logGreen(
-        `Created EntryPage.tsx in ./src/features/${featureName}/pages/EntryPage.tsx`,
-      );
-      break;
+    logGreen(`Created entry page: ${featureFolderPath}/pages/EntryPage.tsx`);
   }
 
   /* 
-		Additional stuffs
-	*/
-  // Add this new feature to customRoutes
+    1. ask for record name
+    2. ask for collection name
+    3. ask for query key
+    4. create list page in pages folder
+    5. create show page in pages folder
+    6. create form page in pages folder
+    7. create data folder with index.tsx
+  */
+  if (featureType === "crud") {
+    // Record name
+    let recordName = await input({
+      message: "Name of record/model/document: ",
+      validate: (value) => {
+        if (value.length === 0) {
+          return "Please enter a name!";
+        }
+        if (!recordNameRegex.test(value)) {
+          return "Characters, digits, underscores or hyphens only and must start with a character!";
+        }
+        return true;
+      },
+    });
+
+    // collection name
+    let collectionName = await input({
+      message: "Name of collection (backend): ",
+      validate: (value) => {
+        if (value.length === 0) {
+          return "Please enter a name!";
+        }
+        if (!collectionNameRegex.test(value)) {
+          return "Characters, digits, underscores or hyphens only and must start with a character!";
+        }
+        return true;
+      },
+    });
+
+    /* 
+      Create pages
+    */
+    // read template files
+    let listPageContent = await fsPromises.readFile(
+      `${scriptTemplatePath}/pages/List.txt`,
+      "utf-8",
+    );
+    let showPageContent = await fsPromises.readFile(
+      `${scriptTemplatePath}/pages/Show.txt`,
+      "utf-8",
+    );
+    let formPageContent = await fsPromises.readFile(
+      `${scriptTemplatePath}/pages/Form.txt`,
+      "utf-8",
+    );
+
+    // replace
+    listPageContent = listPageContent.replaceAll(
+      "%recordName%",
+      changeCase.pascalCase(recordName),
+    );
+    showPageContent = showPageContent
+      .replaceAll("%recordName%", changeCase.pascalCase(recordName))
+      .replaceAll("%routeName%", routeName);
+    formPageContent = formPageContent
+      .replaceAll("%recordPascalName%", changeCase.pascalCase(recordName))
+      .replaceAll("%recordParamName%", changeCase.paramCase(recordName))
+      .replaceAll("%routeName%", routeName);
+
+    listPageContent = await prettier.format(listPageContent, {
+      parser: "babel-ts",
+    });
+    showPageContent = await prettier.format(showPageContent, {
+      parser: "babel-ts",
+    });
+    formPageContent = await prettier.format(formPageContent, {
+      parser: "babel-ts",
+    });
+
+    await fsPromises.writeFile(
+      `${featureFolderPath}/pages/List.tsx`,
+      listPageContent,
+    );
+    logGreen(`Created List.tsx: ${featureFolderPath}/pages/List.tsx`);
+
+    await fsPromises.writeFile(
+      `${featureFolderPath}/pages/Show.tsx`,
+      showPageContent,
+    );
+    logGreen(`Created Show.tsx: ${featureFolderPath}/pages/Show.tsx`);
+
+    await fsPromises.writeFile(
+      `${featureFolderPath}/pages/Form.tsx`,
+      formPageContent,
+    );
+    logGreen(`Created Form.tsx: ${featureFolderPath}/pages/Form.tsx`);
+
+    /* 
+      Create data folder
+      - query key
+      - schema
+      - record type
+      - data hooks
+    */
+    await fsPromises.mkdir(`${featureFolderPath}/data`);
+
+    // read
+    let dataIndexContent = await fsPromises.readFile(
+      `${scriptTemplatePath}/data/${featureType}.txt`,
+      "utf-8",
+    );
+
+    // replace
+    dataIndexContent = dataIndexContent
+      .replaceAll("%collectionName%", collectionName)
+      .replaceAll("%recordPascalName%", changeCase.pascalCase(recordName));
+
+    // format
+    dataIndexContent = await prettier.format(dataIndexContent, {
+      parser: "babel-ts",
+    });
+
+    // create file
+    await fsPromises.writeFile(
+      `${featureFolderPath}/data/index.ts`,
+      dataIndexContent,
+    );
+
+    logGreen(
+      `Created schema, record type and hooks: ${featureFolderPath}/data/index.ts`,
+    );
+  }
+
+  // link route in customRoutes.tsx
   let customRouteContent = await fsPromises.readFile(
     `./src/routes/customRoutes.tsx`,
     "utf-8",
   );
 
-  let exportStatement = `export { default as ${changeCase.camelCase(
-    featureName,
-  )}Route } from "@src/features/${featureName}/routes";`;
+  let exportStatement = `export { default as ${changeCase.pascalCase(
+    routeName,
+  )}Route } from "@features/${folderName}/routes";`;
 
   customRouteContent += exportStatement;
 
@@ -255,22 +311,15 @@ try {
     customRouteContent,
   );
 
-  logGreen(`\nAdded route into ./src/routes/customRoutes.tsx`);
+  logGreen(`Linked route in ./src/routes/customRoutes.tsx`);
 
   log(divider);
 
   logYellow(`You can now access the feature at:\n\n`);
-  logYellow(
-    `➜    http://localhost:${env.VITE_SERVER_PORT}/${changeCase.paramCase(
-      featureName,
-    )}`,
-  );
-  logYellow(
-    `➜    Remember to change your KEY in ./src/features/${featureName}/data/hooks.ts\n`,
-  );
+  logYellow(`➜    http://localhost:${env.VITE_SERVER_PORT}/${routeName}\n`);
 } catch (error) {
-  log(chalk.red("Something went wrong:\n", error));
-  log("\n");
-  logRed("Please delete any folders or files created from this script!");
+  logRed(JSON.stringify(error, null, 2));
+  logRed("\nSomething went wrong...\n");
+  logRed("Please delete any folders or files created from this script!\n");
   process.exit(1);
 }

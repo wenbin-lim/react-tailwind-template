@@ -8,5 +8,5 @@ export default {
   drawer: "1200",
   modal: "1300",
   toast: "1400",
-  tooltip: "1500",
+  tooltip: "1500", // tooltip, menu dropdown
 };
