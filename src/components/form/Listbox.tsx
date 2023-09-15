@@ -1,13 +1,13 @@
-import { Fragment } from "react";
+import React, { Fragment } from "react";
 import clsx from "clsx";
 
-import { Combobox as HUICombobox, Transition } from "@headlessui/react";
+import { Listbox as HUIListbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 
 /* 
   !! IMPORTANT !!
-  https://headlessui.com/react/combobox
-  
+	https://headlessui.com/react/listbox
+	
   Use <Controller /> from react-hook-form to render and control this component.
 
 	<Controller
@@ -16,30 +16,30 @@ import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 		defaultValue="" // multiple = false
 		defaultValue={[]} // multiple = true
 		render={({ field }) => (
-			<Combobox
+			<Listbox
 				multiple={true | false}
 				value={field.value}
 				onChange={field.onChange}
 			>
-				<Combobox.Label>Label</Combobox.Label>
-				<Combobox.Input setQuery={setQuery} invalid={invalid}/>
-				<Combobox.Options
+				<Listbox.Label>Label</Listbox.Label>
+				<Listbox.Button selected={field.value} invalid={invalid} />
+				<Listbox.Options
 					options={options.map(({name, value}) => ({
 						name,
 						value,
 					}))}
 				/>
-			</Combobox>
+			</Listbox>
 		)}
 	/>
 */
-export type ComboboxOption = {
+export type ListboxOption = {
   name: string;
   value: string;
   [key: string]: any;
 };
 
-type ComboboxProps = {
+type ListboxProps = {
   disabled?: boolean;
   children?: React.ReactNode;
 } & (
@@ -48,106 +48,120 @@ type ComboboxProps = {
       value?: string;
       onChange?: (value: string) => void;
     }
-  | { multiple: true; value?: string[]; onChange?: (value: string[]) => void }
+  | {
+      multiple: true;
+      value?: string[];
+      onChange?: (value: string[]) => void;
+    }
 );
 
-const Combobox = ({
-  multiple: isMultiple,
+const Listbox = ({
+  multiple,
   value,
   onChange,
   disabled,
   children,
-}: ComboboxProps) => {
-  return isMultiple ? (
-    <HUICombobox
-      multiple={true}
+}: ListboxProps) => {
+  return (
+    <HUIListbox
+      multiple={multiple}
       value={value}
       onChange={onChange}
       disabled={disabled}
     >
       <div className="relative">{children}</div>
-    </HUICombobox>
-  ) : (
-    <HUICombobox value={value} onChange={onChange} disabled={disabled}>
-      <div className="relative">{children}</div>
-    </HUICombobox>
+    </HUIListbox>
   );
 };
 
-type ComboboxLabelProps = {
+type ListboxLabelProps = {
   required?: boolean;
   invalid?: boolean;
   className?: string;
   children?: React.ReactNode;
 };
 
-const ComboboxLabel = ({
+const ListboxLabel = ({
   required,
   invalid,
   className,
   children,
-}: ComboboxLabelProps) => (
-  <HUICombobox.Label
+}: ListboxLabelProps) => (
+  <HUIListbox.Label
     className={clsx("form-label mb-2", className, {
       "form-label-invalid": invalid,
       "form-label-required": required,
     })}
   >
     {children}
-  </HUICombobox.Label>
+  </HUIListbox.Label>
 );
 
-type ComboboxInputProps = {
+type ListboxButtonProps = {
   invalid?: boolean;
   placeholder?: string;
-  query: string;
-  setQuery: (value: string) => void;
+  selected?: string | string[];
+  children?: React.ReactNode;
 };
 
-const ComboboxInput = ({
+const ListboxButton = ({
   invalid,
   placeholder,
-  query,
-  setQuery,
-}: ComboboxInputProps) => {
+  selected,
+  children,
+}: ListboxButtonProps) => {
+  const whatToDisplay = () => {
+    if (children) return children;
+
+    if (selected) {
+      if (Array.isArray(selected)) {
+        return selected.join(", ");
+      } else {
+        return selected;
+      }
+    }
+
+    return placeholder || "Select a value";
+  };
+
   return (
-    <div className="relative">
-      <HUICombobox.Input
-        className={clsx("input pr-16 dark:input-dark disabled:cursor-auto", {
+    <HUIListbox.Button
+      className={clsx(
+        "input relative h-9 pr-16 text-left dark:input-dark disabled:cursor-auto",
+        {
           "input-invalid": invalid,
-        })}
-        onChange={(event) => setQuery(event.target.value)}
-        displayValue={() => query}
-        placeholder={placeholder}
-      />
-      <HUICombobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
+        },
+      )}
+    >
+      {whatToDisplay()}
+      <span className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
         <ChevronUpDownIcon
           className="h-5 w-5 text-gray-400"
           aria-hidden="true"
         />
-      </HUICombobox.Button>
-    </div>
+      </span>
+    </HUIListbox.Button>
   );
 };
 
-type ComboboxRenderOptionProps = {
+type ListboxRenderOptionProps = {
   active: boolean;
   selected: boolean;
   disabled: boolean;
-  option: ComboboxOption;
+  option: ListboxOption;
 };
 
-type ComboboxOptionsProps = {
-  options: ComboboxOption[];
+type ListboxOptionsProps = {
+  options: ListboxOption[];
   className?: string;
-  renderOption?: (props: ComboboxRenderOptionProps) => JSX.Element;
+  renderOption?: (props: ListboxRenderOptionProps) => JSX.Element;
 };
 
-const ComboboxOptions = ({
+const ListboxOptions = ({
   options,
   className,
   renderOption,
-}: ComboboxOptionsProps) => {
+}: ListboxOptionsProps) => {
   return (
     options.length > 0 && (
       <Transition
@@ -159,14 +173,14 @@ const ComboboxOptions = ({
         leaveFrom="transform scale-y-100 opacity-100"
         leaveTo="transform scale-y-0 opacity-0"
       >
-        <HUICombobox.Options
+        <HUIListbox.Options
           className={clsx(
             "absolute z-popover mt-2 max-h-60 w-full origin-top overflow-auto rounded-md bg-gray-50 py-2 text-sm shadow-lg ring-1 ring-gray-300 focus:outline-none",
             className,
           )}
         >
           {options.map((option) => (
-            <HUICombobox.Option key={option.value} value={option.value}>
+            <HUIListbox.Option key={option.value} value={option.value}>
               {({ active, selected, disabled }) =>
                 renderOption ? (
                   renderOption({ active, selected, disabled, option })
@@ -199,17 +213,17 @@ const ComboboxOptions = ({
                   </div>
                 )
               }
-            </HUICombobox.Option>
+            </HUIListbox.Option>
           ))}
-        </HUICombobox.Options>
+        </HUIListbox.Options>
       </Transition>
     )
   );
 };
 
 // assigning
-Combobox.Label = ComboboxLabel;
-Combobox.Input = ComboboxInput;
-Combobox.Options = ComboboxOptions;
+Listbox.Label = ListboxLabel;
+Listbox.Button = ListboxButton;
+Listbox.Options = ListboxOptions;
 
-export default Combobox;
+export default Listbox;

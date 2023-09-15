@@ -1,3 +1,4 @@
+import { useState } from "react";
 import clsx from "clsx";
 import { useDropzone, FileRejection, DropzoneOptions } from "react-dropzone";
 
@@ -6,186 +7,257 @@ import {
   MinusCircleIcon,
   DocumentTextIcon,
 } from "@heroicons/react/24/solid";
-import { useState } from "react";
 
-type PreviewFile = File & {
-  preview: string;
+/* 
+  !! IMPORTANT !!
+  https://react-dropzone.js.org/#section-basic-example
+	
+  Use <Controller /> from react-hook-form to render and control this component.
+
+  Add children into <FileUpload /> to render custom UI, else default UI will be rendered.
+  
+  <Controller
+    name=""
+    control={control}
+    render={({ field }) => (
+      <FileUpload
+        onChange={field.onChange}
+      >
+        {({ acceptedFiles, rejectedFiles, removeAcceptedFile }) => (
+          <ul>
+            {acceptedFiles.map((file) => (
+              <li key={file.name}>{file.name}</li>
+            ))}
+          </ul>
+        )}
+      </FileUpload>
+    )}
+  />
+*/
+
+type FileWithPreview = File & {
+  preview?: string;
 };
 
-interface Props {
-  id?: string;
-  wrapperClass?: string;
+type DocumentListItemProps = {
   label?: string;
-  required?: boolean;
-  errorText?: string;
+  onClickRemove?: () => void;
+};
+
+export const DocumentListItem = ({
+  label,
+  onClickRemove,
+}: DocumentListItemProps) => (
+  <div className="group flex items-center gap-x-1">
+    <DocumentTextIcon className="h-6 w-6 text-gray-300 group-hover:hidden" />
+    {onClickRemove && (
+      <button
+        type="button"
+        className="transtion-all hidden hover:scale-105 active:scale-110 group-hover:block"
+        onClick={onClickRemove}
+      >
+        <MinusCircleIcon className="h-6 w-6 text-red-500" />
+      </button>
+    )}
+    {label && <p className="text-sm leading-6">{label}</p>}
+  </div>
+);
+
+type ImageListItemProps = {
+  imageSrc?: string;
+  imageAlt?: string;
+  onClickRemove?: () => void;
+};
+
+export const ImageListItem = ({
+  imageSrc,
+  imageAlt,
+  onClickRemove,
+}: ImageListItemProps) => (
+  <div className="group relative min-w-max">
+    {imageSrc ? (
+      <img
+        className="group-hover:ring-input-focus h-20 rounded-md object-cover group-hover:ring-2"
+        src={imageSrc}
+        alt={imageAlt}
+      />
+    ) : (
+      <PhotoIcon className="h-20 w-20 text-gray-300" />
+    )}
+    {onClickRemove && (
+      <button
+        type="button"
+        className="transtion-all absolute -right-2 -top-2 hover:scale-105 active:scale-110 group-hover:block"
+        onClick={onClickRemove}
+      >
+        <MinusCircleIcon className="h-6 w-6 text-red-500" />
+      </button>
+    )}
+  </div>
+);
+
+type RejectedFileErrorsProps = {
+  files: FileRejection[];
+};
+
+export const RejectedFileErrors = ({ files }: RejectedFileErrorsProps) =>
+  files.length > 0 && (
+    <div>
+      {files.map(({ file, errors }) => (
+        <div key={file.name}>
+          <p className="text-sm leading-6 text-red-400 dark:text-red-600">
+            {file.name}
+          </p>
+          <ul className="text-xs leading-5 text-gray-700 dark:text-gray-500">
+            {errors.map((error) => (
+              <li key={error.code}>{error.message}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  );
+
+type FileUploadChildrenProps = {
+  acceptedFiles: FileWithPreview[];
+  rejectedFiles: FileRejection[];
+  removeAcceptedFile: (file: FileWithPreview) => void;
+};
+
+type FileUploadProps = {
+  id?: string;
+  invalid?: boolean;
   helperText?: string;
-  onChange: (value: File | File[]) => void;
-  multiple?: boolean;
-  current?: JSX.Element | React.ReactNode;
-  options?: DropzoneOptions;
-}
+  currentFile?: JSX.Element;
+  dropzoneOptions?: DropzoneOptions;
+  children?: (props: FileUploadChildrenProps) => JSX.Element;
+} & (
+  | {
+      multiple?: false | undefined;
+      onChange: (value: File) => void;
+    }
+  | {
+      multiple: true;
+      onChange: (value: File[]) => void;
+    }
+);
 
 const FileUpload = ({
-  id,
-  wrapperClass,
-  label,
-  required,
-  errorText,
-  helperText,
-  multiple,
-  options,
   onChange,
-  current,
-}: Props) => {
-  const [files, setFiles] = useState<PreviewFile[]>([]);
+  id,
+  multiple,
+  invalid,
+  helperText,
+  currentFile,
+  dropzoneOptions,
+  children,
+}: FileUploadProps) => {
+  const [acceptedFiles, setAcceptedFiles] = useState<FileWithPreview[]>([]);
   const [rejectedFiles, setRejectedFiles] = useState<FileRejection[]>([]);
 
-  const onFilesChange = (newFiles: File[]) => {
-    if (multiple) {
-      onChange(newFiles);
-    } else {
-      onChange(newFiles[0]!);
-    }
-  };
+  const onFilesChange = (newFiles: File[]) =>
+    multiple ? onChange(newFiles) : onChange(newFiles[0]!);
 
   const { getRootProps, getInputProps, open } = useDropzone({
-    ...options,
+    ...dropzoneOptions,
     noClick: true,
     onDrop(acceptedFiles, fileRejections) {
       setRejectedFiles(fileRejections);
 
-      const newFiles = acceptedFiles.map((file) =>
+      const newAcceptedFiles = acceptedFiles.map((file) =>
         Object.assign(file, {
           preview: URL.createObjectURL(file),
         }),
       );
 
-      setFiles(newFiles);
-      onFilesChange(newFiles);
+      setAcceptedFiles(newAcceptedFiles);
+      onFilesChange(newAcceptedFiles);
     },
   });
 
-  const removeFile = (file: PreviewFile) => {
-    const newFiles = [...files];
-    newFiles.splice(newFiles.indexOf(file), 1);
+  const removeFile = (file: FileWithPreview) => {
+    const filesAfterRemove = [...acceptedFiles];
+    filesAfterRemove.splice(filesAfterRemove.indexOf(file), 1);
 
-    setFiles(newFiles);
-    onFilesChange(newFiles);
+    setAcceptedFiles(filesAfterRemove);
+    onFilesChange(filesAfterRemove);
   };
 
+  const filterDocumentFiles = (files: FileWithPreview[]) =>
+    files.filter((file) => !file.type.includes("image"));
+
+  const filterImageFiles = (files: FileWithPreview[]) =>
+    files.filter((file) => file.type.includes("image"));
+
   return (
-    <div className={clsx(wrapperClass)}>
-      {!!label && (
-        <label
-          htmlFor={id || `file_input_${new Date().getTime()}`}
-          className={clsx("mb-2 block text-sm font-medium leading-6", {
-            "text-red-500": !!errorText,
-            "after:text-red-500 after:content-['*']": required,
-          })}
-        >
-          {label}
-        </label>
-      )}
-
-      {!!errorText && (
-        <p className="mb-2 text-sm leading-6 text-red-500">{errorText}</p>
-      )}
-
+    <div className="flex flex-col gap-y-2">
       <div
         {...getRootProps({
           className: clsx(
             "flex cursor-pointer justify-center rounded-lg border border-dashed px-6 py-10",
-            errorText
+            invalid
               ? "border-red-400 dark:border-red-500"
-              : "border-gray-900/25 dark:border-gray-100/25",
+              : "border-gray-300 dark:border-gray-700",
           ),
         })}
         onClick={open}
       >
         <div className="flex flex-col items-center text-center">
-          {current || (
+          {currentFile || (
             <PhotoIcon className="h-12 w-12 text-gray-300" aria-hidden="true" />
           )}
-          <div className="mt-4 flex text-sm leading-6 text-gray-600">
-            <input
-              id={id || `file_input_${new Date().getTime()}`}
-              type="file"
-              className="sr-only"
-              {...getInputProps()}
-              hidden
-            />
-            <span
-              className={clsx("relative rounded-md font-semibold text-primary")}
-            >
-              Upload a file
-            </span>
-            <p className="pl-1">or drag and drop</p>
-          </div>
-          <p className="text-xs leading-5 text-gray-600">{helperText}</p>
+          <p className="mt-4 flex text-sm leading-6 text-gray-600">
+            <span className="font-bold text-primary">Upload a file</span>
+            <span>&nbsp;or drag and drop</span>
+          </p>
+          {helperText && (
+            <p className="text-xs leading-5 text-gray-600">{helperText}</p>
+          )}
+          <input
+            id={id}
+            type="file"
+            className="sr-only"
+            hidden
+            {...getInputProps()}
+          />
         </div>
       </div>
 
-      {!!files.length && (
-        <div className="mt-2">
-          {/* other files */}
-          <div className="space-y-1">
-            {files
-              .filter((file) => !file.type.includes("image"))
-              .map((file) => (
-                <div
-                  key={file.name}
-                  className="group flex items-center gap-x-1"
-                >
-                  <DocumentTextIcon className="h-6 w-6 text-gray-300 group-hover:hidden" />
-                  <button
-                    type="button"
-                    className="transtion-all hidden hover:scale-105 active:scale-110 group-hover:block"
-                    onClick={() => removeFile(file)}
-                  >
-                    <MinusCircleIcon className="h-6 w-6 text-red-500" />
-                  </button>
-                  <p className="text-sm leading-6">{file.name}</p>
-                </div>
-              ))}
-          </div>
+      {children &&
+        children({
+          acceptedFiles,
+          rejectedFiles,
+          removeAcceptedFile: removeFile,
+        })}
 
-          {/* images */}
-          <div className="flex gap-x-4 overflow-auto px-1 py-2">
-            {files
-              .filter((file) => file.type.includes("image"))
-              .map((file) => (
-                <div key={file.name} className="group relative min-w-max">
-                  <img
-                    className="h-20 rounded-md object-cover group-hover:ring-2 group-hover:ring-input-focus"
-                    src={file.preview}
-                    alt={file.name}
-                  />
-                  <button
-                    type="button"
-                    className="transtion-all absolute -right-2 -top-2 hidden hover:scale-105 active:scale-110 group-hover:block"
-                    onClick={() => removeFile(file)}
-                  >
-                    <MinusCircleIcon className="h-6 w-6 text-red-500" />
-                  </button>
-                </div>
-              ))}
-          </div>
-        </div>
-      )}
-      {!!rejectedFiles.length && (
-        <div className="mt-2">
-          {rejectedFiles.map(({ file, errors }) => (
-            <div key={file.name}>
-              <p className="text-sm leading-6 text-red-500">{file.name}</p>
-              <ul className="text-xs leading-5 text-gray-500">
-                {errors.map((error) => (
-                  <li key={error.code}>{error.message}</li>
-                ))}
-              </ul>
-            </div>
+      {/* accepted other document files */}
+      {!children && filterDocumentFiles(acceptedFiles).length > 0 && (
+        <div>
+          {filterDocumentFiles(acceptedFiles).map((file) => (
+            <DocumentListItem
+              key={file.name}
+              label={file.name}
+              onClickRemove={() => removeFile(file)}
+            />
           ))}
         </div>
       )}
+
+      {/* accepted image files */}
+      {!children && filterImageFiles(acceptedFiles).length > 0 && (
+        <div className="flex gap-x-4 overflow-auto px-1 py-2">
+          {filterImageFiles(acceptedFiles).map((file) => (
+            <ImageListItem
+              key={file.name}
+              imageSrc={file.preview}
+              imageAlt={file.name}
+              onClickRemove={() => removeFile(file)}
+            />
+          ))}
+        </div>
+      )}
+
+      {!children && <RejectedFileErrors files={rejectedFiles} />}
     </div>
   );
 };

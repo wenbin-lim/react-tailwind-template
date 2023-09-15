@@ -2,32 +2,60 @@ import clsx from "clsx";
 
 import { Popover } from "@headlessui/react";
 import { useFloating, flip, shift, autoUpdate } from "@floating-ui/react";
-import { SketchPicker, ColorResult } from "react-color";
+import { SketchPicker, RGBColor, HSLColor } from "react-color";
 
-interface ColorPickerProps {
+type Hex = {
+  type: "hex";
+  value: string;
+  onChange: (hex: string) => void;
+};
+
+type RGB = {
+  type: "rgb";
+  value: RGBColor;
+  onChange: (rgb: RGBColor) => void;
+};
+
+type HSL = {
+  type: "hsl";
+  value: HSLColor;
+  onChange: (hsl: HSLColor) => void;
+};
+
+type ColorPickerProps = {
   id?: string;
-  label?: string;
-  required?: boolean;
-  errorText?: string;
-  helperText?: string;
-  wrapperClass?: string;
+  name?: string;
   disabled?: boolean;
-  value?: ColorResult;
-  onChange: (value: ColorResult) => void;
-  displayAs?: "hex" | "rgb" | "hsl";
-}
+  invalid?: boolean;
+} & (Hex | RGB | HSL);
 
+/* 
+  !! IMPORTANT !!
+  Use <Controller /> from react-hook-form to render and control this component.
+
+  <Controller
+    name=""
+    control={control}
+    render={({ field }) => (
+      <ColorPicker
+        type="hex"
+        name={field.name}
+        value={field.value}
+        onChange={(value) => field.onChange(value)}
+        disabled={}
+        invalid={}
+      />
+    )}
+  />
+*/
 const ColorPicker = ({
   id,
-  label,
-  required,
-  errorText,
-  helperText,
-  wrapperClass,
+  name,
   disabled,
+  invalid,
+  type,
   value,
   onChange,
-  displayAs = "hex",
 }: ColorPickerProps) => {
   const { refs, floatingStyles } = useFloating({
     placement: "bottom-end",
@@ -35,58 +63,62 @@ const ColorPicker = ({
     middleware: [flip(), shift()],
   });
 
-  const getDisplayValue = () => {
-    if (value) {
-      switch (displayAs) {
-        case "rgb":
-          return `r: ${value.rgb.r}, g: ${value.rgb.g}, b: ${value.rgb.b}`;
-        case "hsl": {
-          const h = value.hsl.h.toFixed(2);
-          const s = value.hsl.s.toFixed(2);
-          const l = value.hsl.l.toFixed(2);
-          return `h: ${h}, s: ${s}, l: ${l}`;
-        }
-        case "hex":
-        default:
-          return value.hex;
-      }
-    }
+  const displayColorAsString = () => {
+    if (!value) return "";
 
-    return "Wrong color format";
+    switch (type) {
+      case "hex":
+        return value;
+      case "rgb":
+        return `r: ${value.r}, g: ${value.g}, b: ${value.b}`;
+      case "hsl":
+        return `h: ${value.h.toFixed(2)}, s: ${value.s.toFixed(
+          2,
+        )}, l: ${value.l.toFixed(2)}`;
+      default:
+        return "";
+    }
+  };
+
+  const displayColorAsCss = () => {
+    if (!value) return "inherit";
+
+    switch (type) {
+      case "hex":
+        return value;
+      case "rgb":
+        return `rgba(${value.r}, ${value.g}, ${value.b}, ${value.a})`;
+      case "hsl":
+        return `hsl(${value.h}, ${value.s * 100}%, ${value.l * 100}%)`;
+      default:
+        return "inherit";
+    }
   };
 
   return (
-    <div className={clsx(wrapperClass)}>
-      {label && (
-        <label
-          htmlFor={id || `input_${new Date().getTime()}`}
-          className={clsx("mb-2 block text-sm font-medium leading-6", {
-            "text-red-500": !!errorText,
-            "after:text-red-500 after:content-['*']": required,
-          })}
-        >
-          {label}
-        </label>
-      )}
+    <div className="relative rounded-md" ref={refs.setReference}>
+      <input
+        id={id}
+        name={name}
+        className={clsx("input pr-16 dark:input-dark disabled:cursor-auto", {
+          "input-invalid": invalid,
+        })}
+        aria-invalid={invalid ? "true" : "false"}
+        value={displayColorAsString()}
+        readOnly
+      />
 
-      <Popover className="relative rounded-md shadow-sm">
+      <Popover>
         <Popover.Button
-          className={clsx(
-            "flex h-9 w-full items-center justify-between rounded-input border-0 bg-inherit px-3 py-1.5 shadow-sm ring-1 ring-inset sm:text-sm sm:leading-6",
-            errorText
-              ? "pr-10 text-red-500 ring-red-300 focus:border-red-500 focus:ring-red-500 dark:ring-red-500"
-              : "text-inherit ring-gray-300 focus:ring-input-focus dark:ring-gray-700",
-          )}
+          className="absolute inset-y-0 right-0 flex items-center px-3"
           disabled={disabled}
-          ref={refs.setReference}
         >
-          <span>{getDisplayValue()}</span>
           <div
             className={clsx(
               "w-10 rounded-sm text-xs ring-2 ring-gray-300 dark:ring-gray-700",
             )}
             style={{
-              backgroundColor: value ? value.hex : "#fff",
+              backgroundColor: displayColorAsCss(),
             }}
           >
             &nbsp;
@@ -100,22 +132,24 @@ const ColorPicker = ({
         >
           <div className="m-2 overflow-hidden rounded-md shadow-lg">
             <SketchPicker
-              onChangeComplete={onChange}
-              color={value && value.hex}
+              className="text-black"
+              onChange={(color) => {
+                switch (type) {
+                  case "hex":
+                    return onChange(color.hex);
+                  case "rgb":
+                    return onChange(color.rgb);
+                  case "hsl":
+                    return onChange(color.hsl);
+                  default:
+                    return;
+                }
+              }}
+              color={value}
             />
           </div>
         </Popover.Panel>
       </Popover>
-
-      {(errorText || helperText) && (
-        <p
-          className={clsx("mt-2 text-xs", {
-            "text-red-500": !!errorText,
-          })}
-        >
-          {errorText || helperText}
-        </p>
-      )}
     </div>
   );
 };

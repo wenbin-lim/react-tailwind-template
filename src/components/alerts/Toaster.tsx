@@ -21,9 +21,9 @@ const Toaster = () => {
       position={isMobile ? "bottom-center" : "top-right"}
       reverseOrder={true}
       toastOptions={{
-        duration: 6000,
+        duration: 6000, // 6 seconds
         className:
-          "rounded-md p-4 !bg-background !text-on-background max-sm:!flex-1 max-sm:!max-w-full",
+          "rounded-md p-4 !bg-background !text-on-background max-sm:!flex-1 max-sm:!max-w-full sm:!max-w-screen-sm",
         success: {
           className: "rounded-md p-4 !bg-green-50 !text-green-800",
         },
@@ -52,7 +52,7 @@ const Toaster = () => {
                             t.type === "success",
                           "hover:bg-red-100  focus:ring-red-600  focus:ring-offset-red-50":
                             t.type === "error",
-                          "hover:bg-surface focus:ring-blue-400  focus:ring-offset-surface":
+                          "hover:bg-surface focus:ring-focus  focus:ring-offset-surface":
                             t.type !== "success" && t.type !== "error",
                         },
                       )}

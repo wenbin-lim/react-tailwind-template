@@ -13,8 +13,6 @@ export default backend;
 /* 
 	Data providing methods which interfaces with Backend API
 	Change the implementation of each methods according to the backend used
-
-  Current backend used: Pocketbase
 */
 
 // Fetch all records

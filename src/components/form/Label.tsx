@@ -3,16 +3,16 @@ import clsx from "clsx";
 interface LabelProps {
   htmlFor?: string;
   required?: boolean;
-  isError?: boolean;
+  invalid?: boolean;
   children?: React.ReactNode;
 }
-const Label = ({ htmlFor, required, isError, children }: LabelProps) => {
+const Label = ({ htmlFor, required, invalid, children }: LabelProps) => {
   return (
     children && (
       <label
-        className={clsx("block text-sm font-medium leading-6", {
-          "text-red-500": isError,
-          "after:text-red-500 after:content-['*']": required,
+        className={clsx("form-label", {
+          "form-label-invalid": invalid,
+          "form-label-required": required,
         })}
         htmlFor={htmlFor}
       >

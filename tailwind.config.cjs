@@ -6,7 +6,7 @@ import forms from "@tailwindcss/forms";
 import colors from "./src/theme/colors";
 
 // custom components
-import { button, textInput } from "./src/theme/components";
+import { button, form as customFormComponents } from "./src/theme/components";
 
 // custom layout sizes
 import { layoutSizes, zIndex } from "./src/theme/utils";
@@ -14,7 +14,7 @@ import { layoutSizes, zIndex } from "./src/theme/utils";
 export default {
   // darkMode: "class",   // to toggle dark mode via class
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
-  plugins: [typography, forms, button, textInput],
+  plugins: [typography, forms, button, customFormComponents],
   theme: {
     extend: {
       colors,

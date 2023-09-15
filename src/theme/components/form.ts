@@ -2,6 +2,22 @@ import plugin from "tailwindcss/plugin";
 
 export default plugin(function ({ addComponents, theme }) {
   addComponents({
+    ".form-label": {
+      display: "block",
+      fontSize: theme("fontSize.sm"),
+      fontWeight: theme("fontWeight.medium"),
+      lineHeight: theme("lineHeight.6"),
+      color: "inherit",
+      "&.form-label-invalid": {
+        color: theme("colors.red.500"),
+      },
+      "&.form-label-required": {
+        "&::after": {
+          content: "'*'",
+          color: theme("colors.red.500"),
+        },
+      },
+    },
     ".input": {
       display: "block",
       width: "100%",

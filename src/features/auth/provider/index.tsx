@@ -7,8 +7,8 @@ import { AuthModel } from "pocketbase";
 import jwtDecode, { JwtPayload } from "jwt-decode";
 
 // Constants
-const TOKEN_REFRESH_BUFFER_SECONDS = 10;
-const REFRESH_INTERVAL_MS = 5000;
+const TOKEN_REFRESH_BUFFER_SECONDS = 600; // 10 minutes
+const REFRESH_INTERVAL_MS = 600000; // 10 minutes
 
 // Types
 export type AuthProviderType = {
