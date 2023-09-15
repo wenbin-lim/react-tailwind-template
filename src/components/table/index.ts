@@ -1,1 +1,1 @@
-export { default as TableHeadSort } from "./TableHeadSort";
+export { default as SortableTH } from "./SortableTH";
