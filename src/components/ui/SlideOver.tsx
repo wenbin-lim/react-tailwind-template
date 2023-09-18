@@ -3,27 +3,24 @@ import clsx from "clsx";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 
-type SlideOverProps = {
+type Props = {
   open: boolean;
   setOpen: (open: boolean) => void;
   children?: React.ReactNode;
-  /**
-   * tailwind max width classes
-   * https://tailwindcss.com/docs/max-width
-   * */
-  width?: string;
+  /** tailwind max-width class */
+  panelWidth?: string;
 };
 
-const SlideOver = ({ open, setOpen, width, children }: SlideOverProps) => {
+const SlideOver = ({ open, setOpen, panelWidth, children }: Props) => {
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative z-modal" onClose={setOpen}>
         <Transition.Child
           as={Fragment}
-          enter="ease-in-out duration-500 sm:duration-700"
+          enter="ease-in-out duration-500"
           enterFrom="backdrop-blur-none bg-transparent"
           enterTo="backdrop-blur-sm bg-modal-backdrop dark:bg-modal-backdrop-dark"
-          leave="ease-in-out duration-500 sm:duration-700"
+          leave="ease-in-out duration-200"
           leaveFrom="backdrop-blur-sm bg-modal-backdrop dark:bg-modal-backdrop-dark"
           leaveTo="backdrop-blur-none bg-transparent"
         >
@@ -42,22 +39,22 @@ const SlideOver = ({ open, setOpen, width, children }: SlideOverProps) => {
                   <Dialog.Panel
                     className={clsx(
                       "pointer-events-auto relative w-screen",
-                      width ? width : "max-w-md",
+                      panelWidth ? panelWidth : "max-w-md",
                     )}
                   >
                     <Transition.Child
                       as={Fragment}
-                      enter="ease-in-out duration-500 sm:duration-700"
+                      enter="ease-in-out duration-500"
                       enterFrom="opacity-0"
                       enterTo="opacity-100"
-                      leave="ease-in-out duration-500 sm:duration-700"
+                      leave="ease-in-out duration-500"
                       leaveFrom="opacity-100"
                       leaveTo="opacity-0"
                     >
                       <div className="absolute left-0 top-0 -ml-8 flex pr-2 pt-4 sm:-ml-10 sm:pr-4">
                         <button
                           type="button"
-                          className="focus:ring-input-focus relative rounded-md text-black focus:outline-none focus:ring-2 dark:text-white"
+                          className="relative rounded-md text-black focus:outline-none focus:ring-2 focus:ring-input-focus dark:text-white"
                           onClick={() => setOpen(false)}
                         >
                           <span className="absolute -inset-2.5" />
