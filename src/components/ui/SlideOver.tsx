@@ -54,7 +54,7 @@ const SlideOver = ({ open, setOpen, panelWidth, children }: Props) => {
                       <div className="absolute left-0 top-0 -ml-8 flex pr-2 pt-4 sm:-ml-10 sm:pr-4">
                         <button
                           type="button"
-                          className="relative rounded-md text-black focus:outline-none focus:ring-2 focus:ring-input-focus dark:text-white"
+                          className="focus:ring-input-focus relative rounded-md text-black focus:outline-none focus:ring-2 dark:text-white"
                           onClick={() => setOpen(false)}
                         >
                           <span className="absolute -inset-2.5" />
