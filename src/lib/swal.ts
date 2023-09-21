@@ -9,12 +9,12 @@ const swal = Swal.mixin({
     container:
       "flex justify-center z-modal transition duration-500 backdrop-blur-sm !bg-modal-backdrop dark:!bg-modal-backdrop-dark",
     popup:
-      "rounded-lg bg-background px-8 py-4 text-left shadow-xl mt-auto sm:m-0 sm:w-full sm:max-w-lg sm:p-6 gap-y-2",
+      "rounded-lg bg-background px-8 py-4 text-left shadow-xl mt-auto sm:m-0 sm:w-full sm:max-w-lg sm:p-6 gap-y-4",
     icon: "my-0 text-[0.5rem]",
     // closeButton:
     //   "!hidden sm:!flex text-[36px] font-thin text-gray-500 hover:text-on-background",
     title:
-      "p-0 text-center text-2xl font-semibold leading-6 text-on-background",
+      "p-0 text-center text-2xl font-semibold leading-8 text-on-background",
     htmlContainer: "!m-0 !text-sm !text-gray-500",
     actions: "m-0 mt-6 flex flex-col gap-3 sm:flex-row text-sm",
     cancelButton:
@@ -26,11 +26,11 @@ const swal = Swal.mixin({
   },
   showClass: {
     popup: "animate__animated animate__fadeIn animate__zoomIn",
-    icon: "animate__animated animate__fadeIn",
+    icon: "",
   },
   hideClass: {
     popup: "animate__animated animate__fadeOut animate__zoomOut",
-    icon: "animate__animated animate__fadeOut",
+    icon: "",
   },
 });
 

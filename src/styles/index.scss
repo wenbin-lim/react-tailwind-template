@@ -13,6 +13,7 @@
 @layer base {
   html,
   body {
+    scroll-behavior: smooth;
     @apply h-full;
     @apply bg-background text-on-background;
     @apply dark:bg-background-dark dark:text-on-background-dark;
