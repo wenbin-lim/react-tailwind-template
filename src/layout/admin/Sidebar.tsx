@@ -6,7 +6,7 @@ import navigationItems from "./navigationItems";
 
 const Sidebar = () => {
   return (
-    <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-primary px-6 py-4 text-on-primary">
+    <aside className="flex grow flex-col gap-y-5 overflow-y-auto bg-primary px-6 py-4 text-on-primary">
       {/* company brand / logo */}
       <img className="h-16 w-auto" src="/brand/logo.svg" alt="Company Brand" />
 
@@ -37,7 +37,7 @@ const Sidebar = () => {
           ))}
         </ul>
       </nav>
-    </div>
+    </aside>
   );
 };
 export default Sidebar;

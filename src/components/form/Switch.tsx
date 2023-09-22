@@ -59,7 +59,12 @@ const SwitchGroup = ({ className, children }: SwitchGroupProps) => {
   return (
     <HUISwitch.Group
       as="div"
-      className={clsx("flex items-center justify-between", className)}
+      className={clsx(
+        {
+          "flex items-center justify-between": !className,
+        },
+        className,
+      )}
     >
       {children}
     </HUISwitch.Group>

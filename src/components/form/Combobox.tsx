@@ -22,7 +22,7 @@ import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 				onChange={field.onChange}
 			>
 				<Combobox.Label>Label</Combobox.Label>
-				<Combobox.Input setQuery={setQuery} invalid={invalid}/>
+				<Combobox.Input query={query} setQuery={setQuery} invalid={invalid}/>
 				<Combobox.Options
 					options={options.map(({name, value}) => ({
 						name,

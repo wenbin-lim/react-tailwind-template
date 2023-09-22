@@ -43,13 +43,8 @@ const SortableTH = ({
   children,
 }: SortableTHProps) => {
   return (
-    <th scope="col" onClick={onClick}>
-      <div
-        className={clsx(
-          "group flex cursor-pointer items-center gap-x-2",
-          className,
-        )}
-      >
+    <th className={clsx(className)} scope="col" onClick={onClick}>
+      <div className="group flex cursor-pointer items-center gap-x-2">
         {children && <span>{children}</span>}
         <span
           className={clsx(

@@ -161,6 +161,7 @@ const FileUpload = ({
   const { getRootProps, getInputProps, open } = useDropzone({
     ...dropzoneOptions,
     noClick: true,
+    multiple,
     onDrop(acceptedFiles, fileRejections) {
       setRejectedFiles(fileRejections);
 

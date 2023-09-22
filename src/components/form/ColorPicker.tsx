@@ -6,19 +6,19 @@ import { SketchPicker, RGBColor, HSLColor } from "react-color";
 
 type Hex = {
   type: "hex";
-  value: string;
+  value?: string;
   onChange: (hex: string) => void;
 };
 
 type RGB = {
   type: "rgb";
-  value: RGBColor;
+  value?: RGBColor;
   onChange: (rgb: RGBColor) => void;
 };
 
 type HSL = {
   type: "hsl";
-  value: HSLColor;
+  value?: HSLColor;
   onChange: (hsl: HSLColor) => void;
 };
 
@@ -70,7 +70,9 @@ const ColorPicker = ({
       case "hex":
         return value;
       case "rgb":
-        return `r: ${value.r}, g: ${value.g}, b: ${value.b}`;
+        return `r: ${value.r}, g: ${value.g}, b: ${value.b}${
+          value?.a ? ` ,a: ${value.a}` : ""
+        }`;
       case "hsl":
         return `h: ${value.h.toFixed(2)}, s: ${value.s.toFixed(
           2,
@@ -87,7 +89,7 @@ const ColorPicker = ({
       case "hex":
         return value;
       case "rgb":
-        return `rgba(${value.r}, ${value.g}, ${value.b}, ${value.a})`;
+        return `rgba(${value.r}, ${value.g}, ${value.b}, ${value.a || 1})`;
       case "hsl":
         return `hsl(${value.h}, ${value.s * 100}%, ${value.l * 100}%)`;
       default:
@@ -133,7 +135,7 @@ const ColorPicker = ({
           <div className="m-2 overflow-hidden rounded-md shadow-lg">
             <SketchPicker
               className="text-black"
-              onChange={(color) => {
+              onChangeComplete={(color) => {
                 switch (type) {
                   case "hex":
                     return onChange(color.hex);

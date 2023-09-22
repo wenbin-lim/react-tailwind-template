@@ -22,7 +22,7 @@ import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 				onChange={field.onChange}
 			>
 				<Listbox.Label>Label</Listbox.Label>
-				<Listbox.Button selected={field.value} invalid={invalid} />
+				<Listbox.Button invalid={invalid}>{field.value}</Listbox.Button>
 				<Listbox.Options
 					options={options.map(({name, value}) => ({
 						name,
@@ -33,6 +33,7 @@ import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 		)}
 	/>
 */
+
 export type ListboxOption = {
   name: string;
   value: string;
@@ -100,26 +101,16 @@ const ListboxLabel = ({
 type ListboxButtonProps = {
   invalid?: boolean;
   placeholder?: string;
-  selected?: string | string[];
   children?: React.ReactNode;
 };
 
 const ListboxButton = ({
   invalid,
   placeholder,
-  selected,
   children,
 }: ListboxButtonProps) => {
   const whatToDisplay = () => {
     if (children) return children;
-
-    if (selected) {
-      if (Array.isArray(selected)) {
-        return selected.join(", ");
-      } else {
-        return selected;
-      }
-    }
 
     return placeholder || "Select a value";
   };
@@ -127,7 +118,7 @@ const ListboxButton = ({
   return (
     <HUIListbox.Button
       className={clsx(
-        "input relative h-9 pr-16 text-left dark:input-dark disabled:cursor-auto",
+        "input relative h-9 truncate pr-16 text-left dark:input-dark disabled:cursor-auto",
         {
           "input-invalid": invalid,
         },

@@ -33,7 +33,7 @@ const TopBar = ({
   };
 
   return (
-    <div
+    <nav
       className={clsx(
         "z-appbar flex h-topbar shrink-0 items-center gap-x-4 border-b border-gray-200 px-4 shadow-sm dark:border-gray-700 sm:gap-x-6 sm:px-6 lg:px-8",
         {
@@ -64,7 +64,7 @@ const TopBar = ({
           {/* settings button */}
           <button
             type="button"
-            className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500"
+            className="-m-3 p-3 text-gray-400 hover:text-gray-500"
             onClick={() => navigate("#")}
           >
             <span className="sr-only">Settings</span>
@@ -118,7 +118,7 @@ const TopBar = ({
           />
         </div>
       </div>
-    </div>
+    </nav>
   );
 };
 export default TopBar;

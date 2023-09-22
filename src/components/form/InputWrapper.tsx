@@ -6,7 +6,16 @@ interface InputWrapperProps {
 }
 const InputWrapper = ({ className, children }: InputWrapperProps) => {
   return (
-    <div className={clsx("flex flex-col gap-y-2", className)}>{children}</div>
+    <div
+      className={clsx(
+        {
+          "flex flex-col gap-y-2": !className,
+        },
+        className,
+      )}
+    >
+      {children}
+    </div>
   );
 };
 export default InputWrapper;

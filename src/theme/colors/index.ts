@@ -58,9 +58,9 @@ export default {
     dark: "rgba(243, 244, 246, 0.05)",
   },
   "on-primary": {
-    DEFAULT: colors.gray[200],
-    light: colors.gray[200],
-    dark: colors.gray[200],
+    DEFAULT: colors.white,
+    light: colors.white,
+    dark: colors.white,
   },
   "on-secondary": {
     DEFAULT: colors.black,
@@ -70,16 +70,16 @@ export default {
   "on-background": {
     DEFAULT: colors.black,
     light: colors.black,
-    dark: colors.gray[200],
+    dark: colors.white,
   },
   "on-surface": {
     DEFAULT: colors.black,
     light: colors.black,
-    dark: colors.gray[200],
+    dark: colors.white,
   },
   "on-surface-container": {
     DEFAULT: colors.black,
     light: colors.black,
-    dark: colors.gray[200],
+    dark: colors.white,
   },
 };

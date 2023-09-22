@@ -38,7 +38,7 @@ const MenuDropdown = ({
       <Menu.Button ref={refs.setReference} type="button">
         <span className="sr-only">Open menu</span>
         {triggerButton || (
-          <div className="-m-2 p-2 text-gray-500 hover:text-gray-900 dark:hover:text-gray-100">
+          <div className="p-2 text-gray-500 hover:text-gray-900 dark:hover:text-gray-100">
             <EllipsisVerticalIcon className="h-5 w-5" />
           </div>
         )}
