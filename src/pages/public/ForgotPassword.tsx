@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,26 +8,25 @@ import {
 } from "@src/features/auth/api";
 import { useRequestPasswordChange } from "@src/features/auth/hooks";
 
+import { Button } from "@src/components/ui/button";
 import {
-  InputWrapper,
-  Label,
-  Input,
-  HelperErrorText,
-} from "@src/components/form";
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@src/components/ui/form";
+import { Input } from "@src/components/ui/input";
 
-import toast from "react-hot-toast";
+import { useToast } from "@src/components/toast/use-toast";
 import { getGenericToastMessage } from "@src/utils/common";
 
 const ForgotPassword = () => {
-  const navigate = useNavigate();
+  const { toast } = useToast();
 
   // Form
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<RequestPasswordChangeProps>({
+  const form = useForm<RequestPasswordChangeProps>({
     resolver: zodResolver(RequestPasswordChangeSchema),
   });
 
@@ -37,10 +36,15 @@ const ForgotPassword = () => {
   const onRequestPasswordChange = (data: RequestPasswordChangeProps) => {
     requestPasswordChangeFn.mutate(data, {
       onSuccess: () =>
-        toast.success("Password reset link has been sent to your email"),
+        toast({
+          description: "Password reset link has been sent to your email",
+        }),
       onError: () => {
-        reset();
-        toast.error(getGenericToastMessage("error"));
+        form.reset();
+        toast({
+          variant: "destructive",
+          description: getGenericToastMessage("error"),
+        });
       },
     });
   };
@@ -58,44 +62,49 @@ const ForgotPassword = () => {
         </h2>
       </section>
 
-      <form
-        id="forgot-password-form"
-        className="flex w-full flex-col gap-y-6 sm:max-w-sm"
-        onSubmit={handleSubmit(onRequestPasswordChange)}
-      >
-        <InputWrapper>
-          <Label htmlFor="email">Your Email</Label>
-          <Input
-            id="email"
-            type="email"
-            autoComplete="email"
-            autoFocus
-            disabled={requestPasswordChangeFn.isPending}
-            invalid={!!errors.email}
-            {...register("email")}
-          />
-          <HelperErrorText isError={true}>
-            {errors.email?.message}
-          </HelperErrorText>
-        </InputWrapper>
-        <button
-          className="btn mt-12 w-full bg-primary text-on-primary"
-          type="submit"
-          disabled={requestPasswordChangeFn.isPending}
+      <Form {...form}>
+        <form
+          id="forgot-password-form"
+          className="flex w-full flex-col gap-y-6 sm:max-w-sm"
+          onSubmit={form.handleSubmit(onRequestPasswordChange)}
         >
-          Request Password Link
-        </button>
+          <FormField
+            control={form.control}
+            name="email"
+            defaultValue=""
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Your Email</FormLabel>
+                <FormControl>
+                  <Input
+                    autoFocus
+                    type="email"
+                    autoComplete="email"
+                    disabled={requestPasswordChangeFn.isPending}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <p className="text-center text-sm text-gray-500">
-          Password changed?{" "}
-          <a
-            onClick={() => navigate("/login")}
-            className="cursor-pointer font-semibold leading-6 text-secondary-600 hover:text-secondary-500"
+          <Button
+            className="mt-6"
+            type="submit"
+            disabled={requestPasswordChangeFn.isPending}
           >
-            Try login
-          </a>
-        </p>
-      </form>
+            Request Password Link
+          </Button>
+        </form>
+      </Form>
+
+      <p className="text-center text-sm">
+        Password changed?{" "}
+        <Button asChild className="h-auto p-0 text-secondary" variant="link">
+          <NavLink to="/login">Try login</NavLink>
+        </Button>
+      </p>
     </main>
   );
 };
