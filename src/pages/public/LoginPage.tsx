@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchema, LoginProps } from "@src/features/auth/api";
 import { useAuth, useLogin } from "@src/features/auth/hooks";
 
+import { Button } from "@src/components/ui/button";
 import {
   InputWrapper,
   Label,
@@ -83,7 +84,7 @@ const LoginPage = () => {
           <div className="flex items-center justify-between">
             <Label htmlFor="password">Password</Label>
             <a
-              className="cursor-pointer text-sm font-semibold text-secondary-500 hover:text-secondary-600"
+              className="text-secondary-500 hover:text-secondary-600 cursor-pointer text-sm font-semibold"
               onClick={() => navigate("/forgot-password")}
             >
               Forgot password?
@@ -102,19 +103,15 @@ const LoginPage = () => {
           </HelperErrorText>
         </InputWrapper>
 
-        <button
-          className="btn mt-6 w-full bg-primary text-on-primary"
-          type="submit"
-          disabled={loginFn.isPending}
-        >
+        <Button className="mt-6" type="submit" disabled={loginFn.isPending}>
           Sign in
-        </button>
+        </Button>
 
         <p className="text-center text-sm text-gray-500">
           Not a member?{" "}
           <a
             onClick={() => navigate("/signup")}
-            className="cursor-pointer font-semibold leading-6 text-secondary-600 hover:text-secondary-500"
+            className="text-secondary-600 hover:text-secondary-500 cursor-pointer font-semibold leading-6"
           >
             Sign up now
           </a>
