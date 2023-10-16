@@ -6,7 +6,7 @@ import navigationItems from "./navigationItems";
 
 const Sidebar = () => {
   return (
-    <aside className="flex grow flex-col gap-y-5 overflow-y-auto bg-primary px-6 py-4 text-on-primary">
+    <aside className="flex grow flex-col gap-y-5 overflow-y-auto bg-primary px-6 py-4 text-primary-foreground">
       {/* company brand / logo */}
       <img className="h-16 w-auto" src="/brand/logo.svg" alt="Company Brand" />
 
@@ -19,10 +19,10 @@ const Sidebar = () => {
                 to={path || "#"}
                 className={({ isActive }) =>
                   clsx(
-                    "flex w-full gap-x-3 rounded-md p-2 text-sm font-semibold leading-6",
+                    "flex w-full gap-x-3 rounded-md p-2 text-sm leading-6",
                     isActive
-                      ? "bg-primary-300 text-on-primary"
-                      : "text-on-primary/50 hover:bg-primary-400 hover:text-on-primary",
+                      ? "font-bold text-secondary hover:text-secondary/75"
+                      : "font-semibold hover:text-primary-foreground/75",
                   )
                 }
               >

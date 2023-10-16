@@ -3,7 +3,7 @@ import clsx from "clsx";
 
 import TopBar from "./TopBar";
 import Sidebar from "./Sidebar";
-import MobileSidebarWrapper from "./MobileSidebarWrapper";
+import { Sheet, SheetContent } from "@src/components/ui/sheet";
 
 type AdminLayoutProps = {
   showTopbar?: boolean;
@@ -16,20 +16,20 @@ const AdminLayout = ({ showSidebar = true, children }: AdminLayoutProps) => {
 
   return (
     <>
+      {/* Mobile sidebar */}
       {showSidebar && (
-        <>
-          <MobileSidebarWrapper
-            showSidebar={showMobileSidebar}
-            onSidebarClose={() => setShowMobileSidebar(false)}
-          >
+        <Sheet open={showMobileSidebar} onOpenChange={setShowMobileSidebar}>
+          <SheetContent className="flex p-0" side="left">
             <Sidebar />
-          </MobileSidebarWrapper>
+          </SheetContent>
+        </Sheet>
+      )}
 
-          {/* Static sidebar for desktop */}
-          <div className="hidden lg:fixed lg:inset-y-0 lg:z-appbar lg:flex lg:w-sidebar">
-            <Sidebar />
-          </div>
-        </>
+      {/* Static sidebar for desktop */}
+      {showSidebar && (
+        <div className="hidden lg:fixed lg:inset-y-0 lg:z-appbar lg:flex lg:w-sidebar">
+          <Sidebar />
+        </div>
       )}
 
       <div

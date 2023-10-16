@@ -1,18 +1,9 @@
 /** @type {import('tailwindcss').Config} */
 import twAnimate from "tailwindcss-animate";
-import typography from "@tailwindcss/typography";
-import forms from "@tailwindcss/forms";
-
-// custom colors
-// import colors from "./src/theme/colors";
-
-// custom components
-import { button, form as customFormComponents } from "./src/theme/components";
 
 export default {
   darkMode: ["class"], // to toggle dark mode via class
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
-  // plugins: [twAnimate, typography, forms, button, customFormComponents],
   plugins: [twAnimate],
   container: {
     center: true,

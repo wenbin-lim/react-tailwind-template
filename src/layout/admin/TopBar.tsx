@@ -6,7 +6,12 @@ import { useAuth } from "@src/features/auth/hooks";
 import { Bars3Icon, UserCircleIcon } from "@heroicons/react/24/solid";
 import { Cog6ToothIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 
-import { MenuDropdown } from "@src/components/ui";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@src/components/ui/dropdown-menu";
 import { getPbFileUrl } from "@src/utils/pocketbase";
 import { RecordModel } from "pocketbase";
 
@@ -37,7 +42,7 @@ const TopBar = ({
       className={clsx(
         "z-appbar flex h-topbar shrink-0 items-center gap-x-4 border-b border-gray-200 px-4 shadow-sm dark:border-gray-700 sm:gap-x-6 sm:px-6 lg:px-8",
         {
-          "sticky top-0 bg-background text-on-background dark:bg-background-dark dark:text-on-background-dark":
+          "text-on-background dark:bg-background-dark dark:text-on-background-dark sticky top-0 bg-background":
             sticky,
         },
       )}
@@ -65,7 +70,7 @@ const TopBar = ({
           <button
             type="button"
             className="-m-3 p-3 text-gray-400 hover:text-gray-500"
-            onClick={() => navigate("#")}
+            onClick={() => alert("settings icon clicked")}
           >
             <span className="sr-only">Settings</span>
             <Cog6ToothIcon className="h-6 w-6" aria-hidden="true" />
@@ -78,10 +83,8 @@ const TopBar = ({
           />
 
           {/* Profile dropdown */}
-          <MenuDropdown
-            menuPlacement="bottom-end"
-            menuClassName="mt-1"
-            triggerButton={
+          <DropdownMenu>
+            <DropdownMenuTrigger>
               <div className="-m-1.5 flex items-center p-1.5">
                 {user && !!user.avatar ? (
                   <img
@@ -108,14 +111,11 @@ const TopBar = ({
                   />
                 </span>
               </div>
-            }
-            actions={[
-              {
-                label: "Logout",
-                callback: onLogout,
-              },
-            ]}
-          />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={onLogout}>Logout</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </nav>
