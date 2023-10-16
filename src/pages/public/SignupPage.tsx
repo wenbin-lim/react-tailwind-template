@@ -1,18 +1,22 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SignupProps, SignupSchema } from "@src/features/auth/api";
 import { useSignup } from "@src/features/auth/hooks";
 
+import { Button } from "@src/components/ui/button";
 import {
-  InputWrapper,
-  Label,
-  Input,
-  HelperErrorText,
-} from "@src/components/form";
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@src/components/ui/form";
+import { Input } from "@src/components/ui/input";
 
-import toast from "react-hot-toast";
+import { useToast } from "@src/components/toast/use-toast";
 import {
   setServerValidationError,
   getGenericToastMessage,
@@ -20,22 +24,11 @@ import {
 
 const SignupPage = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   // Form
-  const {
-    register,
-    handleSubmit,
-    resetField,
-    setError,
-    formState: { errors },
-  } = useForm<SignupProps>({
+  const form = useForm<SignupProps>({
     resolver: zodResolver(SignupSchema),
-    defaultValues: {
-      username: `admin${new Date().getTime() % 10000}`,
-      email: `admin${new Date().getTime() % 10000}@email.com`,
-      password: "password",
-      passwordConfirm: "password",
-    },
   });
 
   // signup logic
@@ -45,14 +38,19 @@ const SignupPage = () => {
     signupFn.mutate(newUser, {
       onSuccess: () => {
         navigate("/login");
-        toast.success("Signup Successful");
+        toast({
+          description: "Signup Successful",
+        });
       },
       onError: (error) => {
-        resetField("password");
-        resetField("passwordConfirm");
+        form.resetField("password");
+        form.resetField("passwordConfirm");
 
-        if (!setServerValidationError(error, setError)) {
-          toast.error(getGenericToastMessage("error"));
+        if (!setServerValidationError(error, form.setError)) {
+          toast({
+            variant: "destructive",
+            description: getGenericToastMessage("error"),
+          });
         }
       },
     });
@@ -70,100 +68,113 @@ const SignupPage = () => {
           <h2 className="text-2xl font-bold leading-9 tracking-tight">
             Create a new account
           </h2>
-          <p className="text-sm leading-6 text-gray-500">
+          <p className="text-center text-sm">
             Already have an account?{" "}
-            <a
-              className="cursor-pointer font-semibold leading-6 text-secondary-600 hover:text-secondary-500"
-              onClick={() => navigate("/login")}
+            <Button
+              asChild
+              className="h-auto p-0 text-secondary"
+              variant="link"
             >
-              Log in now
-            </a>
+              <NavLink to="/login">Log in now</NavLink>
+            </Button>
           </p>
         </section>
 
-        <form
-          id="sign-up-form"
-          className="flex w-full max-w-sm flex-col gap-y-4 lg:w-96"
-          onSubmit={handleSubmit(onSignup)}
-        >
-          <InputWrapper>
-            <Label htmlFor="username">Username</Label>
-            <Input
-              id="username"
-              type="text"
-              autoComplete="username"
-              autoFocus
-              disabled={signupFn.isPending}
-              invalid={!!errors.username}
-              {...register("username")}
-            />
-            <HelperErrorText isError={true}>
-              {errors.username?.message}
-            </HelperErrorText>
-          </InputWrapper>
-
-          <InputWrapper>
-            <Label htmlFor="email" required>
-              Email
-            </Label>
-            <Input
-              id="email"
-              type="email"
-              autoComplete="email"
-              required
-              disabled={signupFn.isPending}
-              invalid={!!errors.email}
-              {...register("email")}
-            />
-            <HelperErrorText isError={true}>
-              {errors.email?.message}
-            </HelperErrorText>
-          </InputWrapper>
-
-          <InputWrapper>
-            <Label htmlFor="password" required>
-              Password
-            </Label>
-            <Input
-              id="password"
-              type="password"
-              autoComplete="current-password"
-              required
-              disabled={signupFn.isPending}
-              invalid={!!errors.password}
-              {...register("password")}
-            />
-            <HelperErrorText isError={true}>
-              {errors.password?.message}
-            </HelperErrorText>
-          </InputWrapper>
-
-          <InputWrapper>
-            <Label htmlFor="passwordConfirm" required>
-              Confirm Password
-            </Label>
-            <Input
-              id="passwordConfirm"
-              type="password"
-              autoComplete="current-password"
-              required
-              disabled={signupFn.isPending}
-              invalid={!!errors.password || !!errors.passwordConfirm}
-              {...register("passwordConfirm")}
-            />
-            <HelperErrorText isError={true}>
-              {errors.password?.message || errors.passwordConfirm?.message}
-            </HelperErrorText>
-          </InputWrapper>
-
-          <button
-            className="btn mt-6 w-full bg-primary text-on-primary"
-            type="submit"
-            disabled={signupFn.isPending}
+        <Form {...form}>
+          <form
+            id="sign-up-form"
+            className="flex w-full max-w-sm flex-col gap-y-4 lg:w-96"
+            onSubmit={form.handleSubmit(onSignup)}
           >
-            Sign up
-          </button>
-        </form>
+            <FormField
+              control={form.control}
+              name="username"
+              defaultValue=""
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Username</FormLabel>
+                  <FormControl>
+                    <Input
+                      autoFocus
+                      autoComplete="username"
+                      disabled={signupFn.isPending}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="email"
+              defaultValue=""
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="email"
+                      autoComplete="email"
+                      disabled={signupFn.isPending}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="password"
+              defaultValue=""
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="password"
+                      autoComplete="current-password"
+                      disabled={signupFn.isPending}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="passwordConfirm"
+              defaultValue=""
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Confirm Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="password"
+                      autoComplete="current-password"
+                      disabled={signupFn.isPending}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <Button
+              className="mt-6"
+              type="submit"
+              disabled={signupFn.isPending}
+            >
+              Sign in
+            </Button>
+          </form>
+        </Form>
       </article>
 
       <figure className="relative hidden w-0 flex-1 lg:block">
