@@ -12,7 +12,8 @@ import { button, form as customFormComponents } from "./src/theme/components";
 export default {
   darkMode: ["class"], // to toggle dark mode via class
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
-  plugins: [twAnimate, typography, forms, button, customFormComponents],
+  // plugins: [twAnimate, typography, forms, button, customFormComponents],
+  plugins: [twAnimate],
   container: {
     center: true,
     padding: "2rem",

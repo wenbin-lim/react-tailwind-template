@@ -1,4 +1,4 @@
-import { useNavigate, Navigate } from "react-router-dom";
+import { Navigate, NavLink } from "react-router-dom";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,24 +8,22 @@ import { useAuth, useLogin } from "@src/features/auth/hooks";
 
 import { Button } from "@src/components/ui/button";
 import {
-  InputWrapper,
-  Label,
-  Input,
-  HelperErrorText,
-} from "@src/components/form";
-import toast from "react-hot-toast";
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@src/components/ui/form";
+import { Input } from "@src/components/ui/input";
+import { useToast } from "@src/components/toast/use-toast";
 
 const LoginPage = () => {
-  const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
+  const { toast } = useToast();
 
   // Form
-  const {
-    register,
-    handleSubmit,
-    resetField,
-    formState: { errors },
-  } = useForm<LoginProps>({
+  const form = useForm<LoginProps>({
     resolver: zodResolver(LoginSchema),
   });
 
@@ -34,10 +32,16 @@ const LoginPage = () => {
 
   const onLogin = (credentials: LoginProps) => {
     loginFn.mutate(credentials, {
-      onSuccess: () => toast.success("Login Successful"),
+      onSuccess: () =>
+        toast({
+          description: "Login Successful",
+        }),
       onError: () => {
-        toast.error("Invalid Credentials");
-        resetField("password");
+        toast({
+          variant: "destructive",
+          description: "Invalid Credentials",
+        });
+        form.resetField("password");
       },
     });
   };
@@ -59,64 +63,73 @@ const LoginPage = () => {
         </h2>
       </section>
 
-      <form
-        id="login-form"
-        className="flex w-full flex-col gap-y-6 sm:max-w-sm"
-        onSubmit={handleSubmit(onLogin)}
-      >
-        <InputWrapper>
-          <Label htmlFor="username">Username</Label>
-          <Input
-            id="username"
-            type="text"
-            autoComplete="username"
-            autoFocus
-            disabled={loginFn.isPending}
-            invalid={!!errors.username}
-            {...register("username")}
+      <Form {...form}>
+        <form
+          id="login-form"
+          className="flex w-full flex-col gap-y-6 sm:max-w-sm"
+          onSubmit={form.handleSubmit(onLogin)}
+        >
+          <FormField
+            control={form.control}
+            name="username"
+            defaultValue=""
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Username</FormLabel>
+                <FormControl>
+                  <Input
+                    autoFocus
+                    autoComplete="username"
+                    disabled={loginFn.isPending}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-          <HelperErrorText isError={true}>
-            {errors.username?.message}
-          </HelperErrorText>
-        </InputWrapper>
 
-        <InputWrapper>
-          <div className="flex items-center justify-between">
-            <Label htmlFor="password">Password</Label>
-            <a
-              className="text-secondary-500 hover:text-secondary-600 cursor-pointer text-sm font-semibold"
-              onClick={() => navigate("/forgot-password")}
-            >
-              Forgot password?
-            </a>
-          </div>
-          <Input
-            id="password"
-            type="password"
-            autoComplete="current-password"
-            disabled={loginFn.isPending}
-            invalid={!!errors.password}
-            {...register("password")}
+          <FormField
+            control={form.control}
+            name="password"
+            defaultValue=""
+            render={({ field }) => (
+              <FormItem>
+                <div className="flex items-center justify-between">
+                  <FormLabel>Password</FormLabel>
+                  <Button
+                    asChild
+                    className="h-auto p-0 text-secondary"
+                    variant="link"
+                  >
+                    <NavLink to="/forgot-password">Forgot password?</NavLink>
+                  </Button>
+                </div>
+                <FormControl>
+                  <Input
+                    type="password"
+                    autoComplete="current-password"
+                    disabled={loginFn.isPending}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-          <HelperErrorText isError={true}>
-            {errors.password?.message}
-          </HelperErrorText>
-        </InputWrapper>
 
-        <Button className="mt-6" type="submit" disabled={loginFn.isPending}>
-          Sign in
+          <Button className="mt-6" type="submit" disabled={loginFn.isPending}>
+            Sign in
+          </Button>
+        </form>
+      </Form>
+
+      <p className="text-center text-sm">
+        Not a member?{" "}
+        <Button asChild className="h-auto p-0 text-secondary" variant="link">
+          <NavLink to="/signup">Sign up now</NavLink>
         </Button>
-
-        <p className="text-center text-sm text-gray-500">
-          Not a member?{" "}
-          <a
-            onClick={() => navigate("/signup")}
-            className="text-secondary-600 hover:text-secondary-500 cursor-pointer font-semibold leading-6"
-          >
-            Sign up now
-          </a>
-        </p>
-      </form>
+      </p>
     </main>
   );
 };

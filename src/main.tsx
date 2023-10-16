@@ -12,7 +12,7 @@ import RouterProvider from "@src/routes";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <ThemeProvider defaultTheme="dark">
+    <ThemeProvider defaultTheme="light">
       <AuthProvider>
         <QueryClientProvider client={queryClient}>
           <RouterProvider />

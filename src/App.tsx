@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 // Toasts
-import { Toaster } from "@src/components/alerts";
+import { Toaster } from "@src/components/toast/toaster";
 
 const App = () => {
   return (
