@@ -39,8 +39,8 @@ const AdminLayout = ({ showSidebar = true, children }: AdminLayoutProps) => {
       >
         <TopBar
           sticky={true}
-          showMobileSidebarToggle={true}
-          openMobileSidebar={() => setShowMobileSidebar(true)}
+          showMenuToggle={true}
+          openMenu={() => setShowMobileSidebar(true)}
         />
 
         {/* Outlet */}

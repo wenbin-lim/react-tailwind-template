@@ -3,7 +3,7 @@ const Dashboard = () => {
   const { toast } = useToast();
 
   return (
-    <div className="p-4">
+    <div className="p-container">
       <h1 className="text-4xl">Dashboard</h1>
       <button
         onClick={() => {
@@ -14,6 +14,16 @@ const Dashboard = () => {
       >
         test
       </button>
+
+      <div
+        style={{
+          height: "2000px",
+          width: "100px",
+          backgroundColor: "red",
+        }}
+      >
+        test
+      </div>
     </div>
   );
 };

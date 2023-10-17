@@ -1,0 +1,25 @@
+/* 
+	https://tailwindcss.com/docs/adding-custom-styles#adding-custom-utilities
+*/
+
+@layer utilities {
+  // provides horizontal padding to a container for different screen size
+  .px-container {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+
+  // provides vertical padding to a container
+  .py-container {
+    @apply py-4;
+  }
+
+  // provides padding to a container
+  .p-container {
+    @apply p-4 sm:px-6 lg:px-8;
+  }
+
+  // basic color for icons
+  .icon-color {
+    @apply text-gray-400 hover:text-gray-500 dark:hover:text-white;
+  }
+}

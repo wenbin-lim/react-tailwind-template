@@ -19,10 +19,10 @@ const Sidebar = () => {
                 to={path || "#"}
                 className={({ isActive }) =>
                   clsx(
-                    "flex w-full gap-x-3 rounded-md p-2 text-sm leading-6",
+                    "flex w-full gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-400",
                     isActive
-                      ? "font-bold text-secondary hover:text-secondary/75"
-                      : "font-semibold hover:text-primary-foreground/75",
+                      ? "bg-primary-hover text-primary-foreground"
+                      : "hover:text-primary-foreground",
                   )
                 }
               >

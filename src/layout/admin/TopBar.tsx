@@ -15,44 +15,42 @@ import {
 import { getPbFileUrl } from "@src/utils/pocketbase";
 import { RecordModel } from "pocketbase";
 
-import toast from "react-hot-toast";
+import { useToast } from "@src/components/toast/use-toast";
 
 interface TopBarProps {
   sticky?: boolean;
-  showMobileSidebarToggle?: boolean;
-  openMobileSidebar?: () => void;
+  showMenuToggle?: boolean;
+  openMenu?: () => void;
 }
 
 const TopBar = ({
   sticky = true,
-  showMobileSidebarToggle = true,
-  openMobileSidebar,
+  showMenuToggle = true,
+  openMenu,
 }: TopBarProps) => {
   const navigate = useNavigate();
   const { logout, user } = useAuth();
+  const { toast } = useToast();
 
   const onLogout = async () => {
     logout();
     navigate("/login");
-    toast.success("You have successfully logged out!");
+    toast({
+      description: "Logout Successful",
+    });
   };
 
   return (
     <nav
       className={clsx(
-        "z-appbar flex h-topbar shrink-0 items-center gap-x-4 border-b border-gray-200 px-4 shadow-sm dark:border-gray-700 sm:gap-x-6 sm:px-6 lg:px-8",
+        "px-container z-appbar flex h-topbar shrink-0 items-center gap-x-4 border-b border-border bg-background text-foreground shadow-sm sm:gap-x-6",
         {
-          "text-on-background dark:bg-background-dark dark:text-on-background-dark sticky top-0 bg-background":
-            sticky,
+          "sticky top-0": sticky,
         },
       )}
     >
-      {showMobileSidebarToggle ? (
-        <button
-          type="button"
-          className="-m-3 p-3 lg:hidden"
-          onClick={openMobileSidebar}
-        >
+      {showMenuToggle ? (
+        <button type="button" className="-m-3 p-3 lg:hidden" onClick={openMenu}>
           <span className="sr-only">Open sidebar</span>
           <Bars3Icon className="h-6 w-6" aria-hidden="true" />
         </button>
@@ -69,7 +67,7 @@ const TopBar = ({
           {/* settings button */}
           <button
             type="button"
-            className="-m-3 p-3 text-gray-400 hover:text-gray-500"
+            className="icon-color -m-3 p-3"
             onClick={() => alert("settings icon clicked")}
           >
             <span className="sr-only">Settings</span>
@@ -78,7 +76,7 @@ const TopBar = ({
 
           {/* Separator */}
           <div
-            className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10 lg:dark:bg-gray-100/10"
+            className="hidden bg-border lg:block lg:h-6 lg:w-px"
             aria-hidden="true"
           />
 
@@ -96,7 +94,7 @@ const TopBar = ({
                     alt="user profile picture"
                   />
                 ) : (
-                  <UserCircleIcon className="h-8 w-8 rounded-full text-gray-500" />
+                  <UserCircleIcon className="icon-color h-8 w-8 rounded-full" />
                 )}
                 <span className="hidden lg:flex lg:items-center">
                   <span
