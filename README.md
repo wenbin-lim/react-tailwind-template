@@ -127,3 +127,17 @@ Alert:
 
 - https://sweetalert2.github.io/#examples
 - `import swal from '@src/lib/swal'` in your component and call `swal.fire(...)` to fire an alert
+
+<!-- to add later -->
+
+https://stackoverflow.com/questions/44309390/whats-exactly-the-purpose-of-components-layouts-and-pages-folders-in-a-meteor
+
+Components These are react components or blaze templates that are self-contained. This means that they are not bounded to anything else in the application. Meteor describes 2 types of components: Reusable and Smart. Reusable components are generic, reusable and don't contain any business logic. They receive their data via parent components.
+
+Smart components typically don't contain too much UI related logics, but simply act as a layer between the data and the reusable components. These smart components contain business logic and push data to reusable components.
+
+Layouts Literally just layouts. The structure of your app's user interface is a layout. It should not contain any logics. Layouts contain mostly references to react smart components that in their turn load reusable components.
+
+Pages Same as layouts, but on a page level. Each page contains a layout and references components.
+
+https://ui.shadcn.com/docs/components/data-table

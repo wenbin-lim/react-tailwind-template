@@ -1,48 +1,43 @@
 import { useRef } from "react";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import clsx from "clsx";
 
-type SearchProps = Omit<
-  React.InputHTMLAttributes<HTMLInputElement>,
-  "onChange"
-> & {
+import { Input } from "./input";
+
+import { X } from "lucide-react";
+
+type SearchProps = {
+  value: string;
   onChange: (value: string) => void;
-  searchUsingBtn?: boolean;
-  disabled?: boolean;
+  placeholder?: string;
+  className?: string;
 };
 
-const Search = ({
-  searchUsingBtn = true,
-  onChange,
-  disabled,
-  ...rest
-}: SearchProps) => {
+const Search = ({ value, onChange, placeholder, className }: SearchProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const onClickSearch = () => {
-    if (inputRef.current && searchUsingBtn) {
-      onChange(inputRef.current.value);
-    }
+  const onClear = () => {
+    onChange("");
+    inputRef.current?.focus();
   };
 
   return (
-    <div className="relative flex items-center">
-      <input
-        type="text"
+    <div className={clsx(className, "!relative")}>
+      <Input
         ref={inputRef}
-        onChange={(e) => !searchUsingBtn && onChange(e.target.value)}
-        className="input pr-10 dark:input-dark"
-        disabled={disabled}
-        {...rest}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="pr-10"
+        placeholder={placeholder}
       />
-      <button
-        className="absolute inset-y-0 right-0 flex items-center px-1.5 enabled:active:scale-105"
-        onClick={onClickSearch}
-        disabled={!searchUsingBtn || disabled}
-      >
-        <kbd className="inline-flex items-center rounded border border-gray-300 p-1 font-sans text-xs text-gray-500 dark:border-gray-600">
-          <MagnifyingGlassIcon className="h-4 w-4" />
-        </kbd>
-      </button>
+      {value && (
+        <button
+          className="absolute inset-y-0 right-0 flex items-center px-3 enabled:active:scale-105"
+          onClick={onClear}
+        >
+          <X className="h-4 w-4" />
+          <span className="sr-only">Clear input</span>
+        </button>
+      )}
     </div>
   );
 };

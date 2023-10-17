@@ -1,5 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
+import { SortingState } from "@tanstack/react-table";
+import { sanitizeSqlQuery } from "@src/utils/common";
 
 import {
   getFullList,
@@ -29,30 +31,93 @@ export type Example = z.infer<typeof ExampleSchema> & {
   Data provider hooks
 */
 // get full list
-export const useGetFullListExample = () => {
+type UseGetFullListExampleProps = {
+  sorting: SortingState;
+  filter: string;
+};
+
+export const useGetFullListExample = ({
+  sorting,
+  filter,
+}: UseGetFullListExampleProps) => {
+  let sortQuery = "-created";
+
+  if (Array.isArray(sorting) && sorting[0]) {
+    if (sorting[0].desc) {
+      sortQuery = `-${sorting[0].id}`;
+    } else {
+      sortQuery = sorting[0].id;
+    }
+  }
+
+  const sanitizedFilter = sanitizeSqlQuery(filter);
+  const filterQuery = `(name ~ ${sanitizedFilter})`;
+
   return useQuery({
-    queryKey: [KEY, "list"],
+    queryKey: [
+      KEY,
+      "list",
+      {
+        sort: sortQuery,
+        filter: sanitizedFilter,
+      },
+    ],
     queryFn: () =>
       getFullList<Example>({
         collection: KEY,
         options: {
-          sort: "-created",
+          sort: sortQuery,
+          filter: filterQuery,
         },
       }),
   });
 };
 
 // get paginated list
-export const useGetPaginatedListExample = (page: number, perPage: number) => {
+type UseGetPaginatedListExampleProps = {
+  page: number;
+  perPage: number;
+  sorting: SortingState;
+  filter: string;
+};
+
+export const useGetPaginatedListExample = ({
+  page,
+  perPage,
+  sorting,
+  filter,
+}: UseGetPaginatedListExampleProps) => {
+  let sortQuery = "-created";
+
+  if (Array.isArray(sorting) && sorting[0]) {
+    if (sorting[0].desc) {
+      sortQuery = `-${sorting[0].id}`;
+    } else {
+      sortQuery = sorting[0].id;
+    }
+  }
+
+  const sanitizedFilter = sanitizeSqlQuery(filter);
+  const filterQuery = `(name ~ ${sanitizedFilter})`;
+
   return useQuery({
-    queryKey: [KEY, "list", { pagination: { page, perPage } }],
+    queryKey: [
+      KEY,
+      "list",
+      {
+        pagination: { page, perPage },
+        sort: sortQuery,
+        filter: sanitizedFilter,
+      },
+    ],
     queryFn: () =>
       getPaginatedList<Example>({
         collection: KEY,
         page,
         perPage,
         options: {
-          sort: "-created",
+          sort: sortQuery,
+          filter: filterQuery,
         },
       }),
   });

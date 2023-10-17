@@ -44,7 +44,7 @@ const AdminLayout = ({ showSidebar = true, children }: AdminLayoutProps) => {
         />
 
         {/* Outlet */}
-        {children}
+        <main>{children}</main>
       </div>
     </>
   );

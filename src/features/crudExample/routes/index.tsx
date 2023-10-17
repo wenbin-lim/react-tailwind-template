@@ -4,8 +4,8 @@ import { RequireAuth } from "@src/features/auth/components";
 // Layouts import
 import { Layout } from "@src/layout/admin";
 
-// Pages import
-import List from "../pages/List";
+// Components import
+import { List } from "../components";
 import Show from "../pages/Show";
 import Form from "../pages/Form";
 
