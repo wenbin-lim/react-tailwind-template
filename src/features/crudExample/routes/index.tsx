@@ -5,9 +5,8 @@ import { RequireAuth } from "@src/features/auth/components";
 import { Layout } from "@src/layout/admin";
 
 // Components import
-import { List } from "../components";
+import { List, Form } from "../components";
 import Show from "../pages/Show";
-import Form from "../pages/Form";
 
 // Routes
 const childrenRoutes: RouteObject[] = [
