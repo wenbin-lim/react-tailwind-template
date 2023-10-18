@@ -1,5 +1,0 @@
-const EntryPage = () => {
-  return <div>Entry page for /%routeName%</div>;
-};
-
-export default EntryPage;
