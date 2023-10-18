@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 
-import { useGetOneExample } from "../data";
+import { useGetOneUser } from "../data";
 
 import { Button } from "@src/components/ui/button";
 import { DetailLoader } from "@src/components/loaders";
@@ -10,7 +10,7 @@ const Show = () => {
   const navigate = useNavigate();
 
   // fetch data
-  const { data } = useGetOneExample(id || "");
+  const { data } = useGetOneUser(id || "");
 
   if (data) {
     return (
@@ -31,15 +31,15 @@ const Show = () => {
           </div>
 
           <div className="py-6 sm:grid sm:grid-cols-3 sm:gap-4">
-            <dt className="text-sm font-semibold leading-6">Name</dt>
+            <dt className="text-sm font-semibold leading-6">Username</dt>
             <dd className="mt-1 text-sm leading-6 text-muted-foreground sm:col-span-2 sm:mt-0">
-              {data.name || "-"}
+              {data.username || "-"}
             </dd>
           </div>
         </dl>
 
         <footer className="flex justify-end">
-          <Button variant="outline" onClick={() => navigate("/crud-example")}>
+          <Button variant="outline" onClick={() => navigate("/users")}>
             Back
           </Button>
         </footer>

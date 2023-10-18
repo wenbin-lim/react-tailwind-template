@@ -1,6 +1,5 @@
 // Icons
-import { HomeIcon } from "@heroicons/react/24/outline";
-import { GlobeAltIcon } from "@heroicons/react/24/outline";
+import { HomeIcon, UserGroupIcon } from "@heroicons/react/24/outline";
 
 type NavigationItem = {
   path: string;
@@ -15,9 +14,9 @@ const navigationItems: NavigationItem[] = [
     icon: <HomeIcon />,
   },
   {
-    path: "/crud-example",
-    name: "CRUD Example",
-    icon: <GlobeAltIcon />,
+    path: "/users",
+    name: "Users",
+    icon: <UserGroupIcon />,
   },
 ];
 

@@ -17,13 +17,15 @@ import {
  * Structure query keys: https://tkdodo.eu/blog/effective-react-query-keys
  */
 
-export const KEY = "examples";
+export const KEY = "users";
 
-export const ExampleSchema = z.object({
-  name: z.string(),
+export const UserSchema = z.object({
+  username: z.string(),
+  password: z.string(),
+  passwordConfirm: z.string(),
 });
 
-export type Example = z.infer<typeof ExampleSchema> & {
+export type User = z.infer<typeof UserSchema> & {
   id: string;
 };
 
@@ -32,15 +34,15 @@ export type Example = z.infer<typeof ExampleSchema> & {
  */
 
 // get full list
-type UseGetFullListExampleProps = {
+type UseGetFullListUserProps = {
   sort: SortingState;
   filter: string;
 };
 
-export const useGetFullListExample = ({
+export const useGetFullListUser = ({
   sort,
   filter,
-}: UseGetFullListExampleProps) => {
+}: UseGetFullListUserProps) => {
   return useQuery({
     queryKey: [
       KEY,
@@ -51,7 +53,7 @@ export const useGetFullListExample = ({
       },
     ],
     queryFn: () =>
-      getFullList<Example>({
+      getFullList<User>({
         collection: KEY,
         options: {
           sort: sortingStateToString(sort),
@@ -62,19 +64,19 @@ export const useGetFullListExample = ({
 };
 
 // get paginated list
-type UseGetPaginatedListExampleProps = {
+type UseGetPaginatedListUserProps = {
   page: number;
   perPage: number;
   sort: SortingState;
   filter: string;
 };
 
-export const useGetPaginatedListExample = ({
+export const useGetPaginatedListUser = ({
   page,
   perPage,
   sort,
   filter,
-}: UseGetPaginatedListExampleProps) => {
+}: UseGetPaginatedListUserProps) => {
   return useQuery({
     queryKey: [
       KEY,
@@ -86,7 +88,7 @@ export const useGetPaginatedListExample = ({
       },
     ],
     queryFn: () =>
-      getPaginatedList<Example>({
+      getPaginatedList<User>({
         collection: KEY,
         page,
         perPage,
@@ -99,21 +101,21 @@ export const useGetPaginatedListExample = ({
 };
 
 // get single record
-export const useGetOneExample = (id: string) => {
+export const useGetOneUser = (id: string) => {
   return useQuery({
     queryKey: [KEY, "detail", id],
-    queryFn: () => getOne<Example>({ collection: KEY, id }),
+    queryFn: () => getOne<User>({ collection: KEY, id }),
     enabled: !!id,
   });
 };
 
 // add one record
-export const useAddOneExample = () => {
+export const useAddOneUser = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (newRecord: Example) =>
-      addOne<Example>({ collection: KEY, newRecord }),
+    mutationFn: (newRecord: User) =>
+      addOne<User>({ collection: KEY, newRecord }),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [KEY, "list"],
@@ -123,12 +125,12 @@ export const useAddOneExample = () => {
 };
 
 // update one record
-export const useUpdateOneExample = (id: string) => {
+export const useUpdateOneUser = (id: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (newRecord: Example) =>
-      updateOne<Example>({ collection: KEY, id, newRecord }),
+    mutationFn: (newRecord: User) =>
+      updateOne<User>({ collection: KEY, id, newRecord }),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [KEY, "list"],
@@ -141,7 +143,7 @@ export const useUpdateOneExample = (id: string) => {
 };
 
 // delete one record
-export const useDeleteOneExample = () => {
+export const useDeleteOneUser = () => {
   const queryClient = useQueryClient();
 
   return useMutation({

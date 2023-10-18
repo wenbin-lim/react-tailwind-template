@@ -61,7 +61,7 @@ const Form = ({ type }: FormProps) => {
         navigate("/%routeName%");
       },
       onError: (error) => {
-        if (!setServerValidationError(error, setError)) {
+        if (!setServerValidationError(error, form.setError)) {
           toast({
             variant: "destructive",
             description: getGenericToastMessage("error"),

@@ -5,7 +5,9 @@ import { RequireAuth } from "@src/features/auth/components";
 import { Layout } from "@src/layout/admin";
 
 // Components import
-import { List, Form, Show } from "../components";
+import List from "../components/List";
+import Form from "../components/Form";
+import Show from "../components/Show";
 
 // Routes
 const childrenRoutes: RouteObject[] = [
@@ -29,7 +31,7 @@ const childrenRoutes: RouteObject[] = [
 
 // authenticated route
 const route: RouteObject = {
-  path: "/crud-example",
+  path: "/users",
   children: childrenRoutes,
   element: (
     <RequireAuth>
@@ -39,12 +41,5 @@ const route: RouteObject = {
     </RequireAuth>
   ),
 };
-
-// // unauthenticated route
-// const route: RouteObject = {
-//   path: "/crud-example",
-//   children: childrenRoutes,
-//   element: <Outlet />,
-// };
 
 export default route;

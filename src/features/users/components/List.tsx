@@ -1,11 +1,7 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
-import {
-  Example,
-  useGetPaginatedListExample,
-  useDeleteOneExample,
-} from "../data";
+import { User, useGetPaginatedListUser, useDeleteOneUser } from "../data";
 
 import {
   ColumnDef,
@@ -41,7 +37,7 @@ const List = () => {
   const [filter, setFilter] = useState("");
 
   // fetch data list
-  const { data } = useGetPaginatedListExample({
+  const { data } = useGetPaginatedListUser({
     page: pageIndex + 1,
     perPage: pageSize,
     sort,
@@ -49,22 +45,25 @@ const List = () => {
   });
 
   // function to delete on record
-  const deleteFn = useDeleteOneExample();
-  const onDelete = async (id: string) => {
-    const result = await warn.fire();
+  const deleteFn = useDeleteOneUser();
+  const onDelete = useCallback(
+    async (id: string) => {
+      const result = await warn.fire();
 
-    if (result.isConfirmed) {
-      deleteFn.mutate(id, {
-        onSuccess: () =>
-          toast({
-            description: "Deleted successfully",
-          }),
-      });
-    }
-  };
+      if (result.isConfirmed) {
+        deleteFn.mutate(id, {
+          onSuccess: () =>
+            toast({
+              description: "Deleted successfully",
+            }),
+        });
+      }
+    },
+    [deleteFn, toast],
+  );
 
   // set up table
-  const columns: ColumnDef<Example>[] = useMemo(
+  const columns: ColumnDef<User>[] = useMemo(
     () => [
       {
         accessorKey: "id",
@@ -73,9 +72,15 @@ const List = () => {
         ),
       },
       {
+        accessorKey: "username",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="Username" />
+        ),
+      },
+      {
         accessorKey: "name",
         header: ({ column }) => (
-          <DataTableColumnHeader column={column} title="Name" />
+          <DataTableColumnHeader column={column} title="name" />
         ),
       },
       {
@@ -100,7 +105,7 @@ const List = () => {
         ),
       },
     ],
-    [data],
+    [navigate, onDelete],
   );
 
   const table = useReactTable({

@@ -1,11 +1,11 @@
 import { useParams, useNavigate } from "react-router-dom";
 
 import {
-  ExampleSchema,
-  Example,
-  useGetOneExample,
-  useAddOneExample,
-  useUpdateOneExample,
+  UserSchema,
+  User,
+  useGetOneUser,
+  useAddOneUser,
+  useUpdateOneUser,
 } from "../data";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -38,19 +38,19 @@ const Form = ({ type }: FormProps) => {
   const { toast } = useToast();
 
   // fetch data if update form
-  const { data: fetchedData } = useGetOneExample(id || "");
+  const { data: fetchedData } = useGetOneUser(id || "");
 
   // form
-  const form = useForm<Example>({
-    resolver: zodResolver(ExampleSchema),
+  const form = useForm<User>({
+    resolver: zodResolver(UserSchema),
     values: fetchedData,
   });
 
   // mutation
-  const addFn = useAddOneExample();
-  const updateFn = useUpdateOneExample(id || "");
+  const addFn = useAddOneUser();
+  const updateFn = useUpdateOneUser(id || "");
 
-  const onSubmit = (newData: Example) => {
+  const onSubmit = (newData: User) => {
     const mutateFn = type === "create" ? addFn : updateFn;
 
     mutateFn.mutate(newData, {
@@ -58,7 +58,7 @@ const Form = ({ type }: FormProps) => {
         toast({
           description: "Saved successfully",
         });
-        navigate("/crud-example");
+        navigate("/users");
       },
       onError: (error) => {
         if (!setServerValidationError(error, form.setError)) {
@@ -85,21 +85,70 @@ const Form = ({ type }: FormProps) => {
 
         <UIForm {...form}>
           <form
-            id={`${type}-example-form`}
+            id={`${type}-user-form`}
             className="flex flex-1 flex-col gap-y-20"
             onSubmit={form.handleSubmit(onSubmit)}
           >
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-6">
               <FormField
                 control={form.control}
-                name="name"
+                name="username"
                 defaultValue=""
                 render={({ field }) => (
                   <FormItem className="sm:col-span-4">
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel>Username</FormLabel>
                     <FormControl>
                       <Input
                         autoFocus
+                        autoComplete="username"
+                        disabled={
+                          type === "create"
+                            ? addFn.isPending
+                            : updateFn.isPending
+                        }
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="password"
+                defaultValue=""
+                render={({ field }) => (
+                  <FormItem className="sm:col-span-3">
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        autoComplete="new-password"
+                        disabled={
+                          type === "create"
+                            ? addFn.isPending
+                            : updateFn.isPending
+                        }
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="passwordConfirm"
+                defaultValue=""
+                render={({ field }) => (
+                  <FormItem className="sm:col-span-3">
+                    <FormLabel>Confirm Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        autoComplete="new-password"
                         disabled={
                           type === "create"
                             ? addFn.isPending
@@ -117,12 +166,12 @@ const Form = ({ type }: FormProps) => {
         </UIForm>
 
         <footer className="flex items-center justify-end gap-x-4">
-          <Button variant="outline" onClick={() => navigate("/crud-example")}>
+          <Button variant="outline" onClick={() => navigate("/users")}>
             Cancel
           </Button>
 
           <Button
-            form={`${type}-example-form`}
+            form={`${type}-user-form`}
             type="submit"
             disabled={type === "create" ? addFn.isPending : updateFn.isPending}
           >

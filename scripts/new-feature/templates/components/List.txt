@@ -49,22 +49,25 @@ const List = () => {
   });
 
   // function to delete on record
-  const deleteFn = useDeleteOne%recordName%();
-  const onDelete = async (id: string) => {
-    const result = await warn.fire();
+  const deleteFn = useDeleteOneUser();
+  const onDelete = useCallback(
+    async (id: string) => {
+      const result = await warn.fire();
 
-    if (result.isConfirmed) {
-      deleteFn.mutate(id, {
-        onSuccess: () =>
-          toast({
-            description: "Deleted successfully",
-          }),
-      });
-    }
-  };
+      if (result.isConfirmed) {
+        deleteFn.mutate(id, {
+          onSuccess: () =>
+            toast({
+              description: "Deleted successfully",
+            }),
+        });
+      }
+    },
+    [deleteFn, toast],
+  );
 
   // set up table
-  const columns: ColumnDef<Example>[] = useMemo(
+  const columns: ColumnDef<%recordName%>[] = useMemo(
     () => [
       {
         accessorKey: "id",
@@ -100,7 +103,7 @@ const List = () => {
         ),
       },
     ],
-    [data],
+    [navigate, onDelete],
   );
 
   const table = useReactTable({
