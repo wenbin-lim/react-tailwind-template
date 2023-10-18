@@ -28,7 +28,7 @@ import Search from "@src/components/ui/search";
 import { ListLoader } from "@src/components/loaders";
 
 import { useToast } from "@src/components/toast/use-toast";
-import swal, { swalWarnDeleteOption } from "@src/lib/swal";
+import { warn } from "@src/lib/swal";
 
 const List = () => {
   const navigate = useNavigate();
@@ -37,30 +37,30 @@ const List = () => {
     pageIndex: 0,
     pageSize: 10,
   });
-  const [sorting, setSorting] = useState<SortingState>([]);
+  const [sort, setSort] = useState<SortingState>([]);
   const [filter, setFilter] = useState("");
 
   // fetch data list
   const { data } = useGetPaginatedListExample({
     page: pageIndex + 1,
     perPage: pageSize,
-    sorting,
+    sort,
     filter,
   });
 
   // function to delete on record
   const deleteFn = useDeleteOneExample();
-  const onDelete = (id: string) => {
-    swal.fire(swalWarnDeleteOption).then((result) => {
-      if (result.isConfirmed) {
-        deleteFn.mutate(id, {
-          onSuccess: () =>
-            toast({
-              description: "Deleted successfully",
-            }),
-        });
-      }
-    });
+  const onDelete = async (id: string) => {
+    const result = await warn.fire();
+
+    if (result.isConfirmed) {
+      deleteFn.mutate(id, {
+        onSuccess: () =>
+          toast({
+            description: "Deleted successfully",
+          }),
+      });
+    }
   };
 
   // set up table
@@ -110,11 +110,11 @@ const List = () => {
     manualPagination: true,
     pageCount: data?.totalPages ?? -1,
     onPaginationChange: setPagination,
-    onSortingChange: setSorting,
+    onSortingChange: setSort,
     getSortedRowModel: getSortedRowModel(),
     state: {
       pagination: { pageIndex, pageSize },
-      sorting,
+      sorting: sort,
     },
   });
 
