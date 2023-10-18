@@ -3,10 +3,10 @@ import { Outlet, RouteObject } from "react-router-dom";
 
 // Layouts import
 
-// Pages import
-import List from "../pages/List";
-import Show from "../pages/Show";
-import Form from "../pages/Form";
+// Components import
+import List from "../components/List";
+import Form from "../components/Form";
+import Show from "../components/Show";
 
 // Routes
 const childrenRoutes: RouteObject[] = [

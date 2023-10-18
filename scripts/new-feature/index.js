@@ -35,13 +35,13 @@ try {
     Basic:
     1. create feature folder in 'src/features'
     2. create route in 'src/features/routes/index.tsx'
-    3. create EntryPage in 'src/features/pages'
+    3. create EntryPage in 'src/features/components'
     4. link the route in 'src/routes/customRoutes.tsx'
 
     CRUD:
     1. create feature folder in 'src/features'
     2. create route in 'src/features/routes/index.tsx'
-    3. create List, Show and Form pages in 'src/features/pages'
+    3. create List, Show and Form components in 'src/features/components'
     4. create hooks, keys, schemas and types in 'src/features/data/index.ts'
     5. link the route in 'src/routes/customRoutes.tsx'
   */
@@ -132,15 +132,15 @@ try {
 
   logGreen(`Created route: ${featureFolderPath}/routes/index.tsx`);
 
-  // create pages folder
-  await fsPromises.mkdir(`${featureFolderPath}/pages`);
+  // create components folder
+  await fsPromises.mkdir(`${featureFolderPath}/components`);
 
   /* 
-    1. create entry page in pages folder
+    1. create entry page in components folder
   */
   if (featureType === "basic") {
     let entryPageContent = await fsPromises.readFile(
-      `${scriptTemplatePath}/pages/EntryPage.txt`,
+      `${scriptTemplatePath}/components/EntryPage.txt`,
       "utf-8",
     );
 
@@ -151,20 +151,22 @@ try {
     });
 
     await fsPromises.writeFile(
-      `${featureFolderPath}/pages/EntryPage.tsx`,
+      `${featureFolderPath}/components/EntryPage.tsx`,
       entryPageContent,
     );
 
-    logGreen(`Created entry page: ${featureFolderPath}/pages/EntryPage.tsx`);
+    logGreen(
+      `Created entry page: ${featureFolderPath}/components/EntryPage.tsx`,
+    );
   }
 
   /* 
     1. ask for record name
     2. ask for collection name
     3. ask for query key
-    4. create list page in pages folder
-    5. create show page in pages folder
-    6. create form page in pages folder
+    4. create list page in components folder
+    5. create show page in components folder
+    6. create form page in components folder
     7. create data folder with index.tsx
   */
   if (featureType === "crud") {
@@ -197,19 +199,19 @@ try {
     });
 
     /* 
-      Create pages
+      Create components
     */
     // read template files
     let listPageContent = await fsPromises.readFile(
-      `${scriptTemplatePath}/pages/List.txt`,
+      `${scriptTemplatePath}/components/List.txt`,
       "utf-8",
     );
     let showPageContent = await fsPromises.readFile(
-      `${scriptTemplatePath}/pages/Show.txt`,
+      `${scriptTemplatePath}/components/Show.txt`,
       "utf-8",
     );
     let formPageContent = await fsPromises.readFile(
-      `${scriptTemplatePath}/pages/Form.txt`,
+      `${scriptTemplatePath}/components/Form.txt`,
       "utf-8",
     );
 
@@ -237,22 +239,22 @@ try {
     });
 
     await fsPromises.writeFile(
-      `${featureFolderPath}/pages/List.tsx`,
+      `${featureFolderPath}/components/List.tsx`,
       listPageContent,
     );
-    logGreen(`Created List.tsx: ${featureFolderPath}/pages/List.tsx`);
+    logGreen(`Created List.tsx: ${featureFolderPath}/components/List.tsx`);
 
     await fsPromises.writeFile(
-      `${featureFolderPath}/pages/Show.tsx`,
+      `${featureFolderPath}/components/Show.tsx`,
       showPageContent,
     );
-    logGreen(`Created Show.tsx: ${featureFolderPath}/pages/Show.tsx`);
+    logGreen(`Created Show.tsx: ${featureFolderPath}/components/Show.tsx`);
 
     await fsPromises.writeFile(
-      `${featureFolderPath}/pages/Form.tsx`,
+      `${featureFolderPath}/components/Form.tsx`,
       formPageContent,
     );
-    logGreen(`Created Form.tsx: ${featureFolderPath}/pages/Form.tsx`);
+    logGreen(`Created Form.tsx: ${featureFolderPath}/components/Form.tsx`);
 
     /* 
       Create data folder

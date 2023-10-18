@@ -1,5 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
+import { SortingState } from "@tanstack/react-table";
+import { sortingStateToString } from "@src/utils/common";
 
 import {
   getFullList,
@@ -10,11 +12,11 @@ import {
   deleteOne,
 } from "@src/lib/backend";
 
-/* 
-  Query keys, schemas and types
+/**
+ * Query keys, schemas and types
+ * Structure query keys: https://tkdodo.eu/blog/effective-react-query-keys
+ */
 
-	Structure query keys: https://tkdodo.eu/blog/effective-react-query-keys
-*/
 export const KEY = "%collectionName%";
 
 export const %recordPascalName%Schema = z.object({
@@ -25,34 +27,72 @@ export type %recordPascalName% = z.infer<typeof %recordPascalName%Schema> & {
   id: string;
 };
 
-/* 
-  Data provider hooks
-*/
+/**
+ * Data provider hooks
+ */
+
 // get full list
-export const useGetFullList%recordPascalName% = () => {
+type UseGetFullList%recordPascalName%Props = {
+  sort: SortingState;
+  filter: string;
+};
+
+export const useGetFullList%recordPascalName% = ({
+  sort,
+  filter,
+}: UseGetFullList%recordPascalName%Props) => {
   return useQuery({
-    queryKey: [KEY, "list"],
+    queryKey: [
+      KEY,
+      "list",
+      {
+        sort: sortingStateToString(sort),
+        filter,
+      },
+    ],
     queryFn: () =>
       getFullList<%recordPascalName%>({
         collection: KEY,
         options: {
-          sort: "-created",
+          sort: sortingStateToString(sort),
+          filter,
         },
       }),
   });
 };
 
 // get paginated list
-export const useGetPaginatedList%recordPascalName% = (page: number, perPage: number) => {
+type UseGetPaginatedList%recordPascalName%Props = {
+  page: number;
+  perPage: number;
+  sort: SortingState;
+  filter: string;
+};
+
+export const useGetPaginatedList%recordPascalName% = ({
+  page,
+  perPage,
+  sort,
+  filter,
+}: UseGetPaginatedList%recordPascalName%Props) => {
   return useQuery({
-    queryKey: [KEY, "list", { pagination: { page, perPage } }],
+    queryKey: [
+      KEY,
+      "list",
+      {
+        pagination: { page, perPage },
+        sort: sortingStateToString(sort),
+        filter,
+      },
+    ],
     queryFn: () =>
       getPaginatedList<%recordPascalName%>({
         collection: KEY,
         page,
         perPage,
         options: {
-          sort: "-created",
+          sort: sortingStateToString(sort),
+          filter,
         },
       }),
   });

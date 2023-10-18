@@ -3,8 +3,8 @@ import { Outlet, RouteObject } from "react-router-dom";
 
 // Layouts import
 
-// Pages import
-import EntryPage from "../pages/EntryPage";
+// Components import
+import EntryPage from "../components/EntryPage";
 
 // Routes
 const childrenRoutes: RouteObject[] = [

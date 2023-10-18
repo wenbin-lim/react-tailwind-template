@@ -12,11 +12,11 @@ import {
   deleteOne,
 } from "@src/lib/backend";
 
-/* 
-  Query keys, schemas and types
+/**
+ * Query keys, schemas and types
+ * Structure query keys: https://tkdodo.eu/blog/effective-react-query-keys
+ */
 
-	Structure query keys: https://tkdodo.eu/blog/effective-react-query-keys
-*/
 export const KEY = "examples";
 
 export const ExampleSchema = z.object({
@@ -27,9 +27,10 @@ export type Example = z.infer<typeof ExampleSchema> & {
   id: string;
 };
 
-/* 
-  Data provider hooks
-*/
+/**
+ * Data provider hooks
+ */
+
 // get full list
 type UseGetFullListExampleProps = {
   sort: SortingState;
