@@ -3,20 +3,13 @@
 ## Ecosystem:
 
 1. Build Tool - Vite
-2. Styling - TailwindCSS, HeadlessUI, FloatingUI, SASS
+2. Styling - TailwindCSS, ShadCN, SASS
 3. Data Fetching - Tanstack React Query
 4. Routing - React Router
 5. Forms - React Hook Form + Zod
-6. Toast - React Hot Toast
-7. Alerts (Modal) - SweetAlert2
-8. Icons - react-icons, heroicons
-
-## Utils Packages:
-
-1. usehooks-ts
-2. clsx
-3. jwt-decode
-4. animate.css
+6. Alerts (Modal) - SweetAlert2
+7. Icons - react-icons, heroicons, lucide-react
+8. Table - Tanstack React Table
 
 ## Getting Started:
 
@@ -44,7 +37,6 @@
 - `pages`: Unique pages, screens and views
 - `routes`: App routes
 - `styles`: Custom .scss files, tailwindCSS
-- `theme`: Tailwind theme files
 - `types`: Custom type declaration files
 - `utils`: Utility functions
 
@@ -79,6 +71,10 @@
 - SweetAlert2 instance that has pre-defined styling and config
 - Use this instance to fire swal alerts
 
+4. `themeProvider.tsx`
+
+- ShadCN theme provider for dark mode
+
 ## Custom scripts:
 
 `npm run new-feature`
@@ -92,12 +88,6 @@
 1. Ensure the collection name is same as the backend when prompted
 2. An error will occur if your collection record model does not have a `name` field, either add a `name` field in your backend collection schema or change the record schema in the `data/index.ts` file
 
-## @tanstack/react-query practices:
-
-- https://tkdodo.eu/blog/tags/react-query
-- Favor extracting each function into a hook
-- Query Keys: https://tkdodo.eu/blog/effective-react-query-keys
-
 ## Backend:
 
 - Using Pocketbase for data and auth
@@ -108,36 +98,3 @@
 1. Import files using Vite's alias (@src = './src')
 
 - `import Example from '@src/example'
-
-React App Struture
-
-- Import `<Providers/>` in main.tsx
-
-TailwindCSS:
-
-- https://github.com/tailwindlabs/prettier-plugin-tailwindcss
-- `clsx`: https://github.com/tailwindlabs/prettier-plugin-tailwindcss#sorting-classes-in-function-calls
-
-Toast:
-
-- https://react-hot-toast.com/docs
-- `import toast from 'react-hot-toast'` in your component and call `toast("message")` to fire a toast
-
-Alert:
-
-- https://sweetalert2.github.io/#examples
-- `import swal from '@src/lib/swal'` in your component and call `swal.fire(...)` to fire an alert
-
-<!-- to add later -->
-
-https://stackoverflow.com/questions/44309390/whats-exactly-the-purpose-of-components-layouts-and-pages-folders-in-a-meteor
-
-Components These are react components or blaze templates that are self-contained. This means that they are not bounded to anything else in the application. Meteor describes 2 types of components: Reusable and Smart. Reusable components are generic, reusable and don't contain any business logic. They receive their data via parent components.
-
-Smart components typically don't contain too much UI related logics, but simply act as a layer between the data and the reusable components. These smart components contain business logic and push data to reusable components.
-
-Layouts Literally just layouts. The structure of your app's user interface is a layout. It should not contain any logics. Layouts contain mostly references to react smart components that in their turn load reusable components.
-
-Pages Same as layouts, but on a page level. Each page contains a layout and references components.
-
-https://ui.shadcn.com/docs/components/data-table
