@@ -17,10 +17,6 @@ import {
 import { Input } from "@src/components/ui/input";
 
 import { useToast } from "@src/components/toast/use-toast";
-import {
-  setServerValidationError,
-  getGenericToastMessage,
-} from "@src/utils/common";
 
 const SignupPage = () => {
   const navigate = useNavigate();
@@ -45,13 +41,10 @@ const SignupPage = () => {
       onError: (error) => {
         form.resetField("password");
         form.resetField("passwordConfirm");
-
-        if (!setServerValidationError(error, form.setError)) {
-          toast({
-            variant: "destructive",
-            description: getGenericToastMessage("error"),
-          });
-        }
+        toast({
+          variant: "destructive",
+          description: error.message,
+        });
       },
     });
   };
@@ -86,26 +79,6 @@ const SignupPage = () => {
             className="flex w-full max-w-sm flex-col gap-y-4 lg:w-96"
             onSubmit={form.handleSubmit(onSignup)}
           >
-            <FormField
-              control={form.control}
-              name="username"
-              defaultValue=""
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Username</FormLabel>
-                  <FormControl>
-                    <Input
-                      autoFocus
-                      autoComplete="username"
-                      disabled={signupFn.isPending}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
             <FormField
               control={form.control}
               name="email"
@@ -171,7 +144,7 @@ const SignupPage = () => {
               type="submit"
               disabled={signupFn.isPending}
             >
-              Sign in
+              Sign up
             </Button>
           </form>
         </Form>

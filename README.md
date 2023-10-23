@@ -20,6 +20,7 @@
 4. Create .env.local in root and add
    a. `VITE_SERVER_PORT=6969  #frontend server port`
    b. `VITE_API_URL=your_backend_server_url`
+   c. All the firebase config key
 5. Change these files to connect to your preferred backend service (if not pocketbase)
    - ./src/lib/backend.ts (instance, dataprovider methods)
    - ./src/features/auth (api, provider)
@@ -90,8 +91,16 @@
 
 ## Backend:
 
-- Using Pocketbase for data and auth
+- Using Pocketbase for data
 - https://github.com/pocketbase/js-sdk
+
+- Using Firebase for auth
+- Create user with email
+- Sign in with email
+- Sign in with phone number
+- Forget password and reset password
+- Remember to add in firebase config keys in .env.local
+- Remember to enable email and phone sign in in firebase console
 
 ## Important Notes:
 

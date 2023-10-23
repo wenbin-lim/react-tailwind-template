@@ -1,10 +1,12 @@
-import { Navigate, NavLink } from "react-router-dom";
+import { NavLink, useParams, useNavigate } from "react-router-dom";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-import { LoginSchema, LoginProps } from "@src/features/auth/api";
-import { useAuth, useLogin } from "@src/features/auth/hooks";
+import {
+  PasswordResetSchema,
+  PasswordResetProps,
+} from "@src/features/auth/api";
+import { usePasswordReset } from "@src/features/auth/hooks";
 
 import { Button } from "@src/components/ui/button";
 import {
@@ -16,39 +18,52 @@ import {
   FormMessage,
 } from "@src/components/ui/form";
 import { Input } from "@src/components/ui/input";
+
 import { useToast } from "@src/components/toast/use-toast";
 
-const LoginPage = () => {
-  const { isAuthenticated } = useAuth();
+const PasswordReset = () => {
+  const navigate = useNavigate();
+  const { code } = useParams();
   const { toast } = useToast();
 
   // Form
-  const form = useForm<LoginProps>({
-    resolver: zodResolver(LoginSchema),
+  const form = useForm<PasswordResetProps>({
+    resolver: zodResolver(PasswordResetSchema),
   });
 
-  // login logic
-  const loginFn = useLogin();
+  // password reset logic
+  const resetPasswordFn = usePasswordReset();
 
-  const onLogin = (credentials: LoginProps) => {
-    loginFn.mutate(credentials, {
-      onSuccess: () =>
-        toast({
-          description: "Login Successful",
-        }),
-      onError: () => {
-        toast({
-          variant: "destructive",
-          description: "Invalid Credentials",
-        });
-        form.resetField("password");
+  const onPasswordReset = (data: PasswordResetProps) => {
+    if (!code) {
+      return toast({
+        variant: "destructive",
+        description: "Invalid password reset link, please request a new one!",
+      });
+    }
+
+    resetPasswordFn.mutate(
+      {
+        ...data,
+        code,
       },
-    });
+      {
+        onSuccess: () => {
+          toast({
+            description: "Password has been successfully changed!",
+          });
+          navigate("/login");
+        },
+        onError: (error) => {
+          form.reset();
+          toast({
+            variant: "destructive",
+            description: error.message,
+          });
+        },
+      },
+    );
   };
-
-  if (isAuthenticated) {
-    return <Navigate to="/dashboard" />;
-  }
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-y-10 p-6 lg:px-8">
@@ -59,36 +74,17 @@ const LoginPage = () => {
           alt="Company Brand"
         />
         <h2 className="text-2xl font-bold leading-9 tracking-tight">
-          Sign in to your account
+          Resetting your password
         </h2>
       </section>
 
       <Form {...form}>
         <form
-          id="login-form"
+          id="password-reset-form"
           className="flex w-full flex-col gap-y-6 sm:max-w-sm"
-          onSubmit={form.handleSubmit(onLogin)}
+          onSubmit={form.handleSubmit(onPasswordReset)}
         >
-          <FormField
-            control={form.control}
-            name="email"
-            defaultValue=""
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input
-                    autoFocus
-                    type="email"
-                    autoComplete="email"
-                    disabled={loginFn.isPending}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <input type="text" name="username" hidden />
 
           <FormField
             control={form.control}
@@ -96,21 +92,12 @@ const LoginPage = () => {
             defaultValue=""
             render={({ field }) => (
               <FormItem>
-                <div className="flex items-center justify-between">
-                  <FormLabel>Password</FormLabel>
-                  <Button
-                    asChild
-                    className="h-auto p-0 text-secondary"
-                    variant="link"
-                  >
-                    <NavLink to="/forgot-password">Forgot password?</NavLink>
-                  </Button>
-                </div>
+                <FormLabel>New Password</FormLabel>
                 <FormControl>
                   <Input
                     type="password"
                     autoComplete="current-password"
-                    disabled={loginFn.isPending}
+                    disabled={resetPasswordFn.isPending}
                     {...field}
                   />
                 </FormControl>
@@ -119,20 +106,43 @@ const LoginPage = () => {
             )}
           />
 
-          <Button className="mt-6" type="submit" disabled={loginFn.isPending}>
-            Sign in
+          <FormField
+            control={form.control}
+            name="passwordConfirm"
+            defaultValue=""
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Confirm New Password</FormLabel>
+                <FormControl>
+                  <Input
+                    type="password"
+                    autoComplete="current-password"
+                    disabled={resetPasswordFn.isPending}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <Button
+            className="mt-6"
+            type="submit"
+            disabled={resetPasswordFn.isPending}
+          >
+            Submit
           </Button>
         </form>
       </Form>
 
       <p className="text-center text-sm">
-        Not a member?{" "}
+        Password changed?{" "}
         <Button asChild className="h-auto p-0 text-secondary" variant="link">
-          <NavLink to="/signup">Sign up now</NavLink>
+          <NavLink to="/login">Try login</NavLink>
         </Button>
       </p>
     </main>
   );
 };
-
-export default LoginPage;
+export default PasswordReset;

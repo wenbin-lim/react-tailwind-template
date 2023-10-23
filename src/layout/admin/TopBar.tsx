@@ -12,8 +12,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@src/components/ui/dropdown-menu";
-import { getPbFileUrl } from "@src/utils/pocketbase";
-import { RecordModel } from "pocketbase";
 
 import { useToast } from "@src/components/toast/use-toast";
 
@@ -84,13 +82,10 @@ const TopBar = ({
           <DropdownMenu>
             <DropdownMenuTrigger>
               <div className="-m-1.5 flex items-center p-1.5">
-                {user && !!user.avatar ? (
+                {user && !!user.photoURL ? (
                   <img
                     className="h-8 w-8 rounded-full"
-                    src={getPbFileUrl({
-                      record: user as RecordModel,
-                      fileName: user.avatar,
-                    })}
+                    src={user.photoURL}
                     alt="user profile picture"
                   />
                 ) : (

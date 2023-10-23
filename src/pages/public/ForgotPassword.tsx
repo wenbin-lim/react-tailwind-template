@@ -20,7 +20,6 @@ import {
 import { Input } from "@src/components/ui/input";
 
 import { useToast } from "@src/components/toast/use-toast";
-import { getGenericToastMessage } from "@src/utils/common";
 
 const ForgotPassword = () => {
   const { toast } = useToast();
@@ -39,11 +38,11 @@ const ForgotPassword = () => {
         toast({
           description: "Password reset link has been sent to your email",
         }),
-      onError: () => {
+      onError: (error) => {
         form.reset();
         toast({
           variant: "destructive",
-          description: getGenericToastMessage("error"),
+          description: error.message,
         });
       },
     });
