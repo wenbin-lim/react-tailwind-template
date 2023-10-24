@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { 
@@ -49,7 +49,7 @@ const List = () => {
   });
 
   // function to delete on record
-  const deleteFn = useDeleteOneUser();
+  const deleteFn = useDeleteOne%recordName%();
   const onDelete = useCallback(
     async (id: string) => {
       const result = await warn.fire();
