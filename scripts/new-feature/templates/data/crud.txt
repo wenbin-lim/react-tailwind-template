@@ -1,7 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
 import { SortingState } from "@tanstack/react-table";
-import { sortingStateToString } from "@src/utils/common";
 
 import {
   getFullList,
@@ -33,12 +32,14 @@ export type %recordPascalName% = z.infer<typeof %recordPascalName%Schema> & {
 
 // get full list
 type UseGetFullList%recordPascalName%Props = {
-  sort: SortingState;
-  filter: string;
+  sort?: SortingState;
+  search?: string;
+  filter?: string;
 };
 
 export const useGetFullList%recordPascalName% = ({
   sort,
+  search,
   filter,
 }: UseGetFullList%recordPascalName%Props) => {
   return useQuery({
@@ -46,7 +47,8 @@ export const useGetFullList%recordPascalName% = ({
       KEY,
       "list",
       {
-        sort: sortingStateToString(sort),
+        search: search || "",
+        sort,
         filter,
       },
     ],
@@ -54,7 +56,8 @@ export const useGetFullList%recordPascalName% = ({
       getFullList<%recordPascalName%>({
         collection: KEY,
         options: {
-          sort: sortingStateToString(sort),
+          search: search || "",
+          sort,
           filter,
         },
       }),
@@ -65,13 +68,15 @@ export const useGetFullList%recordPascalName% = ({
 type UseGetPaginatedList%recordPascalName%Props = {
   page: number;
   perPage: number;
-  sort: SortingState;
-  filter: string;
+  search?: string;
+  sort?: SortingState;
+  filter?: string;
 };
 
 export const useGetPaginatedList%recordPascalName% = ({
   page,
   perPage,
+  search,
   sort,
   filter,
 }: UseGetPaginatedList%recordPascalName%Props) => {
@@ -80,8 +85,9 @@ export const useGetPaginatedList%recordPascalName% = ({
       KEY,
       "list",
       {
+        search: search || "",
         pagination: { page, perPage },
-        sort: sortingStateToString(sort),
+        sort,
         filter,
       },
     ],
@@ -91,7 +97,8 @@ export const useGetPaginatedList%recordPascalName% = ({
         page,
         perPage,
         options: {
-          sort: sortingStateToString(sort),
+          search: search || "",
+          sort,
           filter,
         },
       }),

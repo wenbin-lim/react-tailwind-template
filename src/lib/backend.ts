@@ -2,6 +2,7 @@
  * Firebase auth
  */
 import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_APIKEY,
@@ -16,46 +17,98 @@ const firebaseConfig = {
 // Initialize Firebase
 export const FIREBASE_APP = initializeApp(firebaseConfig);
 
-import PocketBase, {
-  RecordFullListOptions,
-  RecordListOptions,
-  RecordOptions,
-} from "pocketbase";
+/**
+ * Backend - Goyave
+ * Data providing methods which interfaces with Backend API
+ * Implemented using Axios
+ */
 
-const backend = new PocketBase(import.meta.env.VITE_API_URL).autoCancellation(
-  false,
-);
+// setting axios
+import axios from "axios";
+
+const API_URL = import.meta.env.VITE_API_URL;
+const backend = axios.create({
+  baseURL: API_URL,
+});
+
+backend.interceptors.request.use(async (config) => {
+  const auth = getAuth();
+  await auth.authStateReady();
+
+  const token = await auth.currentUser?.getIdToken();
+
+  // add token to request headers before every request
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
+});
 
 export default backend;
 
-/* 
-	Data providing methods which interfaces with Backend API
-	Change the implementation of each methods according to the backend used
-*/
+/**
+ * Types
+ */
+import { SortingState } from "@tanstack/react-table";
+
+type GetListOptions = {
+  filter?: string;
+  search?: string;
+  sort?: SortingState;
+};
+
+type PaginatedListResult<TRecord> = {
+  currentPage: number;
+  maxPage: number;
+  pageSize: number;
+  total: number;
+  records: TRecord[];
+};
+
+/**
+ * Utils import
+ */
+import { sortingStateToString } from "@src/utils/common";
 
 // Fetch all records
 export type GetFullListProps = {
   collection: string;
-  options?: RecordFullListOptions;
+  options?: GetListOptions;
 };
 
 export async function getFullList<TRecord>({
   collection,
   options,
 }: GetFullListProps) {
-  const data = await backend
-    .collection(collection)
-    .getFullList<TRecord>(options);
+  let url = `${collection}`;
 
-  return data;
+  const sort = options?.sort;
+  if (sort && Array.isArray(sort) && sort[0]) {
+    url += `&${sortingStateToString(sort)}`;
+  }
+
+  const search = options?.search;
+  if (search) {
+    url += `&search=${search}`;
+  }
+
+  const filter = options?.filter;
+  if (filter) {
+    url += `&${filter}`;
+  }
+
+  const res = await backend.get<TRecord[]>(url);
+
+  return res.data;
 }
 
 // Fetch paginated records
 export type GetPaginatedListProps = {
   collection: string;
-  page?: number;
-  perPage?: number;
-  options?: RecordListOptions;
+  page: number;
+  perPage: number;
+  options?: GetListOptions;
 };
 
 export async function getPaginatedList<TRecord>({
@@ -64,49 +117,54 @@ export async function getPaginatedList<TRecord>({
   perPage,
   options,
 }: GetPaginatedListProps) {
-  const data = await backend
-    .collection(collection)
-    .getList<TRecord>(page, perPage, options);
+  let url = `${collection}?page=${page}&per_page=${perPage}`;
 
-  return data;
+  const sort = options?.sort;
+  if (sort && Array.isArray(sort) && sort[0]) {
+    url += `&${sortingStateToString(sort)}`;
+  }
+
+  const search = options?.search;
+  if (search) {
+    url += `&search=${search}`;
+  }
+
+  const filter = options?.filter;
+  if (filter) {
+    url += `&${filter}`;
+  }
+
+  const res = await backend.get<PaginatedListResult<TRecord>>(url);
+
+  return res.data;
 }
 
 // Fetch a single record
 export type GetOneProps = {
   collection: string;
   id: string;
-  options?: RecordOptions;
 };
 
-export async function getOne<TRecord>({
-  collection,
-  id,
-  options,
-}: GetOneProps) {
-  const data = await backend
-    .collection(collection)
-    .getOne<TRecord>(id, options);
+export async function getOne<TRecord>({ collection, id }: GetOneProps) {
+  let url = `${collection}/${id}`;
 
-  return data;
+  const res = await backend.get<TRecord>(url);
+
+  return res.data;
 }
 
 // Add a single record
 export type AddOneProps = {
   collection: string;
   newRecord: FormData | { [key: string]: any } | undefined;
-  options?: RecordOptions;
 };
 
-export async function addOne<TRecord>({
-  collection,
-  newRecord,
-  options,
-}: AddOneProps) {
-  const data = await backend
-    .collection(collection)
-    .create<TRecord>(newRecord, options);
+export async function addOne<TRecord>({ collection, newRecord }: AddOneProps) {
+  let url = `${collection}`;
 
-  return data;
+  const res = await backend.post<TRecord>(url, newRecord);
+
+  return res.data;
 }
 
 // Update a single record
@@ -114,31 +172,30 @@ export type UpdateOneProps = {
   collection: string;
   id: string;
   newRecord: FormData | { [key: string]: any } | undefined;
-  options?: RecordOptions;
 };
 
 export async function updateOne<TRecord>({
   collection,
   id,
   newRecord,
-  options,
 }: UpdateOneProps): Promise<TRecord> {
-  const data = await backend
-    .collection(collection)
-    .update<TRecord>(id, newRecord, options);
+  let url = `${collection}/${id}`;
 
-  return data;
+  const res = await backend.put<TRecord>(url, newRecord);
+
+  return res.data;
 }
 
 // Delete a single record
 export type DeleteOneProps = {
   collection: string;
   id: string;
-  options?: RecordOptions;
 };
 
-export async function deleteOne({ collection, id, options }: DeleteOneProps) {
-  const data = await backend.collection(collection).delete(id, options);
+export async function deleteOne({ collection, id }: DeleteOneProps) {
+  let url = `${collection}/${id}`;
 
-  return data;
+  const res = await backend.delete<boolean>(url);
+
+  return res.data;
 }

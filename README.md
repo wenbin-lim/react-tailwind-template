@@ -21,7 +21,7 @@
    a. `VITE_SERVER_PORT=6969  #frontend server port`
    b. `VITE_API_URL=your_backend_server_url`
    c. All the firebase config key
-5. Change these files to connect to your preferred backend service (if not pocketbase)
+5. Change these files to connect to your preferred backend service
    - ./src/lib/backend.ts (instance, dataprovider methods)
    - ./src/features/auth (api, provider)
 6. Start development server: `npm run dev`
@@ -53,14 +53,11 @@
 
 ## `Lib` folder:
 
-1. `backend.ts` (Current: Pocketbase)
+1. `backend.ts` (Current: Restful Goyave)
 
-- Pocketbase instance that has pre-defined config
-- Import this instance unless you require a clean instance from pocketbase
-- Consist of data API methods pertaining to the backend used
-- These methods are generic and can be widely used
-- Create your own API methods inside `features` if you require more specific functionality for a specific feature
-- Feel free to change the internal implementation if not using Pocketbase
+- Using Restful API to connect to backend (Goyave)
+- Common CRUD methods are provided
+- Write your own custom methods to special endpoints in `features/featureName/api`
 
 2. `reactQuery.ts`
 
@@ -91,8 +88,8 @@
 
 ## Backend:
 
-- Using Pocketbase for data
-- https://github.com/pocketbase/js-sdk
+- Using Restful Goyave for data
+- https://goyave.dev/guide/libraries/filter.html
 
 - Using Firebase for auth
 - Create user with email

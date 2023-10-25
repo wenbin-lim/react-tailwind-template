@@ -37,17 +37,22 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
   */
   // logout user
   const logout = useCallback(async () => {
-    setIsAuthenticated(false);
     await auth.signOut();
-  }, []);
+    setIsAuthenticated(false);
+  }, [auth]);
 
   /**
    * On app load
-   *
-   * Firebase SDK handles token refresh automatically
    */
+  const onAppLoad = useCallback(async () => {
+    await auth.authStateReady();
+    setIsAuthenticating(false);
+  }, [auth]);
+
   useEffectOnce(() => {
-    const authStateListener = onAuthStateChanged(auth, (user) => {
+    onAppLoad();
+
+    const unsubAuthStateListener = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setUser(user);
         setIsAuthenticated(true);
@@ -55,11 +60,10 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
         setUser(null);
         setIsAuthenticated(false);
       }
-      setIsAuthenticating(false);
     });
 
     return () => {
-      authStateListener();
+      unsubAuthStateListener();
     };
   });
 

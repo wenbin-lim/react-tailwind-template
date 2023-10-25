@@ -38,7 +38,7 @@ const List = () => {
     pageSize: 10,
   });
   const [sort, setSort] = useState<SortingState>([]);
-  const [filter, setFilter] = useState("");
+  const [search, setSearch] = useState("");
 
   // fetch data list
   const { data } = useGetPaginatedList%recordName%({
@@ -107,11 +107,11 @@ const List = () => {
   );
 
   const table = useReactTable({
-    data: data?.items ?? [],
+    data: data?.records ?? [],
     columns,
     getCoreRowModel: getCoreRowModel(),
     manualPagination: true,
-    pageCount: data?.totalPages ?? -1,
+    pageCount: data?.maxPage ?? -1,
     onPaginationChange: setPagination,
     onSortingChange: setSort,
     getSortedRowModel: getSortedRowModel(),
@@ -125,8 +125,8 @@ const List = () => {
     <article className="p-container flex h-full flex-col gap-y-6">
       <header className="flex items-center justify-between">
         <Search
-          value={filter}
-          onChange={setFilter}
+          value={search}
+          onChange={setSearch}
           placeholder="Search..."
           className="w-full sm:max-w-xs"
         />
