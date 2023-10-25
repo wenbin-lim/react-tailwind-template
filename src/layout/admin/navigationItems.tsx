@@ -1,5 +1,5 @@
 // Icons
-import { HomeIcon, UserGroupIcon } from "@heroicons/react/24/outline";
+import { HomeIcon } from "@heroicons/react/24/outline";
 
 type NavigationItem = {
   path: string;
@@ -12,11 +12,6 @@ const navigationItems: NavigationItem[] = [
     path: "/dashboard",
     name: "Dashboard",
     icon: <HomeIcon />,
-  },
-  {
-    path: "/users",
-    name: "Users",
-    icon: <UserGroupIcon />,
   },
 ];
 

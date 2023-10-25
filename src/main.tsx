@@ -10,6 +10,10 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@src/lib/reactQuery";
 import RouterProvider from "@src/routes";
 
+// init firebase
+import { initFirebase } from "@src/lib/firebase";
+initFirebase();
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ThemeProvider defaultTheme="light">

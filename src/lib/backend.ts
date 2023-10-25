@@ -1,21 +1,8 @@
-/**
- * Firebase auth
- */
-import { initializeApp } from "firebase/app";
+import axios from "axios";
 import { getAuth } from "firebase/auth";
+import { SortingState } from "@tanstack/react-table";
 
-const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_APIKEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTHDOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECTID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGEBUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGINGSENDERID,
-  appId: import.meta.env.VITE_FIREBASE_APPID,
-  measurementId: import.meta.env.VITE_FIREBASE_MESUREMENTID,
-};
-
-// Initialize Firebase
-export const FIREBASE_APP = initializeApp(firebaseConfig);
+import { sortingStateToString } from "@src/utils/common";
 
 /**
  * Backend - Goyave
@@ -24,8 +11,6 @@ export const FIREBASE_APP = initializeApp(firebaseConfig);
  */
 
 // setting axios
-import axios from "axios";
-
 const API_URL = import.meta.env.VITE_API_URL;
 const backend = axios.create({
   baseURL: API_URL,
@@ -50,7 +35,6 @@ export default backend;
 /**
  * Types
  */
-import { SortingState } from "@tanstack/react-table";
 
 type GetListOptions = {
   filter?: string;
@@ -65,11 +49,6 @@ type PaginatedListResult<TRecord> = {
   total: number;
   records: TRecord[];
 };
-
-/**
- * Utils import
- */
-import { sortingStateToString } from "@src/utils/common";
 
 // Fetch all records
 export type GetFullListProps = {
