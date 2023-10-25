@@ -45,7 +45,7 @@ const List = () => {
     page: pageIndex + 1,
     perPage: pageSize,
     sort,
-    filter,
+    search,
   });
 
   // function to delete on record
