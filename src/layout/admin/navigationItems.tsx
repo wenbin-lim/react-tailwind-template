@@ -13,6 +13,26 @@ const navigationItems: NavigationItem[] = [
     name: "Dashboard",
     icon: <HomeIcon />,
   },
+  {
+    path: "/locations",
+    name: "Locations",
+    icon: <HomeIcon />,
+  },
+  {
+    path: "/areas",
+    name: "Areas",
+    icon: <HomeIcon />,
+  },
+  {
+    path: "/resources",
+    name: "Resources",
+    icon: <HomeIcon />,
+  },
+  {
+    path: "/reservations",
+    name: "Reservations",
+    icon: <HomeIcon />,
+  },
 ];
 
 export default navigationItems;

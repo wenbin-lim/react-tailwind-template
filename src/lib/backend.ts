@@ -114,6 +114,7 @@ export async function getPaginatedList<TRecord>({
   }
 
   const res = await backend.get<PaginatedListResult<TRecord>>(url);
+  // const res = await backend.get("ping");
 
   return res.data;
 }
