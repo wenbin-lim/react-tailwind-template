@@ -160,7 +160,7 @@ export async function updateOne<TRecord>({
 }: UpdateOneProps): Promise<TRecord> {
   let url = `${collection}/${id}`;
 
-  const res = await backend.put<TRecord>(url, newRecord);
+  const res = await backend.patch<TRecord>(url, newRecord);
 
   return res.data;
 }
