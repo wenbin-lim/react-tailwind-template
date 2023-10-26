@@ -112,6 +112,94 @@ const Form = ({ type }: FormProps) => {
                   </FormItem>
                 )}
               />
+
+              <FormField
+                control={form.control}
+                name="address_1"
+                defaultValue=""
+                render={({ field }) => (
+                  <FormItem className="sm:col-span-4">
+                    <FormLabel>Address 1</FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={
+                          type === "create"
+                            ? addFn.isPending
+                            : updateFn.isPending
+                        }
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="address_2"
+                defaultValue=""
+                render={({ field }) => (
+                  <FormItem className="sm:col-span-4">
+                    <FormLabel>Address 2</FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={
+                          type === "create"
+                            ? addFn.isPending
+                            : updateFn.isPending
+                        }
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="postal_code"
+                defaultValue=""
+                render={({ field }) => (
+                  <FormItem className="sm:col-span-4">
+                    <FormLabel>Postal Code</FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={
+                          type === "create"
+                            ? addFn.isPending
+                            : updateFn.isPending
+                        }
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="country"
+                defaultValue=""
+                render={({ field }) => (
+                  <FormItem className="sm:col-span-4">
+                    <FormLabel>Country</FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={
+                          type === "create"
+                            ? addFn.isPending
+                            : updateFn.isPending
+                        }
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
           </form>
         </UIForm>

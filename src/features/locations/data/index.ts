@@ -19,7 +19,19 @@ import {
 export const KEY = "location";
 
 export const LocationSchema = z.object({
-  name: z.string(),
+  name: z
+    .string()
+    .min(3, "Name must be at least 3 characters long")
+    .max(50, "Name must be at most 50 characters long"),
+  address_1: z
+    .string()
+    .min(3, "Address 1 must be at least 3 characters long")
+    .max(50, "Address 1 must be at most 50 characters long"),
+  address_2: z.string(),
+  postal_code: z
+    .string()
+    .length(6, "Postal code must be exactly 6 characters long"),
+  country: z.string().length(2, "Country must be exactly 2 characters long"),
 });
 
 export type Location = z.infer<typeof LocationSchema> & {
