@@ -1,7 +1,7 @@
 import { createContext, useCallback, useState } from "react";
 import { useEffectOnce } from "usehooks-ts";
 
-import { getAuth, onAuthStateChanged, User } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 // Types
 export type AuthProviderType = {
@@ -9,7 +9,6 @@ export type AuthProviderType = {
 };
 
 type AuthContextType = {
-  user: User | null;
   isAuthenticating: boolean;
   isAuthenticated: boolean;
   logout: () => void;
@@ -17,7 +16,6 @@ type AuthContextType = {
 
 // Context
 export const AuthContext = createContext<AuthContextType>({
-  user: null,
   isAuthenticating: true,
   isAuthenticated: false,
   logout: () => {},
@@ -26,7 +24,6 @@ export const AuthContext = createContext<AuthContextType>({
 export const AuthProvider = ({ children }: AuthProviderType) => {
   const auth = getAuth();
 
-  const [user, setUser] = useState(auth.currentUser);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   // for initial loading purposes
@@ -35,7 +32,7 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
   /* 
     Methods
   */
-  // logout user
+  // logout firebase user
   const logout = useCallback(async () => {
     await auth.signOut();
     setIsAuthenticated(false);
@@ -52,15 +49,21 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
   useEffectOnce(() => {
     onAppLoad();
 
-    const unsubAuthStateListener = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        setUser(user);
-        setIsAuthenticated(true);
-      } else {
-        setUser(null);
-        setIsAuthenticated(false);
-      }
-    });
+    const unsubAuthStateListener = onAuthStateChanged(
+      auth,
+      async (firebaseUser) => {
+        try {
+          if (firebaseUser) {
+            setIsAuthenticated(true);
+          } else {
+            logout();
+          }
+        } catch (error) {
+          console.error(error);
+          logout();
+        }
+      },
+    );
 
     return () => {
       unsubAuthStateListener();
@@ -69,7 +72,11 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, logout, isAuthenticating, isAuthenticated }}
+      value={{
+        logout,
+        isAuthenticating,
+        isAuthenticated,
+      }}
     >
       {children}
     </AuthContext.Provider>

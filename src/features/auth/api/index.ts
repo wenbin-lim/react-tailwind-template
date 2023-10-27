@@ -8,7 +8,6 @@ import {
   sendPasswordResetEmail,
   confirmPasswordReset,
 } from "firebase/auth";
-
 import { FirebaseError } from "firebase/app";
 import { getGenericToastMessage } from "@src/utils/common";
 

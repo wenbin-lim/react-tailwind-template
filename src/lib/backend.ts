@@ -1,7 +1,6 @@
 import axios from "axios";
 import { getAuth } from "firebase/auth";
 import { SortingState } from "@tanstack/react-table";
-
 import { sortingStateToString } from "@src/utils/common";
 
 /**
@@ -36,13 +35,13 @@ export default backend;
  * Types
  */
 
-type GetListOptions = {
+export type GetListOptions = {
   filter?: string;
   search?: string;
   sort?: SortingState;
 };
 
-type PaginatedListResult<TRecord> = {
+export type PaginatedListResult<TRecord> = {
   currentPage: number;
   maxPage: number;
   pageSize: number;
@@ -77,7 +76,7 @@ export async function getFullList<TRecord>({
     url += `&${filter}`;
   }
 
-  const res = await backend.get<TRecord[]>(url);
+  const res = await backend.get<PaginatedListResult<TRecord>>(url);
 
   return res.data;
 }
@@ -114,7 +113,6 @@ export async function getPaginatedList<TRecord>({
   }
 
   const res = await backend.get<PaginatedListResult<TRecord>>(url);
-  // const res = await backend.get("ping");
 
   return res.data;
 }

@@ -3,7 +3,6 @@ import { z } from "zod";
 import { SortingState } from "@tanstack/react-table";
 
 import {
-  getFullList,
   getPaginatedList,
   getOne,
   addOne,
@@ -35,46 +34,12 @@ export const LocationSchema = z.object({
 });
 
 export type Location = z.infer<typeof LocationSchema> & {
-  id: string;
+  id: number;
 };
 
 /**
  * Data provider hooks
  */
-
-// get full list
-type UseGetFullListLocationProps = {
-  sort?: SortingState;
-  search?: string;
-  filter?: string;
-};
-
-export const useGetFullListLocation = ({
-  sort,
-  search,
-  filter,
-}: UseGetFullListLocationProps) => {
-  return useQuery({
-    queryKey: [
-      KEY,
-      "list",
-      {
-        search: search || "",
-        sort,
-        filter,
-      },
-    ],
-    queryFn: () =>
-      getFullList<Location>({
-        collection: KEY,
-        options: {
-          search: search || "",
-          sort,
-          filter,
-        },
-      }),
-  });
-};
 
 // get paginated list
 type UseGetPaginatedListLocationProps = {
