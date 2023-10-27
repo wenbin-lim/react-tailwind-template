@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
 import { SortingState } from "@tanstack/react-table";
+import { getAuth } from "firebase/auth";
 
 import {
   getPaginatedList,
@@ -14,7 +15,7 @@ import {
  * Query keys, schemas and types
  * Structure query keys: https://tkdodo.eu/blog/effective-react-query-keys
  */
-
+import { KEY as ME_KEY } from "@features/me/data";
 export const KEY = "location";
 
 export const LocationSchema = z.object({
@@ -93,6 +94,7 @@ export const useGetOneLocation = (id: string) => {
 
 // add one record
 export const useAddOneLocation = () => {
+  const auth = getAuth();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -102,12 +104,17 @@ export const useAddOneLocation = () => {
       queryClient.invalidateQueries({
         queryKey: [KEY, "list"],
       });
+      // update locations in me
+      queryClient.invalidateQueries({
+        queryKey: [ME_KEY, "firebaseId", auth.currentUser?.uid],
+      });
     },
   });
 };
 
 // update one record
 export const useUpdateOneLocation = (id: string) => {
+  const auth = getAuth();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -120,12 +127,17 @@ export const useUpdateOneLocation = (id: string) => {
       queryClient.invalidateQueries({
         queryKey: [KEY, "detail", id],
       });
+      // update locations in me
+      queryClient.invalidateQueries({
+        queryKey: [ME_KEY, "firebaseId", auth.currentUser?.uid],
+      });
     },
   });
 };
 
 // delete one record
 export const useDeleteOneLocation = () => {
+  const auth = getAuth();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -133,6 +145,10 @@ export const useDeleteOneLocation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [KEY, "list"],
+      });
+      // update locations in me
+      queryClient.invalidateQueries({
+        queryKey: [ME_KEY, "firebaseId", auth.currentUser?.uid],
       });
     },
   });

@@ -3,7 +3,6 @@ import { z } from "zod";
 import { SortingState } from "@tanstack/react-table";
 
 import {
-  getFullList,
   getPaginatedList,
   getOne,
   addOne,
@@ -14,7 +13,17 @@ import {
 /**
  * Query keys, schemas and types
  * Structure query keys: https://tkdodo.eu/blog/effective-react-query-keys
+ *
+ * Endpoint for resource is /location/:location_id/resource
+ * Base query key for area is [LOCATION_KEY, last_location, RESOURCE_KEY]
+ * Whenever location is switched, invalidate [LOCATION_KEY] will invalidate all
+ * queries that depend on location
+ *
+ * useGetMe to retrieve last_location (:location_id)
+ * Set /location/:location_id/area as backend collection string
  */
+import { useGetMe } from "@features/me/data";
+import { KEY as LOCATION_KEY } from "@features/locations/data";
 
 export const KEY = "resource";
 
@@ -29,40 +38,6 @@ export type Resource = z.infer<typeof ResourceSchema> & {
 /**
  * Data provider hooks
  */
-
-// get full list
-type UseGetFullListResourceProps = {
-  sort?: SortingState;
-  search?: string;
-  filter?: string;
-};
-
-export const useGetFullListResource = ({
-  sort,
-  search,
-  filter,
-}: UseGetFullListResourceProps) => {
-  return useQuery({
-    queryKey: [
-      KEY,
-      "list",
-      {
-        search: search || "",
-        sort,
-        filter,
-      },
-    ],
-    queryFn: () =>
-      getFullList<Resource>({
-        collection: KEY,
-        options: {
-          search: search || "",
-          sort,
-          filter,
-        },
-      }),
-  });
-};
 
 // get paginated list
 type UseGetPaginatedListResourceProps = {
@@ -80,8 +55,13 @@ export const useGetPaginatedListResource = ({
   sort,
   filter,
 }: UseGetPaginatedListResourceProps) => {
+  const { data: me } = useGetMe();
+
   return useQuery({
+    enabled: !!me,
     queryKey: [
+      LOCATION_KEY,
+      me?.last_location || 0,
       KEY,
       "list",
       {
@@ -93,7 +73,7 @@ export const useGetPaginatedListResource = ({
     ],
     queryFn: () =>
       getPaginatedList<Resource>({
-        collection: KEY,
+        collection: `${LOCATION_KEY}/${me?.last_location}/${KEY}`,
         page,
         perPage,
         options: {
@@ -107,23 +87,33 @@ export const useGetPaginatedListResource = ({
 
 // get single record
 export const useGetOneResource = (id: string) => {
+  const { data: me } = useGetMe();
+
   return useQuery({
-    queryKey: [KEY, "detail", id],
-    queryFn: () => getOne<Resource>({ collection: KEY, id }),
-    enabled: !!id,
+    enabled: !!me && !!id,
+    queryKey: [LOCATION_KEY, me?.last_location, KEY, "detail", id],
+    queryFn: () =>
+      getOne<Resource>({
+        collection: `${LOCATION_KEY}/${me?.last_location}/${KEY}`,
+        id,
+      }),
   });
 };
 
 // add one record
 export const useAddOneResource = () => {
+  const { data: me } = useGetMe();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (newRecord: Resource) =>
-      addOne<Resource>({ collection: KEY, newRecord }),
+      addOne<Resource>({
+        collection: `${LOCATION_KEY}/${me?.last_location}/${KEY}`,
+        newRecord,
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [KEY, "list"],
+        queryKey: [LOCATION_KEY, KEY, "list"],
       });
     },
   });
@@ -131,17 +121,22 @@ export const useAddOneResource = () => {
 
 // update one record
 export const useUpdateOneResource = (id: string) => {
+  const { data: me } = useGetMe();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (newRecord: Resource) =>
-      updateOne<Resource>({ collection: KEY, id, newRecord }),
+      updateOne<Resource>({
+        collection: `${LOCATION_KEY}/${me?.last_location}/${KEY}`,
+        id,
+        newRecord,
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [KEY, "list"],
+        queryKey: [LOCATION_KEY, me?.last_location, KEY, "list"],
       });
       queryClient.invalidateQueries({
-        queryKey: [KEY, "detail", id],
+        queryKey: [LOCATION_KEY, me?.last_location, KEY, "detail", id],
       });
     },
   });
@@ -149,13 +144,18 @@ export const useUpdateOneResource = (id: string) => {
 
 // delete one record
 export const useDeleteOneResource = () => {
+  const { data: me } = useGetMe();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: string) => deleteOne({ collection: KEY, id }),
+    mutationFn: (id: string) =>
+      deleteOne({
+        collection: `${LOCATION_KEY}/${me?.last_location}/${KEY}`,
+        id,
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [KEY, "list"],
+        queryKey: [LOCATION_KEY, me?.last_location, KEY, "list"],
       });
     },
   });
