@@ -25,11 +25,13 @@ const Sidebar = () => {
   // selecting location logic
   const onSwitchLocation = (value: string) => {
     switchLocationFn.mutate(parseInt(value), {
-      onSuccess: () => {
-        console.log("success");
-      },
+      onSuccess: () =>
+        toast({
+          description: "Location switched",
+        }),
       onError: () =>
         toast({
+          variant: "destructive",
           description: "Failed to switch location, please try again later",
         }),
     });

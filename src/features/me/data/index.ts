@@ -8,7 +8,7 @@ import { Location } from "@src/features/locations/data";
  * Query keys, schemas and types
  * Structure query keys: https://tkdodo.eu/blog/effective-react-query-keys
  */
-
+import { KEY as LOCATION_KEY } from "@features/locations/data";
 export const KEY = "me";
 
 export type DbUser = {
@@ -61,9 +61,14 @@ export const useSwitchLastLocation = () => {
 
       return res.data;
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({
         queryKey: [KEY, "firebaseId", auth.currentUser?.uid],
+      });
+
+      // invalidate all location queries
+      await queryClient.refetchQueries({
+        queryKey: [LOCATION_KEY],
       });
     },
   });

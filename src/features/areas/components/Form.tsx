@@ -112,6 +112,28 @@ const Form = ({ type }: FormProps) => {
                   </FormItem>
                 )}
               />
+
+              <FormField
+                control={form.control}
+                name="description"
+                defaultValue=""
+                render={({ field }) => (
+                  <FormItem className="sm:col-span-4">
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={
+                          type === "create"
+                            ? addFn.isPending
+                            : updateFn.isPending
+                        }
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
           </form>
         </UIForm>

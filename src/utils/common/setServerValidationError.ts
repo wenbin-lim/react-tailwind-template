@@ -16,7 +16,7 @@ function setServerValidationError<T extends FieldValues>(
   // check if axios error
   if (error instanceof AxiosError) {
     switch (error.code) {
-      case "ERR_BAD_REQUEST":
+      case "ERR_BAD_REQUEST": {
         const errors = error.response?.data?.validationError;
         // check if errors is not empty
         if (Object.keys(errors).length > 0) {
@@ -29,6 +29,7 @@ function setServerValidationError<T extends FieldValues>(
           return true;
         }
         return false;
+      }
       default:
         return false;
     }

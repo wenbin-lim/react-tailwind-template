@@ -3,7 +3,6 @@ import { z } from "zod";
 import { SortingState } from "@tanstack/react-table";
 
 import {
-  getFullList,
   getPaginatedList,
   getOne,
   addOne,
@@ -14,12 +13,24 @@ import {
 /**
  * Query keys, schemas and types
  * Structure query keys: https://tkdodo.eu/blog/effective-react-query-keys
+ *
+ * One location has many areas
+ * Endpoint for area is /location/:location_id/area
+ * Base query key for area is [LOCATION_KEY, last_location, AREA_KEY]
+ * Whenever location is switched, invalidate [LOCATION_KEY] will invalidate all
+ * queries that depend on location
+ *
+ * useGetMe to retrieve last_location (:location_id)
+ * Set /location/:location_id/area as backend collection string
  */
+import { useGetMe } from "@features/me/data";
+import { KEY as LOCATION_KEY } from "@features/locations/data";
 
 export const KEY = "area";
 
 export const AreaSchema = z.object({
   name: z.string(),
+  description: z.string(),
 });
 
 export type Area = z.infer<typeof AreaSchema> & {
@@ -29,40 +40,6 @@ export type Area = z.infer<typeof AreaSchema> & {
 /**
  * Data provider hooks
  */
-
-// get full list
-type UseGetFullListAreaProps = {
-  sort?: SortingState;
-  search?: string;
-  filter?: string;
-};
-
-export const useGetFullListArea = ({
-  sort,
-  search,
-  filter,
-}: UseGetFullListAreaProps) => {
-  return useQuery({
-    queryKey: [
-      KEY,
-      "list",
-      {
-        search: search || "",
-        sort,
-        filter,
-      },
-    ],
-    queryFn: () =>
-      getFullList<Area>({
-        collection: KEY,
-        options: {
-          search: search || "",
-          sort,
-          filter,
-        },
-      }),
-  });
-};
 
 // get paginated list
 type UseGetPaginatedListAreaProps = {
@@ -80,8 +57,13 @@ export const useGetPaginatedListArea = ({
   sort,
   filter,
 }: UseGetPaginatedListAreaProps) => {
+  const { data: me } = useGetMe();
+
   return useQuery({
+    enabled: !!me,
     queryKey: [
+      LOCATION_KEY,
+      me?.last_location || 0,
       KEY,
       "list",
       {
@@ -93,7 +75,7 @@ export const useGetPaginatedListArea = ({
     ],
     queryFn: () =>
       getPaginatedList<Area>({
-        collection: KEY,
+        collection: `${LOCATION_KEY}/${me?.last_location}/${KEY}`,
         page,
         perPage,
         options: {
@@ -107,23 +89,33 @@ export const useGetPaginatedListArea = ({
 
 // get single record
 export const useGetOneArea = (id: string) => {
+  const { data: me } = useGetMe();
+
   return useQuery({
-    queryKey: [KEY, "detail", id],
-    queryFn: () => getOne<Area>({ collection: KEY, id }),
-    enabled: !!id,
+    enabled: !!me && !!id,
+    queryKey: [LOCATION_KEY, me?.last_location, KEY, "detail", id],
+    queryFn: () =>
+      getOne<Area>({
+        collection: `${LOCATION_KEY}/${me?.last_location}/${KEY}`,
+        id,
+      }),
   });
 };
 
 // add one record
 export const useAddOneArea = () => {
+  const { data: me } = useGetMe();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (newRecord: Area) =>
-      addOne<Area>({ collection: KEY, newRecord }),
+      addOne<Area>({
+        collection: `${LOCATION_KEY}/${me?.last_location}/${KEY}`,
+        newRecord,
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [KEY, "list"],
+        queryKey: [LOCATION_KEY, KEY, "list"],
       });
     },
   });
@@ -131,17 +123,22 @@ export const useAddOneArea = () => {
 
 // update one record
 export const useUpdateOneArea = (id: string) => {
+  const { data: me } = useGetMe();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (newRecord: Area) =>
-      updateOne<Area>({ collection: KEY, id, newRecord }),
+      updateOne<Area>({
+        collection: `${LOCATION_KEY}/${me?.last_location}/${KEY}`,
+        id,
+        newRecord,
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [KEY, "list"],
+        queryKey: [LOCATION_KEY, me?.last_location, KEY, "list"],
       });
       queryClient.invalidateQueries({
-        queryKey: [KEY, "detail", id],
+        queryKey: [LOCATION_KEY, me?.last_location, KEY, "detail", id],
       });
     },
   });
@@ -149,13 +146,18 @@ export const useUpdateOneArea = (id: string) => {
 
 // delete one record
 export const useDeleteOneArea = () => {
+  const { data: me } = useGetMe();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: string) => deleteOne({ collection: KEY, id }),
+    mutationFn: (id: string) =>
+      deleteOne({
+        collection: `${LOCATION_KEY}/${me?.last_location}/${KEY}`,
+        id,
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [KEY, "list"],
+        queryKey: [LOCATION_KEY, me?.last_location, KEY, "list"],
       });
     },
   });

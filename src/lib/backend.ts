@@ -124,7 +124,7 @@ export type GetOneProps = {
 };
 
 export async function getOne<TRecord>({ collection, id }: GetOneProps) {
-  let url = `${collection}/${id}`;
+  const url = `${collection}/${id}`;
 
   const res = await backend.get<TRecord>(url);
 
@@ -138,7 +138,7 @@ export type AddOneProps = {
 };
 
 export async function addOne<TRecord>({ collection, newRecord }: AddOneProps) {
-  let url = `${collection}`;
+  const url = `${collection}`;
 
   const res = await backend.post<TRecord>(url, newRecord);
 
@@ -157,7 +157,7 @@ export async function updateOne<TRecord>({
   id,
   newRecord,
 }: UpdateOneProps): Promise<TRecord> {
-  let url = `${collection}/${id}`;
+  const url = `${collection}/${id}`;
 
   const res = await backend.patch<TRecord>(url, newRecord);
 
@@ -171,7 +171,7 @@ export type DeleteOneProps = {
 };
 
 export async function deleteOne({ collection, id }: DeleteOneProps) {
-  let url = `${collection}/${id}`;
+  const url = `${collection}/${id}`;
 
   const res = await backend.delete<boolean>(url);
 
