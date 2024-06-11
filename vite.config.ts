@@ -11,7 +11,7 @@ export default defineConfig(({ mode }) => {
     // vite config
     plugins: [react(), svgr(), reactClickToComponent(), pluginRewriteAll()],
     server: {
-      port: parseInt(env.VITE_SERVER_PORT),
+      port: env.VITE_SERVER_PORT ? parseInt(env.VITE_SERVER_PORT) : 3000,
       host: true,
       // strictPort: true,
     },
