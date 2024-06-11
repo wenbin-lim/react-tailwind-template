@@ -318,7 +318,7 @@ try {
   log(divider);
 
   logYellow(`You can now access the feature at:\n\n`);
-  logYellow(`➜    http://localhost:${env.VITE_SERVER_PORT}/${routeName}\n`);
+  logYellow(`➜    http://localhost:${env.VITE_SERVER_PORT ? env.VITE_SERVER_PORT : 3000}/${routeName}\n`);
 } catch (error) {
   logRed(JSON.stringify(error, null, 2));
   logRed("\nSomething went wrong...\n");
